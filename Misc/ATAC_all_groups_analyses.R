@@ -143,7 +143,6 @@ scale_x_discrete(labels=c("txStart","txEnd", "intergenic", "intragenic"))
 ggsave(L, file = "~/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/Figures/ZHR_Z30_Full_results_output_ALL_classes_oppos_reinforc_proportion.pdf")
 
 
-
 ###### chromosome effect?
 # Assign X or Autosome category
 ALL$Auto_X <- "NA"
