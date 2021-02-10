@@ -24,12 +24,12 @@ ATAC_RNA_closest  <- read.delim("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC
 # prepare ATAC and RNA files to merge
 RNA_minimal <- RNA[,c(1,28:40,43)]
 ATAC_minimal <- ATAC[,c(1:4,19:31,34,35)]
- 
+
 ## select classes
 ATAC_minimal_intra_inter <-  ATAC_minimal[ATAC_minimal$class == "inter" | ATAC_minimal$class == "intra",]
 ATAC_minimal_start_end <- ATAC_minimal[ATAC_minimal$class == "start" | ATAC_minimal$class == "end",]
 
-
+ 
 colnames(RNA_minimal) <- paste(colnames(RNA_minimal), "RNA", sep = "_")
 colnames(RNA_minimal)[1] <- "Gene"
 
