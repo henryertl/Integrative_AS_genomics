@@ -128,54 +128,52 @@ if (all_classes_integrated$P_qvalue_RNA[i] < 0.05 && all_classes_integrated$P_qv
 
 all_classes_integrated$distance_to_exon1 <- abs(all_classes_integrated[,18] - all_classes_integrated[,35])
 
-ggplot(all_classes_integrated, aes(x=div_category, fill=div_category, y=perc_cis_RNA)) +
-geom_boxplot(notch=TRUE)
+write.table(all_classes_integrated, file = "/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_RNA_comp/ZHR_Z30_ATAC_RNA_integrated_minimal.txt", row.names = F, quote = F, sep = "\t")
 
-ggplot(all_classes_integrated, aes(x=div_category, fill=div_category, y=abs(P_est.mean_RNA))) +
+O <- all_classes_integrated %>% 
+ggplot(aes(x=P_est.mean, y=P_est.mean_RNA, fill=div_category, color=div_category)) +
+geom_point()
+
+# % cis expression by group
+M <- all_classes_integrated[all_classes_integrated$P_qvalue_RNA < 0.05,] %>%
+ggplot(aes(x=div_category, fill=div_category, y=perc_cis_RNA)) +
+geom_boxplot(notch=TRUE) +
+theme_main() +
+ylab("Gene expression - percent cis") +
+xlab("") +
+scale_fill_discrete(guide=FALSE) +
+scale_x_discrete(labels=c("CA conserved\nGE diverged","CA diverged\nGE diverged\nopposite dir.", "CA diverged\nGE diverged\nsame dir."))
+
+# % cis accessibility by group
+N <- all_classes_integrated[all_classes_integrated$P_qvalue < 0.05,] %>%
+ggplot(aes(x=div_category, fill=div_category, y=perc_cis)) +
+geom_boxplot(notch=TRUE) +
+theme_main() +
+ylab("Accessibility - percent cis") +
+xlab("") +
+scale_fill_discrete(guide=FALSE) +
+scale_x_discrete(labels=c("CA diverged\nGE conserved","CA diverged\nGE diverged\nopposite dir.", "CA diverged\nGE diverged\nsame dir."))
+
+# effect size expression by group
+all_classes_integrated[all_classes_integrated$P_qvalue_RNA < 0.05,] %>%
+ggplot(aes(x=div_category, fill=div_category, y=abs(P_est.mean_RNA))) +
 geom_boxplot(notch=TRUE) +
 ylim(0,2)
+
+all_classes_integrated[all_classes_integrated$P_qvalue_RNA < 0.05 & all_classes_integrated$class == "start",] %>%
+ggplot(aes(x=div_category, fill=div_category, y=abs(P_est.mean_RNA))) +
+geom_boxplot(notch=TRUE) +
+ylim(0,2)
+
+# effect size accessibility by group
+all_classes_integrated[all_classes_integrated$P_qvalue < 0.05,] %>%
+ggplot(aes(x=div_category, fill=div_category, y=abs(P_est.mean))) +
+geom_boxplot(notch=TRUE) +
+ylim(0,2)
+
+
 
 all_classes_integrated[(all_classes_integrated$class == "inter" | all_classes_integrated$class == "intra") & all_classes_integrated$distance_to_exon1 < 10000,] %>%
 ggplot(aes(x=div_category, fill=div_category, y=distance_to_exon1)) +
 geom_boxplot(notch=TRUE) +
 ylim(0,2)
-
-# calculate basic metrics with integrated matrix
-## distance to first exon
-RNA_minimal_closest_locus$distance_to_exon1 <- abs(RNA_minimal_closest_locus[,17] - RNA_minimal_closest_locus[,36])
-write.table(RNA_minimal_closest_locus, file = "/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_RNA_comp/ZHR_Z30_ATAC_RNA_integrated_minimal.txt", row.names = F, quote = F, sep = "\t")
-
-
-RNA_minimal_closest_locus$distance_bin <- "7"
-
-for (i in 1:nrow(RNA_minimal_closest_locus)) {
-
-if (RNA_minimal_closest_locus$distance_to_exon1[i] < 5000){
-
-	RNA_minimal_closest_locus$distance_bin[i] <- "1"
-
-} else if (RNA_minimal_closest_locus$distance_to_exon1[i] > 5000 & RNA_minimal_closest_locus$distance_to_exon1[i] < 10000){
-
-	RNA_minimal_closest_locus$distance_bin[i] <- "2"
-
-} else if (RNA_minimal_closest_locus$distance_to_exon1[i] > 10000 & RNA_minimal_closest_locus$distance_to_exon1[i] < 15000){
-
-	RNA_minimal_closest_locus$distance_bin[i] <- "3"
-
-} else if (RNA_minimal_closest_locus$distance_to_exon1[i] > 15000 & RNA_minimal_closest_locus$distance_to_exon1[i] < 20000){
-
-	RNA_minimal_closest_locus$distance_bin[i] <- "4"
-
-} else if (RNA_minimal_closest_locus$distance_to_exon1[i] > 20000 & RNA_minimal_closest_locus$distance_to_exon1[i] < 25000){
-
-	RNA_minimal_closest_locus$distance_bin[i] <- "5"
-
-} else if (RNA_minimal_closest_locus$distance_to_exon1[i] > 25000 & RNA_minimal_closest_locus$distance_to_exon1[i] < 30000){
-
-RNA_minimal_closest_locus$distance_bin[i] <- "6"
-
-}
-}
-
-
-##### assign txEnd and txStart their genes
