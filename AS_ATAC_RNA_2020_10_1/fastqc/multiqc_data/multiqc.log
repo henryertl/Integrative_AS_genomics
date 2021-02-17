@@ -1,0 +1,292 @@
+[2020-10-02 09:45:11,856] multiqc                                            [DEBUG  ]  No MultiQC config found: /Users/henryertl/miniconda3/lib/python3.7/site-packages/multiqc_config.yaml
+[2020-10-02 09:45:11,856] multiqc                                            [DEBUG  ]  No MultiQC config found: /Users/henryertl/.multiqc_config.yaml
+[2020-10-02 09:45:11,856] multiqc                                            [DEBUG  ]  No MultiQC config found: multiqc_config.yaml
+[2020-10-02 09:45:11,856] multiqc                                            [DEBUG  ]  Command used: /Users/henryertl/miniconda3/bin/multiqc .
+[2020-10-02 09:45:12,450] multiqc                                            [DEBUG  ]  Latest MultiQC version is v1.9
+[2020-10-02 09:45:12,450] multiqc                                            [INFO   ]  This is MultiQC v1.9
+[2020-10-02 09:45:12,450] multiqc                                            [DEBUG  ]  Command     : /Users/henryertl/miniconda3/bin/multiqc .
+[2020-10-02 09:45:12,451] multiqc                                            [DEBUG  ]  Working dir : /Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/fastqc
+[2020-10-02 09:45:12,451] multiqc                                            [INFO   ]  Template    : default
+[2020-10-02 09:45:12,451] multiqc                                            [DEBUG  ]  Running Python 3.7.3 (default, Mar 27 2019, 16:54:48)  [Clang 4.0.1 (tags/RELEASE_401/final)]
+[2020-10-02 09:45:12,451] multiqc                                            [INFO   ]  Searching   : /Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/fastqc
+[2020-10-02 09:45:12,452] multiqc                                            [DEBUG  ]  Analysing modules: custom_content, conpair, peddy, somalier, methylQA, mosdepth, phantompeakqualtools, qualimap, preseq, quast, qorts, rna_seqc, rockhopper, rsem, rseqc, busco, goleft_indexcov, disambiguate, supernova, deeptools, sargasso, verifybamid, mirtrace, happy, mirtop, homer, macs2, theta2, snpeff, gatk, htseq, bcftools, featureCounts, fgbio, dragen, dedup, damageprofiler, biobambam2, mtnucratio, picard, prokka, samblaster, samtools, sexdeterrmine, bamtools, jellyfish, vcftools, longranger, stacks, varscan2, bbmap, bismark, biscuit, hicexplorer, hicup, hicpro, salmon, kallisto, slamdunk, star, hisat2, tophat, bowtie2, bowtie1, snpsplit, kat, leehom, adapterRemoval, clipandmerge, cutadapt, flexbar, kaiju, kraken, malt, trimmomatic, sickle, skewer, sortmerna, biobloomtools, fastq_screen, afterqc, fastp, fastqc, pycoqc, minionqc, multivcfanalyzer, clusterflow, bcl2fastq, interop, ivar, flash, seqyclean
+[2020-10-02 09:45:12,452] multiqc                                            [DEBUG  ]  Using temporary directory for creating report: /var/folders/kw/5hd8rx0938d8sy57sc85dpz80000gn/T/tmp6eksjsp2
+[2020-10-02 09:45:12,563] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TAAGGCGA-ATAGAGAG_S360_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:12,565] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TAAGGCGA-ATAGAGAG_S360_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:12,598] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_AGGCAGAA-AGAGGATA_S368_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:12,600] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_AGGCAGAA-AGAGGATA_S368_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:12,631] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_CGTACTAG-TCTACTCT_S373_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:12,632] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_CGTACTAG-TCTACTCT_S373_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:12,661] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TCTCTACT-GAACCGCG_S331_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:12,663] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TCTCTACT-GAACCGCG_S331_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:12,699] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_ATGTAAGT-CATAGAGT_S332_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:12,701] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_ATGTAAGT-CATAGAGT_S332_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:12,733] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_AGCTCGCT-GATTCTGC_S349_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:12,735] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_AGCTCGCT-GATTCTGC_S349_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:12,763] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_CTGCTTCC-GATCTATC_S340_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:12,765] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_CTGCTTCC-GATCTATC_S340_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:12,793] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GGACTTGG-CGTCTGCG_S330_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:12,794] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GGACTTGG-CGTCTGCG_S330_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:12,826] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GACGTCTT-GGTGAACC_S351_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:12,828] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GACGTCTT-GGTGAACC_S351_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:12,857] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TAAGGCGA-TCTACTCT_S372_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:12,858] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TAAGGCGA-TCTACTCT_S372_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:12,887] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_CGTACTAG-ATAGAGAG_S361_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:12,889] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_CGTACTAG-ATAGAGAG_S361_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:12,918] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TAGGCATG-AGAGGATA_S371_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:12,920] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TAGGCATG-AGAGGATA_S371_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:12,951] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_AACGTTCC-AGTACTCC_S356_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:12,952] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_AACGTTCC-AGTACTCC_S356_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:12,980] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_CTACGACA-TTGGACTC_S358_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:12,982] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_CTACGACA-TTGGACTC_S358_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,010] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TCCTGAGC-ATAGAGAG_S363_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,011] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TCCTGAGC-ATAGAGAG_S363_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,045] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_CCTTCACC-GGAGCGTC_S350_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,047] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_CCTTCACC-GGAGCGTC_S350_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,075] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GGACTCCT-AGAGGATA_S370_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,077] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GGACTCCT-AGAGGATA_S370_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,107] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_AAGTCCAA-TACTCATA_S342_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,109] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_AAGTCCAA-TACTCATA_S342_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,144] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GTATGTTC-TTCCTGTT_S341_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,145] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GTATGTTC-TTCCTGTT_S341_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,174] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GGACTCCT-ATAGAGAG_S364_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,175] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GGACTCCT-ATAGAGAG_S364_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,205] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_AGGCAGAA-ATAGAGAG_S362_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,207] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_AGGCAGAA-ATAGAGAG_S362_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,240] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_CTTGGTAT-GGACTTGG_S333_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,242] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_CTTGGTAT-GGACTTGG_S333_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,273] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TAAGGCGA-AGAGGATA_S366_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,274] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TAAGGCGA-AGAGGATA_S366_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,304] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TAGGCATG-ATAGAGAG_S365_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,305] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TAGGCATG-ATAGAGAG_S365_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,338] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TTACAGGA-GCTTGTCA_S357_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,340] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TTACAGGA-GCTTGTCA_S357_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,369] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_AAGATACT-ATGTAAGT_S335_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,371] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_AAGATACT-ATGTAAGT_S335_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,401] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_CTCTCGTC-AGGTTATA_S343_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,403] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_CTCTCGTC-AGGTTATA_S343_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,433] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TCCTGAGC-AGAGGATA_S369_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,435] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TCCTGAGC-AGAGGATA_S369_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,466] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_AGGCAGAA-TCTACTCT_S374_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,468] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_AGGCAGAA-TCTACTCT_S374_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,499] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GATTCTGC-CTCTCGTC_S346_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,505] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GATTCTGC-CTCTCGTC_S346_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,539] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_AACAGGTT-CTTGGTAT_S336_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,540] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_AACAGGTT-CTTGGTAT_S336_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,572] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GCACGGAC-TGCGAGAC_S344_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,573] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GCACGGAC-TGCGAGAC_S344_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,601] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_AGCCTCAT-TCTCTACT_S334_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,602] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_AGCCTCAT-TCTCTACT_S334_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,631] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TTGGACTC-CTGCTTCC_S355_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,632] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TTGGACTC-CTGCTTCC_S355_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,668] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TCATCCTT-AGCTCGCT_S352_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,670] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TCATCCTT-AGCTCGCT_S352_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,697] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GATCTATC-AGCCTCAT_S337_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,699] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GATCTATC-AGCCTCAT_S337_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,729] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GGAGCGTC-GCACGGAC_S347_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,731] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GGAGCGTC-GCACGGAC_S347_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,764] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TCCAACGC-AAGTCCAA_S345_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,765] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TCCAACGC-AAGTCCAA_S345_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,795] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_AGTACTCC-AACAGGTT_S339_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,797] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_AGTACTCC-AACAGGTT_S339_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,824] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_ACGCACCT-CCTTCACC_S353_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,825] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_ACGCACCT-CCTTCACC_S353_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,859] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_CGTACTAG-AGAGGATA_S367_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,860] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_CGTACTAG-AGAGGATA_S367_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,890] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GCAATGCA-AACGTTCC_S359_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,892] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GCAATGCA-AACGTTCC_S359_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,922] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GGTGAACC-TCCAACGC_S348_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,924] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GGTGAACC-TCCAACGC_S348_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,956] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TTCCTGTT-AAGATACT_S338_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,958] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TTCCTGTT-AAGATACT_S338_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:13,987] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GCTTGTCA-GTATGTTC_S354_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:13,989] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GCTTGTCA-GTATGTTC_S354_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,019] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GTATGTTC-TTCCTGTT_S341_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,021] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GTATGTTC-TTCCTGTT_S341_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,051] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GGACTCCT-ATAGAGAG_S364_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,053] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GGACTCCT-ATAGAGAG_S364_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,084] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_AGGCAGAA-ATAGAGAG_S362_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,086] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_AGGCAGAA-ATAGAGAG_S362_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,116] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_CTTGGTAT-GGACTTGG_S333_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,117] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_CTTGGTAT-GGACTTGG_S333_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,147] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TAGGCATG-ATAGAGAG_S365_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,148] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TAGGCATG-ATAGAGAG_S365_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,180] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TAAGGCGA-AGAGGATA_S366_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,181] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TAAGGCGA-AGAGGATA_S366_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,211] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TTACAGGA-GCTTGTCA_S357_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,213] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TTACAGGA-GCTTGTCA_S357_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,244] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_AAGATACT-ATGTAAGT_S335_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,246] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_AAGATACT-ATGTAAGT_S335_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,278] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_CTCTCGTC-AGGTTATA_S343_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,279] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_CTCTCGTC-AGGTTATA_S343_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,306] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TCCTGAGC-AGAGGATA_S369_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,308] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TCCTGAGC-AGAGGATA_S369_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,338] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_AGGCAGAA-TCTACTCT_S374_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,339] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_AGGCAGAA-TCTACTCT_S374_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,371] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GATTCTGC-CTCTCGTC_S346_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,372] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GATTCTGC-CTCTCGTC_S346_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,401] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_AGCCTCAT-TCTCTACT_S334_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,403] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_AGCCTCAT-TCTCTACT_S334_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,437] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GCACGGAC-TGCGAGAC_S344_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,440] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GCACGGAC-TGCGAGAC_S344_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,478] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_AACAGGTT-CTTGGTAT_S336_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,480] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_AACAGGTT-CTTGGTAT_S336_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,512] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GATCTATC-AGCCTCAT_S337_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,514] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GATCTATC-AGCCTCAT_S337_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,544] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TCATCCTT-AGCTCGCT_S352_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,546] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TCATCCTT-AGCTCGCT_S352_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,576] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TTGGACTC-CTGCTTCC_S355_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,578] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TTGGACTC-CTGCTTCC_S355_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,605] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GGAGCGTC-GCACGGAC_S347_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,607] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GGAGCGTC-GCACGGAC_S347_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,636] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_AGTACTCC-AACAGGTT_S339_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,638] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_AGTACTCC-AACAGGTT_S339_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,671] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TCCAACGC-AAGTCCAA_S345_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,673] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TCCAACGC-AAGTCCAA_S345_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,704] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_ACGCACCT-CCTTCACC_S353_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,706] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_ACGCACCT-CCTTCACC_S353_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,738] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_CGTACTAG-AGAGGATA_S367_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,740] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_CGTACTAG-AGAGGATA_S367_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,771] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GCAATGCA-AACGTTCC_S359_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,773] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GCAATGCA-AACGTTCC_S359_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,805] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GGTGAACC-TCCAACGC_S348_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,806] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GGTGAACC-TCCAACGC_S348_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,835] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TTCCTGTT-AAGATACT_S338_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,837] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TTCCTGTT-AAGATACT_S338_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,866] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GCTTGTCA-GTATGTTC_S354_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,868] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GCTTGTCA-GTATGTTC_S354_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,901] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TAAGGCGA-ATAGAGAG_S360_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,903] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TAAGGCGA-ATAGAGAG_S360_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,932] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_AGGCAGAA-AGAGGATA_S368_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,934] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_AGGCAGAA-AGAGGATA_S368_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:14,965] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_CGTACTAG-TCTACTCT_S373_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,966] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_CGTACTAG-TCTACTCT_S373_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:14,998] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TCTCTACT-GAACCGCG_S331_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:15,000] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TCTCTACT-GAACCGCG_S331_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:15,029] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_ATGTAAGT-CATAGAGT_S332_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:15,031] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_ATGTAAGT-CATAGAGT_S332_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:15,060] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_AGCTCGCT-GATTCTGC_S349_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:15,062] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_AGCTCGCT-GATTCTGC_S349_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:15,093] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_CTGCTTCC-GATCTATC_S340_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:15,095] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_CTGCTTCC-GATCTATC_S340_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:15,127] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GGACTTGG-CGTCTGCG_S330_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:15,129] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GGACTTGG-CGTCTGCG_S330_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:15,158] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GACGTCTT-GGTGAACC_S351_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:15,160] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GACGTCTT-GGTGAACC_S351_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:15,188] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TAAGGCGA-TCTACTCT_S372_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:15,190] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TAAGGCGA-TCTACTCT_S372_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:15,225] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_CGTACTAG-ATAGAGAG_S361_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:15,226] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_CGTACTAG-ATAGAGAG_S361_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:15,257] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_AACGTTCC-AGTACTCC_S356_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:15,259] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_AACGTTCC-AGTACTCC_S356_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:15,288] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TAGGCATG-AGAGGATA_S371_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:15,290] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TAGGCATG-AGAGGATA_S371_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:15,324] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_CTACGACA-TTGGACTC_S358_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:15,326] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_CTACGACA-TTGGACTC_S358_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:15,357] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_TCCTGAGC-ATAGAGAG_S363_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:15,358] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_TCCTGAGC-ATAGAGAG_S363_R1_001_val_1_fastqc.html
+[2020-10-02 09:45:15,391] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_CCTTCACC-GGAGCGTC_S350_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:15,392] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_CCTTCACC-GGAGCGTC_S350_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:15,424] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_GGACTCCT-AGAGGATA_S370_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:15,426] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_GGACTCCT-AGAGGATA_S370_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:15,458] multiqc                                            [DEBUG  ]  File ignored by hicexplorer because it exceeded search pattern filesize limit: 1777-HE-1_AAGTCCAA-TACTCATA_S342_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:15,459] multiqc                                            [DEBUG  ]  File ignored by longranger/invocation because it exceeded search pattern filesize limit: 1777-HE-1_AAGTCCAA-TACTCATA_S342_R2_001_val_2_fastqc.html
+[2020-10-02 09:45:15,699] multiqc.plots.bargraph                             [DEBUG  ]  Using matplotlib version 3.3.2
+[2020-10-02 09:45:15,699] multiqc.plots.linegraph                            [DEBUG  ]  Using matplotlib version 3.3.2
+[2020-10-02 09:45:15,700] multiqc                                            [DEBUG  ]  No samples found: custom_content
+[2020-10-02 09:45:15,704] multiqc                                            [DEBUG  ]  No samples found: conpair
+[2020-10-02 09:45:15,710] multiqc                                            [DEBUG  ]  No samples found: peddy
+[2020-10-02 09:45:15,713] multiqc                                            [DEBUG  ]  No samples found: somalier
+[2020-10-02 09:45:15,716] multiqc                                            [DEBUG  ]  No samples found: methylQA
+[2020-10-02 09:45:15,719] multiqc                                            [DEBUG  ]  No samples found: mosdepth
+[2020-10-02 09:45:15,723] multiqc                                            [DEBUG  ]  No samples found: phantompeakqualtools
+[2020-10-02 09:45:15,726] multiqc                                            [DEBUG  ]  No samples found: qualimap
+[2020-10-02 09:45:15,728] multiqc                                            [DEBUG  ]  No samples found: preseq
+[2020-10-02 09:45:15,731] multiqc                                            [DEBUG  ]  No samples found: quast
+[2020-10-02 09:45:15,734] multiqc                                            [DEBUG  ]  No samples found: qorts
+[2020-10-02 09:45:15,736] multiqc                                            [DEBUG  ]  No samples found: rna_seqc
+[2020-10-02 09:45:15,739] multiqc                                            [DEBUG  ]  No samples found: rockhopper
+[2020-10-02 09:45:15,741] multiqc                                            [DEBUG  ]  No samples found: rsem
+[2020-10-02 09:45:15,746] multiqc                                            [DEBUG  ]  No samples found: rseqc
+[2020-10-02 09:45:15,748] multiqc                                            [DEBUG  ]  No samples found: busco
+[2020-10-02 09:45:15,751] multiqc                                            [DEBUG  ]  No samples found: goleft_indexcov
+[2020-10-02 09:45:15,754] multiqc                                            [DEBUG  ]  No samples found: disambiguate
+[2020-10-02 09:45:15,757] multiqc                                            [DEBUG  ]  No samples found: supernova
+[2020-10-02 09:45:15,761] multiqc                                            [DEBUG  ]  No samples found: deeptools
+[2020-10-02 09:45:15,764] multiqc                                            [DEBUG  ]  No samples found: sargasso
+[2020-10-02 09:45:15,766] multiqc                                            [DEBUG  ]  No samples found: verifybamid
+[2020-10-02 09:45:15,769] multiqc                                            [DEBUG  ]  No samples found: mirtrace
+[2020-10-02 09:45:15,771] multiqc                                            [DEBUG  ]  No samples found: happy
+[2020-10-02 09:45:15,774] multiqc                                            [DEBUG  ]  No samples found: mirtop
+[2020-10-02 09:45:15,777] multiqc                                            [DEBUG  ]  No samples found: homer
+[2020-10-02 09:45:15,780] multiqc                                            [DEBUG  ]  No samples found: macs2
+[2020-10-02 09:45:15,782] multiqc                                            [DEBUG  ]  No samples found: theta2
+[2020-10-02 09:45:15,785] multiqc                                            [DEBUG  ]  No samples found: snpeff
+[2020-10-02 09:45:15,788] multiqc                                            [DEBUG  ]  No samples found: gatk
+[2020-10-02 09:45:15,791] multiqc                                            [DEBUG  ]  No samples found: htseq
+[2020-10-02 09:45:15,794] multiqc                                            [DEBUG  ]  No samples found: bcftools
+[2020-10-02 09:45:15,796] multiqc                                            [DEBUG  ]  No samples found: featureCounts
+[2020-10-02 09:45:15,799] multiqc                                            [DEBUG  ]  No samples found: fgbio
+[2020-10-02 09:45:15,804] multiqc                                            [DEBUG  ]  No samples found: dragen
+[2020-10-02 09:45:15,806] multiqc                                            [DEBUG  ]  No samples found: dedup
+[2020-10-02 09:45:15,809] multiqc                                            [DEBUG  ]  No samples found: damageprofiler
+[2020-10-02 09:45:15,817] multiqc                                            [DEBUG  ]  No samples found: biobambam2
+[2020-10-02 09:45:15,820] multiqc                                            [DEBUG  ]  No samples found: mtnucratio
+[2020-10-02 09:45:15,823] multiqc                                            [DEBUG  ]  No samples found: picard
+[2020-10-02 09:45:15,826] multiqc                                            [DEBUG  ]  No samples found: prokka
+[2020-10-02 09:45:15,828] multiqc                                            [DEBUG  ]  No samples found: samblaster
+[2020-10-02 09:45:15,832] multiqc                                            [DEBUG  ]  No samples found: samtools
+[2020-10-02 09:45:15,834] multiqc                                            [DEBUG  ]  No samples found: sexdeterrmine
+[2020-10-02 09:45:15,838] multiqc                                            [DEBUG  ]  No samples found: bamtools
+[2020-10-02 09:45:15,840] multiqc                                            [DEBUG  ]  No samples found: jellyfish
+[2020-10-02 09:45:15,843] multiqc                                            [DEBUG  ]  No samples found: vcftools
+[2020-10-02 09:45:15,846] multiqc                                            [DEBUG  ]  No samples found: longranger
+[2020-10-02 09:45:15,848] multiqc                                            [DEBUG  ]  No samples found: stacks
+[2020-10-02 09:45:15,851] multiqc                                            [DEBUG  ]  No samples found: varscan2
+[2020-10-02 09:45:15,856] multiqc                                            [DEBUG  ]  No samples found: bbmap
+[2020-10-02 09:45:15,859] multiqc                                            [DEBUG  ]  No samples found: bismark
+[2020-10-02 09:45:15,862] multiqc                                            [DEBUG  ]  No samples found: biscuit
+[2020-10-02 09:45:15,864] multiqc                                            [DEBUG  ]  No samples found: hicexplorer
+[2020-10-02 09:45:15,867] multiqc                                            [DEBUG  ]  No samples found: hicup
+[2020-10-02 09:45:15,869] multiqc                                            [DEBUG  ]  No samples found: hicpro
+[2020-10-02 09:45:15,872] multiqc                                            [DEBUG  ]  No samples found: salmon
+[2020-10-02 09:45:15,875] multiqc                                            [DEBUG  ]  No samples found: kallisto
+[2020-10-02 09:45:15,877] multiqc                                            [DEBUG  ]  No samples found: slamdunk
+[2020-10-02 09:45:15,880] multiqc                                            [DEBUG  ]  No samples found: star
+[2020-10-02 09:45:15,882] multiqc                                            [DEBUG  ]  No samples found: hisat2
+[2020-10-02 09:45:15,885] multiqc                                            [DEBUG  ]  No samples found: tophat
+[2020-10-02 09:45:15,888] multiqc                                            [DEBUG  ]  No samples found: bowtie2
+[2020-10-02 09:45:15,890] multiqc                                            [DEBUG  ]  No samples found: bowtie1
+[2020-10-02 09:45:15,893] multiqc                                            [DEBUG  ]  No samples found: snpsplit
+[2020-10-02 09:45:15,895] multiqc                                            [DEBUG  ]  No samples found: kat
+[2020-10-02 09:45:15,898] multiqc                                            [DEBUG  ]  No samples found: leehom
+[2020-10-02 09:45:15,900] multiqc                                            [DEBUG  ]  No samples found: adapterRemoval
+[2020-10-02 09:45:15,903] multiqc                                            [DEBUG  ]  No samples found: clipandmerge
+[2020-10-02 09:45:15,905] multiqc                                            [DEBUG  ]  No samples found: cutadapt
+[2020-10-02 09:45:15,908] multiqc                                            [DEBUG  ]  No samples found: flexbar
+[2020-10-02 09:45:15,910] multiqc                                            [DEBUG  ]  No samples found: kaiju
+[2020-10-02 09:45:15,914] multiqc                                            [DEBUG  ]  No samples found: kraken
+[2020-10-02 09:45:15,917] multiqc                                            [DEBUG  ]  No samples found: malt
+[2020-10-02 09:45:15,920] multiqc                                            [DEBUG  ]  No samples found: trimmomatic
+[2020-10-02 09:45:15,923] multiqc                                            [DEBUG  ]  No samples found: sickle
+[2020-10-02 09:45:15,926] multiqc                                            [DEBUG  ]  No samples found: skewer
+[2020-10-02 09:45:15,928] multiqc                                            [DEBUG  ]  No samples found: sortmerna
+[2020-10-02 09:45:15,931] multiqc                                            [DEBUG  ]  No samples found: biobloomtools
+[2020-10-02 09:45:15,933] multiqc                                            [DEBUG  ]  No samples found: fastq_screen
+[2020-10-02 09:45:15,936] multiqc                                            [DEBUG  ]  No samples found: afterqc
+[2020-10-02 09:45:15,938] multiqc                                            [DEBUG  ]  No samples found: fastp
+[2020-10-02 09:45:16,108] multiqc.modules.fastqc.fastqc                      [INFO   ]  Found 90 reports
+[2020-10-02 09:45:18,015] multiqc                                            [DEBUG  ]  No samples found: pycoqc
+[2020-10-02 09:45:18,019] multiqc                                            [DEBUG  ]  No samples found: minionqc
+[2020-10-02 09:45:18,021] multiqc                                            [DEBUG  ]  No samples found: multivcfanalyzer
+[2020-10-02 09:45:18,024] multiqc                                            [DEBUG  ]  No samples found: clusterflow
+[2020-10-02 09:45:18,027] multiqc                                            [DEBUG  ]  No samples found: bcl2fastq
+[2020-10-02 09:45:18,029] multiqc                                            [DEBUG  ]  No samples found: interop
+[2020-10-02 09:45:18,032] multiqc                                            [DEBUG  ]  No samples found: ivar
+[2020-10-02 09:45:18,034] multiqc                                            [DEBUG  ]  No samples found: flash
+[2020-10-02 09:45:18,037] multiqc                                            [DEBUG  ]  No samples found: seqyclean
+[2020-10-02 09:45:18,131] multiqc                                            [INFO   ]  Compressing plot data
+[2020-10-02 09:45:19,307] multiqc                                            [INFO   ]  Report      : multiqc_report.html
+[2020-10-02 09:45:19,307] multiqc                                            [INFO   ]  Data        : multiqc_data
+[2020-10-02 09:45:19,307] multiqc                                            [DEBUG  ]  Moving data file from '/var/folders/kw/5hd8rx0938d8sy57sc85dpz80000gn/T/tmp6eksjsp2/multiqc_data' to '/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/fastqc/multiqc_data'
+[2020-10-02 09:45:19,516] multiqc                                            [INFO   ]  MultiQC complete
