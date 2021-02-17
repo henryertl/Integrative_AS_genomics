@@ -92,7 +92,7 @@ ATAC_minimal_start_end_gene_RNA_int <- join_all(list(RNA_minimal, ATAC_minimal_s
 ATAC_minimal_start_end_gene_RNA_int$Name <- NULL
 ATAC_minimal_start_end_gene_RNA_int$beg_first_exon <- 0
 
-## OUTPUT: 3786 txStart/End regions
+## OUTPUT: 3768 txStart/End regions
 
 ### join 2 classes ###
 all_classes_integrated <- rbind(ATAC_minimal_start_end_gene_RNA_int, RNA_minimal_closest_locus)
@@ -133,18 +133,34 @@ all_classes_integrated$distance_to_exon1 <- abs(all_classes_integrated[,18] - al
 write.table(all_classes_integrated, file = "./AS_ATAC_RNA_2020_10_1/ATAC_RNA_comp/ZHR_Z30_ATAC_RNA_integrated_minimal.txt", row.names = F, quote = F, sep = "\t")
 
 O <- all_classes_integrated %>%
-ggplot(aes(x=P_est.mean, y=P_est.mean_RNA, fill=div_category, color=div_category)) +
-geom_point()
+ggplot(aes(x=P_est.mean, y=P_est.mean_RNA, color=div_category)) +
+geom_point() +
+theme_main() +
+scale_color_discrete(name = "Divergence category",
+labels = c("Acc cons & Exp cons", "Acc cons & Exp div", "Acc div & Exp cons", "Acc div & Exp div opposite", "Acc div & Exp div same ")) +
+theme(legend.text= element_text(size = 10),
+legend.title = element_text(size = 10)) +
+xlab("Estimated accessibility divergence") +
+ylab("Estimated expression divergennce") +
+ylim(-2.5,2.5) +
+xlim(-2.5,2.5) +
+ggtitle("Accessibility vs Expression divergence - integrated categories")
+	ggsave(O, file = "./Figures/Acc_vs_Exp_categories_ZHR_Z30.pdf")
 
 # % cis expression by group
-M <- all_classes_integrated[all_classes_integrated$P_qvalue_RNA < 0.05,] %>%
+M <- all_classes_integrated[all_classes_integrated$P_qvalue_RNA < 0.05 & all_classes_integrated$class == "start", ,] %>%
 ggplot(aes(x=div_category, fill=div_category, y=perc_cis_RNA)) +
 geom_boxplot(notch=TRUE) +
 theme_main() +
 ylab("Gene expression - percent cis") +
 xlab("") +
 scale_fill_discrete(guide=FALSE) +
-scale_x_discrete(labels=c("CA conserved\nGE diverged","CA diverged\nGE diverged\nopposite dir.", "CA diverged\nGE diverged\nsame dir."))
+scale_x_discrete(labels=c("Acc cons & Exp div","Acc div & Exp div\nopposite", "Acc div & Exp div\nsame")) +
+ggtitle("Percent cis of expression divergence across integrated categories") +
+theme(axis.text = element_text(size = 15),
+axis.title = element_text(size = 15),
+plot.title = element_text(size = 13, face = "bold"))
+	ggsave(M, file = "./Figures/Exp_percCis_int_categories_ZHR_Z30.pdf")
 
 # % cis accessibility by group
 N <- all_classes_integrated[all_classes_integrated$P_qvalue < 0.05,] %>%
@@ -154,28 +170,139 @@ theme_main() +
 ylab("Accessibility - percent cis") +
 xlab("") +
 scale_fill_discrete(guide=FALSE) +
-scale_x_discrete(labels=c("CA diverged\nGE conserved","CA diverged\nGE diverged\nopposite dir.", "CA diverged\nGE diverged\nsame dir."))
+scale_x_discrete(labels=c("Acc div & Exp cons","Acc div & Exp div\nopposite", "Acc div & Exp div\nsame")) +
+ggtitle("Percent cis of accessibility across integrated categories") +
+theme(axis.text = element_text(size = 15),
+axis.title = element_text(size = 15),
+plot.title = element_text(size = 13, face = "bold"))
+	ggsave(N, file = "./Figures/Acc_percCis_int_categories_ZHR_Z30.pdf")
 
 # effect size expression by group
-all_classes_integrated[all_classes_integrated$P_qvalue_RNA < 0.05,] %>%
+L <- all_classes_integrated[all_classes_integrated$P_qvalue_RNA < 0.05,] %>%
 ggplot(aes(x=div_category, fill=div_category, y=abs(P_est.mean_RNA))) +
 geom_boxplot(notch=TRUE) +
-ylim(0,2)
+ylim(0,1.5) +
+ylab("Magnitude of estimated expression divergence") +
+xlab("") +
+scale_x_discrete(labels=c("Acc cons & Exp div","Acc div & Exp div\nopposite", "Acc div & Exp div\nsame")) +
+scale_fill_discrete(guide=FALSE) +
+theme_main() +
+theme(axis.text = element_text(size = 15),
+axis.title = element_text(size = 15),
+plot.title = element_text(size = 13, face = "bold")) +
+ggtitle("Magnitude of expression divergence across integrated categories")
+	ggsave(L, file = "./Figures/Exp_effectsize_int_categories_ZHR_Z30.pdf")
 
-all_classes_integrated[all_classes_integrated$P_qvalue_RNA < 0.05 & all_classes_integrated$class == "start",] %>%
+# same as above but with JUST txStart to demonstrate that this isn't just due to incorrect pairing
+K <- all_classes_integrated[all_classes_integrated$P_qvalue_RNA < 0.05 & all_classes_integrated$class == "start",] %>%
 ggplot(aes(x=div_category, fill=div_category, y=abs(P_est.mean_RNA))) +
 geom_boxplot(notch=TRUE) +
-ylim(0,2)
+ylim(0,1.5) +
+ylab("Magnitude of estimated expression divergence") +
+xlab("") +
+scale_x_discrete(labels=c("Acc cons & Exp div","Acc div & Exp div\nopposite", "Acc div & Exp div\nsame")) +
+scale_fill_discrete(guide=FALSE) +
+theme_main() +
+theme(axis.text = element_text(size = 15),
+axis.title = element_text(size = 15),
+plot.title = element_text(size = 12, face = "bold")) +
+ggtitle("Magnitude of expression divergence (only txStart) across integrated categories")
+	ggsave(K, file = "./Figures/Exp_effectsize_txStartONLY_int_categories_ZHR_Z30.pdf")
 
 # effect size accessibility by group
-all_classes_integrated[all_classes_integrated$P_qvalue < 0.05,] %>%
+Y <- all_classes_integrated[all_classes_integrated$P_qvalue < 0.05,] %>%
 ggplot(aes(x=div_category, fill=div_category, y=abs(P_est.mean))) +
 geom_boxplot(notch=TRUE) +
-ylim(0,2)
+ylim(0,1.5) +
+ylab("Magnitude of estimated accessibility divergence") +
+xlab("") +
+scale_x_discrete(labels=c("Acc div & Exp cons","Acc div & Exp div\nopposite", "Acc div & Exp div\nsame")) +
+scale_fill_discrete(guide=FALSE) +
+theme_main() +
+theme(axis.text = element_text(size = 15),
+axis.title = element_text(size = 15),
+plot.title = element_text(size = 13, face = "bold")) +
+ggtitle("Magnitude of accessibility divergence across integrated categories")
+	ggsave(Y, file = "./Figures/Acc_effectsize_int_categories_ZHR_Z30.pdf")
 
-
-
-all_classes_integrated[(all_classes_integrated$class == "inter" | all_classes_integrated$class == "intra") & all_classes_integrated$distance_to_exon1 < 10000,] %>%
-ggplot(aes(x=div_category, fill=div_category, y=distance_to_exon1)) +
+# effect size accessibility by group with ONLY txSTart
+Z <- all_classes_integrated[all_classes_integrated$P_qvalue < 0.05 & all_classes_integrated$class == "start",] %>%
+ggplot(aes(x=div_category, fill=div_category, y=abs(P_est.mean))) +
 geom_boxplot(notch=TRUE) +
-ylim(0,2)
+ylim(0,1.5) +
+ylab("Magnitude of estimated accessibility divergence") +
+xlab("") +
+scale_x_discrete(labels=c("Acc div & Exp cons","Acc div & Exp div\nopposite", "Acc div & Exp div\nsame")) +
+scale_fill_discrete(guide=FALSE) +
+theme_main() +
+theme(axis.text = element_text(size = 15),
+axis.title = element_text(size = 15),
+plot.title = element_text(size = 11, face = "bold")) +
+ggtitle("Magnitude of accessibility divergence (only txStart) across integrated categories")
+	ggsave(Z, file = "./Figures/Acc_effectsize_txStartONLY_int_categories_ZHR_Z30.pdf")
+
+# compare distance to gene by category - limit to 30Kb
+Q <- all_classes_integrated[(all_classes_integrated$class == "inter" | all_classes_integrated$class == "intra") & all_classes_integrated$div_category != "AccC_ExpC" & all_classes_integrated$div_category != "AccC_ExpD",] %>%
+ggplot(aes(x=div_category, fill=div_category, y=distance_to_exon1/1000)) +
+geom_boxplot(notch=TRUE) +
+ylim(0,30) +
+ylab("Distance to closest expressed gene") +
+xlab("") +
+#scale_x_discrete(labels=c("Acc div & Exp cons","Acc div & Exp div\nopposite", "Acc div & Exp div\nsame")) +
+scale_fill_discrete(guide=FALSE) +
+theme_main() +
+theme(axis.text = element_text(size = 13),
+axis.title = element_text(size = 15),
+plot.title = element_text(size = 14, face = "bold")) +
+ggtitle("Kilobases to closest gene across integrated categories")
+	ggsave(Q, file = "./Figures/Dist_to_closest_gene_int_categories_ZHR_Z30.pdf")
+
+
+class_props <- matrix(ncol = 4, nrow = 5) %>% as.data.frame()
+colnames(class_props) <- c("inter", "intra", "start", "end")
+class_props[1,1] <- nrow(all_classes_integrated[all_classes_integrated$class == "inter" & all_classes_integrated$div_category == "AccC_ExpC",])
+class_props[2,1] <- nrow(all_classes_integrated[all_classes_integrated$class == "inter" & all_classes_integrated$div_category == "AccC_ExpD",])
+class_props[3,1] <- nrow(all_classes_integrated[all_classes_integrated$class == "inter" & all_classes_integrated$div_category == "AccD_ExpC",])
+class_props[4,1] <- nrow(all_classes_integrated[all_classes_integrated$class == "inter" & all_classes_integrated$div_category == "AccD_ExpD_O",])
+class_props[5,1] <- nrow(all_classes_integrated[all_classes_integrated$class == "inter" & all_classes_integrated$div_category == "AccD_ExpD_S",])
+
+class_props[1,2] <- nrow(all_classes_integrated[all_classes_integrated$class == "intra" & all_classes_integrated$div_category == "AccC_ExpC",])
+class_props[2,2] <- nrow(all_classes_integrated[all_classes_integrated$class == "intra" & all_classes_integrated$div_category == "AccC_ExpD",])
+class_props[3,2] <- nrow(all_classes_integrated[all_classes_integrated$class == "intra" & all_classes_integrated$div_category == "AccD_ExpC",])
+class_props[4,2] <- nrow(all_classes_integrated[all_classes_integrated$class == "intra" & all_classes_integrated$div_category == "AccD_ExpD_O",])
+class_props[5,2] <- nrow(all_classes_integrated[all_classes_integrated$class == "intra" & all_classes_integrated$div_category == "AccD_ExpD_S",])
+
+class_props[1,3] <- nrow(all_classes_integrated[all_classes_integrated$class == "start" & all_classes_integrated$div_category == "AccC_ExpC",])
+class_props[2,3] <- nrow(all_classes_integrated[all_classes_integrated$class == "start" & all_classes_integrated$div_category == "AccC_ExpD",])
+class_props[3,3] <- nrow(all_classes_integrated[all_classes_integrated$class == "start" & all_classes_integrated$div_category == "AccD_ExpC",])
+class_props[4,3] <- nrow(all_classes_integrated[all_classes_integrated$class == "start" & all_classes_integrated$div_category == "AccD_ExpD_O",])
+class_props[5,3] <- nrow(all_classes_integrated[all_classes_integrated$class == "start" & all_classes_integrated$div_category == "AccD_ExpD_S",])
+
+class_props[1,4] <- nrow(all_classes_integrated[all_classes_integrated$class == "end" & all_classes_integrated$div_category == "AccC_ExpC",])
+class_props[2,4] <- nrow(all_classes_integrated[all_classes_integrated$class == "end" & all_classes_integrated$div_category == "AccC_ExpD",])
+class_props[3,4] <- nrow(all_classes_integrated[all_classes_integrated$class == "end" & all_classes_integrated$div_category == "AccD_ExpC",])
+class_props[4,4] <- nrow(all_classes_integrated[all_classes_integrated$class == "end" & all_classes_integrated$div_category == "AccD_ExpD_O",])
+class_props[5,4] <- nrow(all_classes_integrated[all_classes_integrated$class == "end" & all_classes_integrated$div_category == "AccD_ExpD_S",])
+
+class_props$inter <- class_props$inter/sum(class_props$inter)
+class_props$intra <- class_props$intra/sum(class_props$intra)
+class_props$start <- class_props$start/sum(class_props$start)
+class_props$end <- class_props$end/sum(class_props$end)
+class_props$div_category <- c("AccC_ExpC", "AccC_ExpD", "AccD_ExpC", "AccD_ExpD_O", "AccD_ExpD_S")
+
+G <- melt(class_props) %>%
+ggplot(aes(x=variable, y=value, fill=div_category)) +
+geom_bar(stat="identity", colour="white") +
+xlab("") +
+ylab("Proportion") +
+scale_x_discrete(labels=c("Intergenic","Intragenic", "txStart", "txEnd")) +
+scale_fill_discrete(name = "Divergence category",
+labels = c("Acc cons & Exp cons", "Acc cons & Exp div", "Acc div & Exp cons", "Acc div & Exp div opposite", "Acc div & Exp div same ")) +
+theme_main() +
+theme(axis.text = element_text(size = 12),
+axis.title = element_text(size = 15),
+plot.title = element_text(size = 13, face = "bold"),
+legend.text= element_text(size = 10),
+legend.title = element_text(size = 10)) +
+ggtitle("Relative proportions of integrated category for each class")
+	ggsave(G, file = "./Figures/Prop_div_categories_by_int_categories_ZHR_Z30.pdf")
