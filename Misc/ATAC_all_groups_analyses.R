@@ -23,6 +23,7 @@ theme_main <- function() {
 )
 }
 
+
 #######################################################################
 ###### Generate base plots - % cis accumulation and differences #######
 #######################################################################
@@ -175,7 +176,7 @@ ALL$Auto_X[i] <- "Autosome"
 
 }
 }
- 
+
 ## Plot distribution of estimated expression differences (P_est.mean)
 ALL[ALL$P_qvalue < 0.5 | ALL$H_qvalue < 0.5,] %>%
 ggplot(aes(x=chrom, y=abs(P_est.mean), fill = chrom))+
