@@ -7,12 +7,14 @@
 ## generating files input files ##
 ##################################
 
+setwd("/Users/henryertl/Documents/Devs/Integrative_AS_genomics")
+
 # attach first exon coords to RNA data
-RNA <- read.delim("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/RNA_seq/Data_tables/Full_results_output_ZHR_Z30_RNA_20min_100max.txt", header = T)
-first_exon_coords <- read.delim("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_gene_coords_first_exon.bed", header = F)
+RNA <- read.delim("./AS_ATAC_RNA_2020_10_1/RNA_seq/Data_tables/Full_results_output_ZHR_Z30_RNA_20min_100max.txt", header = T)
+first_exon_coords <- read.delim("./AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_gene_coords_first_exon.bed", header = F)
 colnames(first_exon_coords) <- c("chrom_exon1", "start_exon1", "end_exon1", "Gene")
 RNA_coords <- join_all(list(RNA, first_exon_coords), by = "Gene", type = "left")
-write.table(RNA_coords, file = "/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/RNA_seq/Data_tables/Full_results_output_ZHR_Z30_RNA_20min_100max_exon1_coords.txt", row.names = F, quote = F, sep = "\t")
+write.table(RNA_coords, file = "./AS_ATAC_RNA_2020_10_1/RNA_seq/Data_tables/Full_results_output_ZHR_Z30_RNA_20min_100max_exon1_coords.txt", row.names = F, quote = F, sep = "\t")
 
 # rearrange RNA_coords in unix to just be coordinates and in BED format for below
 bedtools closest \
@@ -26,9 +28,9 @@ bedtools closest \
 ########################################
 
 # read in data from bedtools
-ATAC <- read.delim("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/ZHR_Z30_Full_results_output_ALL_classes.txt", header = T)
-RNA <- read.delim("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/RNA_seq/Data_tables/Full_results_output_ZHR_Z30_RNA_20min_100max.txt", header = T)
-ATAC_RNA_closest  <- read.delim("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_RNA_comp/ZHR_Z30_ATAC_RNA_closest.bed", header = F, sep = "\t")
+ATAC <- read.delim("./AS_ATAC_RNA_2020_10_1/ATAC_seq/ZHR_Z30_Full_results_output_ALL_classes.txt", header = T)
+RNA <- read.delim("./AS_ATAC_RNA_2020_10_1/RNA_seq/Data_tables/Full_results_output_ZHR_Z30_RNA_20min_100max.txt", header = T)
+ATAC_RNA_closest  <- read.delim("./AS_ATAC_RNA_2020_10_1/ATAC_RNA_comp/ZHR_Z30_ATAC_RNA_closest.bed", header = F, sep = "\t")
 
 ## clean up ATAC data - keep relevant columns and separate classes
 ATAC_minimal <- ATAC[,c(1:4,19:31,34,35)]
@@ -56,8 +58,8 @@ RNA_minimal_closest_locus <- join_all(list(RNA_minimal, ATAC_minimal_intra_inter
 
 # Set 2: integrate start and end data with corresponding gene and expression info
 # prepare txSTart and End files - basically just re-writing the locus key
-start_end <- read.delim("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_all_uniq", header = T)
-gene_conversions <- read.delim("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/Dmel_geneID_conversion_table.txt", header = F)
+start_end <- read.delim("./AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_all_uniq", header = T)
+gene_conversions <- read.delim("./AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/Dmel_geneID_conversion_table.txt", header = F)
 gene_conversions <- gene_conversions[,c(1,5)]
 colnames(gene_conversions) <- c("Gene", "ID")
 
@@ -128,9 +130,9 @@ if (all_classes_integrated$P_qvalue_RNA[i] < 0.05 && all_classes_integrated$P_qv
 
 all_classes_integrated$distance_to_exon1 <- abs(all_classes_integrated[,18] - all_classes_integrated[,35])
 
-write.table(all_classes_integrated, file = "/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_RNA_comp/ZHR_Z30_ATAC_RNA_integrated_minimal.txt", row.names = F, quote = F, sep = "\t")
+write.table(all_classes_integrated, file = "./AS_ATAC_RNA_2020_10_1/ATAC_RNA_comp/ZHR_Z30_ATAC_RNA_integrated_minimal.txt", row.names = F, quote = F, sep = "\t")
 
-O <- all_classes_integrated %>% 
+O <- all_classes_integrated %>%
 ggplot(aes(x=P_est.mean, y=P_est.mean_RNA, fill=div_category, color=div_category)) +
 geom_point()
 
