@@ -132,7 +132,7 @@ Parental_hybrid_model <- function(locus_ID, Parental_hybrid_data){
 ######################
 ##Read primary data ##
 ######################
-full_dataset <- read.delim("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/Data_tables/ZHR_TSIM_ATAC_txEnd500_CPM_final_dm6_20min.txt", header = T)
+full_dataset <- read.delim("/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Data_tables/ZHR_TSIM_ATAC_intragenic_CPM_final_dm6_20min.txt", header = T)
 colnames(full_dataset) <- c("chrom", "start", "end", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2")
 full_dataset$Paste_locus <- paste(full_dataset$chrom, full_dataset$start, full_dataset$end, sep = "_")
 
@@ -167,18 +167,18 @@ if (Arguments[1] == "Parents") {
 
   Parental_results <- do.call(rbind, mclapply(Parental_data$Paste_locus, function(x) Parental_model(x, Parental_data), mc.cores = 4))
 
-  write.table(Parental_results, file = "/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/Parental_test_output_ZHR_TSIM_ATAC_CPM_macs2_20min_txEnd.txt", row.names = F, quote = F)
+  write.table(Parental_results, file = "/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/Parental_test_output_ZHR_TSIM_ATAC_CPM_macs2_20min_intragenic.txt", row.names = F, quote = F)
 
 } else if (Arguments[1] == "Hybrids"){
 
   Hybrid_results <- do.call(rbind, mclapply(Hybrid_data$Paste_locus, function(x) Hybrid_model(x, Hybrid_data), mc.cores = 4))
 
-  write.table(Hybrid_results, file = "/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/Hybrid_test_output_ZHR_TSIM_ATAC_CPM_macs2_20min_txEnd.txt", row.names = F, quote = F)
+  write.table(Hybrid_results, file = "/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/Hybrid_test_output_ZHR_TSIM_ATAC_CPM_macs2_20min_intragenic.txt", row.names = F, quote = F)
 
 } else if(Arguments[1] == "Parent-Hybrid") {
 
   Parental_hybrid_results <- do.call(rbind, mclapply(Parental_hybrid_data$Paste_locus, function(x) Parental_hybrid_model(x, Parental_hybrid_data), mc.cores = 4))
 
-  write.table(Parental_hybrid_results, file = "/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/Parental_hybrid_test_output_ZHR_TSIM_ATAC_CPM_macs2_20min_txEnd.txt", row.names = F, quote = F)
+  write.table(Parental_hybrid_results, file = "/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/Parental_hybrid_test_output_ZHR_TSIM_ATAC_CPM_macs2_20min_intragenic.txt", row.names = F, quote = F)
 
 }

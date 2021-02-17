@@ -11,6 +11,7 @@
 
 ######################## DEFINE INPUTS ##################################
 
+
 strain1="ZHR"
 strain2="SIM"
 strain1_chrom_names="zhr_bow_chrX zhr_bow_chr2L zhr_bow_chr2R zhr_bow_chr3L zhr_bow_chr3R zhr_bow_chr4"
