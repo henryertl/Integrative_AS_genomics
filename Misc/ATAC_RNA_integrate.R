@@ -250,11 +250,12 @@ ylab("Distance to closest expressed gene") +
 xlab("") +
 #scale_x_discrete(labels=c("Acc div & Exp cons","Acc div & Exp div\nopposite", "Acc div & Exp div\nsame")) +
 scale_fill_discrete(guide=FALSE) +
+scale_x_discrete(labels=c("Acc div & Exp cons","Acc div & Exp div\nopposite", "Acc div & Exp div\nsame")) +
 theme_main() +
 theme(axis.text = element_text(size = 13),
 axis.title = element_text(size = 15),
-plot.title = element_text(size = 14, face = "bold")) +
-ggtitle("Kilobases to closest gene across integrated categories")
+plot.title = element_text(size = 12, face = "bold")) +
+ggtitle("Kilobases to closest gene (inter- & intragenic) across integrated categories")
 	ggsave(Q, file = "./Figures/Dist_to_closest_gene_int_categories_ZHR_Z30.pdf")
 
 
