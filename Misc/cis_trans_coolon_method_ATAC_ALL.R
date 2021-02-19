@@ -11,6 +11,8 @@ ZHR_Z30_TSIM_all <- cbind(ZHR_Z30_all, ZHR_TSIM_all)
 ZHR_Z30_TSIM_all <- ZHR_Z30_TSIM_all[c(1:15,19:ncol(ZHR_Z30_TSIM_all))]
 colnames(ZHR_Z30_TSIM_all) <- c("chrom", "start", "end", "ZHR_1", "ZHR_2", "ZHR_3", "Z30_1", "Z30_2", "Z30_3", "HYB_1_ZHR", "HYB_2_ZHR", "HYB_3_ZHR", "HYB_1_Z30", "HYB_2_Z30", "HYB_3_Z30", "ZHR_1_tsim", "ZHR_2_tsim", "ZHR_3_tsim", "TSIM_1", "TSIM_2", "TSIM_3", "HYB_1_ZHR_tsim", "HYB_2_ZHR_tsim", "HYB_3_ZHR_tsim", "HYB_1_TSIM", "HYB_2_TSIM", "HYB_3_TSIM")
 
+write.table(ZHR_Z30_TSIM_all, file = "/Users/henryertl/Documents/Devs/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_Z30_TSIM_comb_ATAC_counts_ALLclasses.bed", sep = "\t", quote = F, row.names = F)
+
 df <- ZHR_Z30_TSIM_all
 
 # get total read counts
