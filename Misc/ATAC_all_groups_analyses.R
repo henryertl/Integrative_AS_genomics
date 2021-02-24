@@ -23,23 +23,32 @@ theme_main <- function() {
 )
 }
 
-
+rm(list = ls())
 #######################################################################
 ###### Generate base plots - % cis accumulation and differences #######
 #######################################################################
 
 # Read in Bayes output files
-inter <- read.delim("~/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/Full_results_output_ZHR_Z30_ATAC_20min_intergenic.txt", header = T)
-inter$class <- "inter"
-
-intra <- read.delim("~/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/Full_results_output_ZHR_Z30_ATAC_20min_intragenic.txt", header = T)
-intra$class <- "intra"
-
-start <- read.delim("~/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/Full_results_output_ZHR_Z30_ATAC_20min_txStart.txt", header = T)
+Full_results_output <- read.delim("/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Data_tables/Full_results_output_ZHR_Z30_ATAC_20min_centered.txt", header = T) %>% as.data.frame()
+Full_results_output$Direction <- NULL
+start <- read.delim("/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/Full_results_output_ZHR_TSIM_ATAC_20min_txStart.txt", header = T)
 start$class <- "start"
+start <- start[,c(4,17)]
+colnames(start)[1] <- c("Paste_locus")
 
-end <- read.delim("~/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/Full_results_output_ZHR_Z30_ATAC_20min_txEnd.txt", header = T)
+
+
+end <- read.delim("/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_Z30_ATAC_txEnd500_counts.bed", header = F) %>% as.data.frame()
 end$class <- "end"
+end <- end[,c(4,17)]
+colnames(end)[1] <- c("Paste_locus")
+
+intra <- read.delim("/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_Z30_ATAC_intragenic_peak_counts_center1000.bed", header = F) %>% as.data.frame()
+intra$class <- "intra"
+intra <- intra[,c(4,17)]
+colnames(intra)[1] <- c("Paste_locus")
+
+start <- join_all(list(Full_results_output, start), by = "Paste_locus", type = "full") %>% na.omit()
 
 # concatenate
 ALL <- bind_rows(inter, intra, start, end)

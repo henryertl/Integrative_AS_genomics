@@ -25,7 +25,7 @@ theme_main <- function() {
 #####################
 ##Read primary data##
 #####################
-full_dataset <- read.delim("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/Data_tables/ZHR_TSIM_sub_ATAC_macs2_combined_CPM_final_dm6_20min.txt", header = T)
+full_dataset <- read.delim("/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Data_tables/ZHR_TSIM_ATAC_counts_ALLclasses_20min_CPM_centered1000.txt", header = T)
 colnames(full_dataset) <- c("chrom", "start", "end", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2")
 full_dataset$Paste_locus <- paste(full_dataset$chrom, full_dataset$start, full_dataset$end, sep = "_")
 
@@ -37,9 +37,9 @@ Hybrid_data <- full_dataset[, c("chrom", "start", "end", "Paste_locus", "HYB_1_P
 ####################
 ##Combine datasets##
 ####################
-Parental_results <- read.table("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/ZHR_Z30_TSIM_universal_peakset_outputs/Parental_test_output_ZHR_TSIM_sub_ATAC_CPM_macs2_20min.txt", header = T)
-Hybrid_results <- read.table("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/ZHR_Z30_TSIM_universal_peakset_outputs/Hybrid_test_output_ZHR_TSIM_sub_ATAC_CPM_macs2_20min.txt", header = T)
-Parental_hybrid_results <- read.table("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/ZHR_Z30_TSIM_universal_peakset_outputs/Parental_Hybrid_test_output_ZHR_TSIM_sub_ATAC_CPM_macs2_20min.txt", header = T)
+Parental_results <- read.table("/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/ZHR_Z30_TSIM_universal_peakset_outputs/Parental_test_output_ZHR_TSIM_ATAC_CPM_macs2_20min_centered1000.txt", header = T)
+Hybrid_results <- read.table("/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/ZHR_Z30_TSIM_universal_peakset_outputs/Hybrid_test_output_ZHR_TSIM_ATAC_CPM_macs2_20min_centered1000.txt", header = T)
+Parental_hybrid_results <- read.table("/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/ZHR_Z30_TSIM_universal_peakset_outputs/Parental_Hybrid_test_output_ZHR_TSIM_ATAC_CPM_macs2_20min_centered1000.txt", header = T)
 
 Full_results_output <- join_all(list(Parental_data, Hybrid_data, Parental_results, Hybrid_results, Parental_hybrid_results), by = 'Paste_locus', type = 'full')
 

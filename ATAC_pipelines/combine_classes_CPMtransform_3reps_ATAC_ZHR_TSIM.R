@@ -7,7 +7,7 @@ setwd("/Users/wittkopp_member/Code")
 ##### 1000bp centered intra and inter #####
 start <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_TSIM_ATAC_txStart500_counts.bed", header = F)
 start$V4 <- NULL
-end <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_TSIM_ATAC_txStart500_counts.bed", header = F)
+end <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_TSIM_ATAC_txEnd500_counts.bed", header = F)
 end$V4 <- NULL
 inter <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_TSIM_ATAC_intergenic_peak_counts_center1000.bed", header = F)
 intra <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_TSIM_ATAC_intragenic_peak_counts_center1000.bed", header = F)
@@ -43,6 +43,14 @@ df_ATAC_CPM$V3 <- df_ATAC$end
 colnames(df_ATAC_CPM) <- c("chrom", "start", "end", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3",
 "HYB_1_P1", "HYB_2_P1", "HYB_3_P1","HYB_1_P2", "HYB_2_P2", "HYB_3_P2")
 write.table(df_ATAC_CPM, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Data_tables/ZHR_TSIM_ATAC_counts_ALLclasses_20min_CPM_centered1000.txt", row.names = F, quote = F, sep = "\t")
+
+# subset only overlapping with ZHR_Z30 set
+z30 <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Data_tables/ZHR_Z30_ATAC_counts_ALLclasses_20min_CPM_centered1000.txt", header = T)
+z30$Paste_locus <- paste(z30$chrom, z30$start, z30$end, sep="_")
+df_ATAC_CPM$Paste_locus <- paste(df_ATAC_CPM$chrom, df_ATAC_CPM$start, df_ATAC_CPM$end, sep="_")
+
+TSIM_subset <- left_join(df_ATAC_CPM, z30, by = "Paste_locus") %>% unique %>% na.omit()
+write.table(TSIM_subset, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Data_tables/ZHR_TSIM_ATAC_counts_ALLclasses_20min_CPM_centered1000_Z30overlap.txt", row.names = F, quote = F, sep = "\t")
 
 
 ##### normal intra and inter #####
