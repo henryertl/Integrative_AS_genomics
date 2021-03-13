@@ -1,9 +1,14 @@
-## goal: create dataframes to categorize
-### downloaded df from UCSC browswer and sorted uniq
+## goal: take output from Define_universal_peakset.sh and categorize into and intergenic, intragenic & create txStart and txEnd BED files
+
+### downloaded txStart and txEnd coords from UCSC browswer and sorted uniq
 
 # TXSTART AND END -- USE EXISTING DF FROM UCSC TO DEFINE +/- 500BP TXSTART AND END
+
+#setwd to folder with cloned 'Integrative_AS_genomics' repository
+setwd("/Users/wittkopp_member/Code/")
+
 # read in dataframe and add locus ID
-df <- read.delim("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_txStart_End_coords.txt", header = T)
+df <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_txStart_End_coords.txt", header = T)
 colnames(df)[1] <- "chrom"
 df$paste_locus <- paste(df$chrom, df$txStart, df$txEnd, sep = "_")
 
@@ -25,13 +30,13 @@ df_CDS <- df[,c("chrom", "cdsStart", "cdsEnd", "paste_locus")]
 df_txStart_only <- df[,c("chrom", "txStart", "txStart_plus1", "paste_locus")]
 df_txEnd_only <- df[,c("chrom", "txEnd", "txEnd_plus1", "paste_locus")]
 
-write.table(df_txStart, "/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_txStart.txt", sep="\t", quote = F, row.names=F)
-write.table(df_txStart_End, "/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_txStart_End.txt", sep="\t", quote = F, row.names=F)
-write.table(df_txStart_only, "/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_txStart_only.txt", sep="\t", quote = F, row.names=F)
-write.table(df_txEnd, "/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_txEnd.txt", sep="\t", quote = F, row.names=F)
-write.table(df_txEnd_only, "/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_txEnd_only.txt", sep="\t", quote = F, row.names=F)
-write.table(df_CDS, "/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_CDS.txt", sep="\t", quote = F, row.names=F)
-write.table(df, "/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_all_uniq_processed.txt", sep="\t", quote = F, row.names=F)
+write.table(df_txStart, "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_txStart.txt", sep="\t", quote = F, row.names=F)
+write.table(df_txStart_End, "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_txStart_End.txt", sep="\t", quote = F, row.names=F)
+write.table(df_txStart_only, "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_txStart_only.txt", sep="\t", quote = F, row.names=F)
+write.table(df_txEnd, "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_txEnd.txt", sep="\t", quote = F, row.names=F)
+write.table(df_txEnd_only, "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_txEnd_only.txt", sep="\t", quote = F, row.names=F)
+write.table(df_CDS, "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_CDS.txt", sep="\t", quote = F, row.names=F)
+write.table(df, "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_all_uniq_processed.txt", sep="\t", quote = F, row.names=F)
 
 # INTERGENIC AND INTRAGENIC CLASSES -- REMOVE ALL PEAKS OVERLAPPING WITH TXSTART AND END
 
@@ -65,22 +70,23 @@ bedtools intersect -v -wa \
 
 
 #### Make centered tables from intra- and inter-genic files
-# read in tables
-inter <- read.delim("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_Z30_TSIM_analysis_regions_intergenic_NO_TxStart_End.bed", sep = "\t", header = F)
-intra <- read.delim("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_Z30_TSIM_analysis_regions_intragenic_NO_TxStart_End.bed", sep = "\t", header = F)
+# read in inter and intra BEDs from BEDtools to R
+inter <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_Z30_TSIM_analysis_regions_intergenic_NO_TxStart_End.bed", sep = "\t", header = F)
+intra <- read.delim("/./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_Z30_TSIM_analysis_regions_intragenic_NO_TxStart_End.bed", sep = "\t", header = F)
 
-# get centered peaks
+# center +/- 500 to compare with txStart and txEnd
 inter$length <- inter$V3 - inter$V2
 inter_new <- inter[,c(1, 2, 3, 4)]
-inter_new$V2 <- ceiling(inter_new$V2 + (inter_new$length/2))
-inter_new$V3 <- ceiling(inter_new$V2 + 1)
+inter_new$V2 <- (ceiling(inter_new$V2 + (inter_new$length/2))) - 500
+inter_new$V3 <- (ceiling(inter_new$V2 + (inter_new$length/2))) + 500
 colnames(inter_new) <- c("chrom", "start", "end", "length")
-write.table(inter_new, "/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_Z30_TSIM_analysis_regions_intergenic_NO_TxStart_End_center.txt", sep="\t", quote = F, row.names=F)
+inter_new$length <- NULL
+write.table(inter_new, "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_Z30_TSIM_analysis_regions_intergenic_NO_TxStart_End_center1000.txt", sep="\t", quote = F, row.names=F)
 
-### re-format the CDS regions
 intra$length <- intra$V3 - intra$V2
 intra_new <- intra[,c(1, 2, 3, 4)]
-intra_new$V2 <- ceiling(intra_new$V2 + (intra_new$length/2))
-intra_new$V3 <- ceiling(intra_new$V2 + 1)
+intra_new$V2 <- (ceiling(intra_new$V2 + (intra_new$length/2))) - 500
+intra_new$V3 <- (ceiling(intra_new$V2 + (intra_new$length/2))) + 500
 colnames(intra_new) <- c("chrom", "start", "end", "length")
-write.table(intra_new, "/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_Z30_TSIM_analysis_regions_intragenic_NO_TxStart_End_center.txt", sep="\t", quote = F, row.names=F)
+intra_new$length <- NULL
+write.table(intra_new, "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_Z30_TSIM_analysis_regions_intragenic_NO_TxStart_End_center1000.txt", sep="\t", quote = F, row.names=F)

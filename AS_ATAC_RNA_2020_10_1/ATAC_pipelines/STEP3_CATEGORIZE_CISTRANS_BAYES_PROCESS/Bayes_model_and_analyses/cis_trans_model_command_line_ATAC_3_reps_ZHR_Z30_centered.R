@@ -7,6 +7,8 @@ library(parallel)
 library(qvalue)
 library(magrittr)
 
+# set wd
+setwd("/Users/wittkopp_member/Code")
 
 ##############################
 ##Get command line arguments##
@@ -56,13 +58,12 @@ Parental_model <- function(locus_ID, Parental_data){
 ################
 Hybrid_model <- function(locus_ID, Hybrid_data){
 
-	##ADJUST WHEN WE HAVE FULL DATA
+	## Add locus IDs
 	chrom <- Hybrid_data[Hybrid_data$Paste_locus == locus_ID,]$chrom
 	pos_start <- Hybrid_data[Hybrid_data$Paste_locus == locus_ID,]$start
 	pos_end <- Hybrid_data[Hybrid_data$Paste_locus == locus_ID,]$end
 	Paste_locus <- Hybrid_data$Paste_locus[Hybrid_data$Paste_locus == locus_ID]
 
-	##ADJUST WHEN WE HAVE FULL DATA
 	##Reformat data for modelling
 	reformed_matrix <- matrix(ncol = 3, nrow = 3) %>% as.data.frame()
 	reformed_matrix[1,] <- c(Hybrid_data[Hybrid_data$Paste_locus == locus_ID, c(5, 8)])
@@ -93,13 +94,12 @@ Hybrid_model <- function(locus_ID, Hybrid_data){
 ###########################
 Parental_hybrid_model <- function(locus_ID, Parental_hybrid_data){
 
-	##ADJUST WHEN WE HAVE FULL DATA
+	## Add locus IDs
 	chrom <- Parental_hybrid_data[Parental_hybrid_data$Paste_locus == locus_ID,]$chrom
 	pos_start <- Parental_hybrid_data[Parental_hybrid_data$Paste_locus == locus_ID,]$start
 	pos_end <- Parental_hybrid_data[Parental_hybrid_data$Paste_locus == locus_ID,]$end
 	Paste_locus <- Parental_hybrid_data$Paste_locus[Parental_hybrid_data$Paste_locus == locus_ID]
 
-	##ADJUST WHEN WE HAVE FULL DATA
 	##Reformat data for modelling
 	reformed_matrix <- matrix(ncol = 2, nrow = 6) %>% as.data.frame()
 	reformed_matrix[1,] <- c(Parental_hybrid_data[Parental_hybrid_data$Paste_locus == locus_ID, c(4, 7)]) #p1
@@ -118,7 +118,7 @@ Parental_hybrid_model <- function(locus_ID, Parental_hybrid_data){
 	H_P_mod <- inla(p1_reads ~ Env, data = reformed_matrix , family = "binomial", Ntrials = Total_reads)
 
 	coef <- H_P_mod$summary.fixed
-	fixed_effect_posterior <- H_P_mod$marginals.fixed[[2]] ##Check this... and run some tests
+	fixed_effect_posterior <- H_P_mod$marginals.fixed[[2]] 
 	lower_p <- inla.pmarginal(0, fixed_effect_posterior)
 	upper_p <- 1 - inla.pmarginal(0, fixed_effect_posterior)
 	post_pred_p <- 2 * (min(lower_p, upper_p))
@@ -131,7 +131,8 @@ Parental_hybrid_model <- function(locus_ID, Parental_hybrid_data){
 ######################
 ##Read primary data ##
 ######################
-full_dataset <- read.delim("/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Data_tables/ZHR_Z30_ATAC_counts_ALLclasses_20min_CPM_centered1000.txt", header = T)
+full_dataset <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/CPM_transformed_datatables/ZHR_Z30_ATAC_counts_ALLclasses_20min_CPM_centered1000.txt", header = T)
+full_dataset$class <- NULL
 colnames(full_dataset) <- c("chrom", "start", "end", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2")
 full_dataset$Paste_locus <- paste(full_dataset$chrom, full_dataset$start, full_dataset$end, sep = "_")
 
@@ -152,7 +153,7 @@ All_reads_p2_hyb_r1 <- sum(full_dataset$HYB_1_P2)
 All_reads_p2_hyb_r2 <- sum(full_dataset$HYB_2_P2)
 All_reads_p2_hyb_r3 <- sum(full_dataset$HYB_3_P2)
 
-##Get collumns for Parent, hybrid and hybrid parent data
+##Get columns for Parent, hybrid and hybrid parent data
 Parental_data <- full_dataset[, c("chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3")]
 
 Hybrid_data <- full_dataset[, c("chrom", "start", "end", "Paste_locus", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2")]
@@ -166,18 +167,18 @@ if (Arguments[1] == "Parents") {
 
   Parental_results <- do.call(rbind, mclapply(Parental_data$Paste_locus, function(x) Parental_model(x, Parental_data), mc.cores = 4))
 
-  write.table(Parental_results, file = "/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/Parental_test_output_ZHR_Z30_ATAC_CPM_macs2_20min_centered1000.txt", row.names = F, quote = F)
+  write.table(Parental_results, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Parental_test_output_ZHR_Z30_ATAC_CPM_macs2_20min_centered1000.txt", row.names = F, quote = F)
 
 } else if (Arguments[1] == "Hybrids"){
 
   Hybrid_results <- do.call(rbind, mclapply(Hybrid_data$Paste_locus, function(x) Hybrid_model(x, Hybrid_data), mc.cores = 4))
 
-  write.table(Hybrid_results, file = "/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/Hybrid_test_output_ZHR_Z30_ATAC_CPM_macs2_20min_centered1000.txt", row.names = F, quote = F)
+  write.table(Hybrid_results, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Hybrid_test_output_ZHR_Z30_ATAC_CPM_macs2_20min_centered1000.txt", row.names = F, quote = F)
 
 } else if(Arguments[1] == "Parent-Hybrid") {
 
   Parental_hybrid_results <- do.call(rbind, mclapply(Parental_hybrid_data$Paste_locus, function(x) Parental_hybrid_model(x, Parental_hybrid_data), mc.cores = 4))
 
-  write.table(Parental_hybrid_results, file = "/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/Parental_Hybrid_test_output_ZHR_Z30_ATAC_CPM_macs2_20min_centered1000.txt", row.names = F, quote = F)
+  write.table(Parental_hybrid_results, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Parental_Hybrid_test_output_ZHR_Z30_ATAC_CPM_macs2_20min_centered1000.txt", row.names = F, quote = F)
 
 }
