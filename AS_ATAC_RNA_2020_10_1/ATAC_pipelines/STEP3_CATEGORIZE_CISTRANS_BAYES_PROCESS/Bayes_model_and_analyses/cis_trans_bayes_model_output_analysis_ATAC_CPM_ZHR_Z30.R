@@ -22,10 +22,16 @@ theme_main <- function() {
 )
 }
 
+# set wd
+setwd("/Users/wittkopp_member/Code")
+
+setwd("/Users/henryertl/Documents/Devs")
+
 #####################
 ##Read primary data##
 #####################
-full_dataset <- read.delim("/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Data_tables/ZHR_Z30_ATAC_counts_ALLclasses_20min_CPM_centered1000.txt", header = T)
+full_dataset <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/CPM_transformed_datatables/ZHR_Z30_ATAC_counts_ALLclasses_20min_CPM_centered1000.txt", header = T)
+full_dataset$class <- NULL
 colnames(full_dataset) <- c("chrom", "start", "end", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2")
 full_dataset$Paste_locus <- paste(full_dataset$chrom, full_dataset$start, full_dataset$end, sep = "_")
 
@@ -37,9 +43,9 @@ Hybrid_data <- full_dataset[, c("chrom", "start", "end", "Paste_locus", "HYB_1_P
 ####################
 ##Combine datasets##
 ####################
-Parental_results <- read.table("/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/Parental_test_output_ZHR_Z30_ATAC_CPM_macs2_20min_centered1000.txt", header = T) %>% unique()
-Hybrid_results <- read.table("/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/Hybrid_test_output_ZHR_Z30_ATAC_CPM_macs2_20min_centered1000.txt", header = T) %>% unique()
-Parental_hybrid_results <- read.table("/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/Parental_Hybrid_test_output_ZHR_Z30_ATAC_CPM_macs2_20min_centered1000.txt", header = T) %>% unique()
+Parental_results <- read.table("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Parental_test_output_ZHR_Z30_ATAC_CPM_macs2_20min_centered1000.txt", header = T) %>% unique()
+Hybrid_results <- read.table("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Hybrid_test_output_ZHR_Z30_ATAC_CPM_macs2_20min_centered1000.txt", header = T) %>% unique()
+Parental_hybrid_results <- read.table("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Parental_Hybrid_test_output_ZHR_Z30_ATAC_CPM_macs2_20min_centered1000.txt", header = T) %>% unique()
 
 Full_results_output <- join_all(list(Parental_data, Hybrid_data, Parental_results, Hybrid_results, Parental_hybrid_results), by = 'Paste_locus', type = 'full')
 
@@ -173,12 +179,13 @@ nrow(subset(Full_results_output, Full_results_output$Direction == "Reinforcing")
 Full_results_output$trans_reg_diff <- Full_results_output$P_est.mean - Full_results_output$H_est.mean
 Full_results_output$perc_cis <- (abs(Full_results_output$H_est.mean)/(abs(Full_results_output$H_est.mean) + abs(Full_results_output$trans_reg_diff))) * 100
 
+## Reassign classes
 
 ##################################
 ##Write out full results to file##
-##################################head
+##################################
 
-write.table(Full_results_output, file = "/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Data_tables/Full_results_output_ZHR_Z30_ATAC_20min_centered.txt", sep = "\t", row.names = F, quote = F)
+write.table(Full_results_output, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Full_results_output_ZHR_Z30_ATAC_20min_centered1000.txt", sep = "\t", row.names = F, quote = F)
 
 ##########################
 ##Generate summary plots##
