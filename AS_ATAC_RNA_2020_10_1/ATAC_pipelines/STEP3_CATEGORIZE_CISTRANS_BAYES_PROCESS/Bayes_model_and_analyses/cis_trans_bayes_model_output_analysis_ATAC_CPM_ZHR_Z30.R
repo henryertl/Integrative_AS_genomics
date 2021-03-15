@@ -187,6 +187,8 @@ classes <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_
 classes$Paste_locus <- paste(classes$chrom, classes$start, classes$end, sep = "_")
 classes_key <- classes[,c(ncol(classes), ncol(classes)-1)]
 
+write.table(classes_key, file = "/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/class_pastelocus.txt", sep = "\t", quote = F, row.names = F)
+
 Full_results_output <- left_join(Full_results_output, classes_key, by = "Paste_locus")
 
 ##################################
