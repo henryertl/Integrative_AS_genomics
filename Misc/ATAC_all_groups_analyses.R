@@ -28,33 +28,8 @@ rm(list = ls())
 ###### Generate base plots - % cis accumulation and differences #######
 #######################################################################
 
-# Read in Bayes output files
-Full_results_output <- read.delim("/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Data_tables/Full_results_output_ZHR_Z30_ATAC_20min_centered.txt", header = T) %>% as.data.frame()
-Full_results_output$Direction <- NULL
-start <- read.delim("/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq/Bayes_test_outputs/Full_results_output_ZHR_TSIM_ATAC_20min_txStart.txt", header = T)
-start$class <- "start"
-start <- start[,c(4,17)]
-colnames(start)[1] <- c("Paste_locus")
-
-
-
-end <- read.delim("/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_Z30_ATAC_txEnd500_counts.bed", header = F) %>% as.data.frame()
-end$class <- "end"
-end <- end[,c(4,17)]
-colnames(end)[1] <- c("Paste_locus")
-
-intra <- read.delim("/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_Z30_ATAC_intragenic_peak_counts_center1000.bed", header = F) %>% as.data.frame()
-intra$class <- "intra"
-intra <- intra[,c(4,17)]
-colnames(intra)[1] <- c("Paste_locus")
-
-start <- join_all(list(Full_results_output, start), by = "Paste_locus", type = "full") %>% na.omit()
-
-# concatenate
-ALL <- bind_rows(inter, intra, start, end)
-ALL_shortened <- ALL[,1:4]
-write.table(ALL, file="~/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/ZHR_Z30_Full_results_output_ALL_classes.txt", sep = "\t", row.names = F, quote = F)
-write.table(ALL_shortened, file="~/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/ZHR_Z30_Full_results_output_ALL_classes_shortened.bed", sep = "\t", row.names = F, quote = F)
+# Read in Bayes output file
+ALL <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Full_results_output_ZHR_Z30_ATAC_20min_centered1000_classes.txt", header = T)
 
 ## factor sort to have classes in same order in every plot
 ALL$class <- factor(ALL$class,levels = c("start", "end", "inter", "intra"))
@@ -69,7 +44,7 @@ ylab("Percent cis") +
 xlab("") +
 scale_fill_discrete(guide=FALSE) +
 scale_x_discrete(labels=c("txStart","txEnd", "intergenic", "intragenic"))
-ggsave(R, file = "~/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/Figures/ZHR_Z30_Full_results_output_ALL_classes_perc_cis.pdf")
+ggsave(R, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/ZHR_Z30_Full_results_output_ALL_classes_perc_cis.pdf")
 
 pairwise.wilcox.test(ALL$perc_cis,ALL$class)
 
@@ -82,7 +57,7 @@ ylab("Estimated accessibility divergence") +
 xlab("") +
 scale_fill_discrete(guide=FALSE) +
 scale_x_discrete(labels=c("txStart","txEnd", "intergenic", "intragenic"))
-ggsave(S, file = "~/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/Figures/ZHR_Z30_Full_results_output_ALL_classes_expression_change.pdf")
+ggsave(S, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/ZHR_Z30_Full_results_output_ALL_classes_accessibility_divergence.pdf")
 
 
 pairwise.wilcox.test(abs(ALL$P_est.mean),ALL$class)
@@ -117,7 +92,7 @@ xlab("") +
 ggtitle("Proportion of differentially accessible regions") +
 theme_main() +
 scale_x_discrete(labels=c("txStart","txEnd", "intergenic", "intragenic"))
-ggsave(Z, file = "~/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/Figures/ZHR_Z30_Full_results_output_ALL_classes_diff_acess_proportion.pdf")
+ggsave(Z, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/ZHR_Z30_Full_results_output_ALL_classes_diff_acess_proportion.pdf")
 
 
 ### reinforcing vs opposing
@@ -150,7 +125,7 @@ xlab("") +
 geom_hline(yintercept=0.5, linetype="dashed", color = "grey") +
 theme_main() +
 scale_x_discrete(labels=c("txStart","txEnd", "intergenic", "intragenic"))
-ggsave(L, file = "~/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/Figures/ZHR_Z30_Full_results_output_ALL_classes_oppos_reinforc_proportion.pdf")
+ggsave(L, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/ZHR_Z30_Full_results_output_ALL_classes_oppos_reinforc_proportion.pdf")
 
 
 ###### chromosome effect?
