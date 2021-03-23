@@ -1,3 +1,6 @@
+setwd("/Users/henryertl/Documents/Devs")
+
+
 # read in both Full_results_output fiels
 
 Z30 <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Full_results_output_ZHR_Z30_ATAC_20min_centered1000_classes.txt", header = T) %>% na.omit() %>% unique()
@@ -30,6 +33,7 @@ facet_wrap(~class_Z30, nrow=2, , labeller = labeller(class_Z30=
       "intra" = "intragenic")
   ))
 
+ggsave(A, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/perc_cis_withinVSbetween.pdf")
 
 B <- Z30_TSIM[(Z30_TSIM$P_qvalue_TSIM < 0.05 | Z30_TSIM$H_qvalue_TSIM < 0.05) & (Z30_TSIM$P_qvalue_Z30 < 0.05 | Z30_TSIM$H_qvalue_Z30 < 0.05),] %>%
 melt(id.vars = "class_Z30", measure.vars = c("P_est.mean_Z30", "P_est.mean_TSIM")) %>%
@@ -47,3 +51,5 @@ facet_wrap(~class_Z30, nrow=2, , labeller = labeller(class_Z30=
       "inter" = "intergenic",
       "intra" = "intragenic")
   ))
+
+ggsave(B, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Est_CA_divergence_withinVSbetween.pdf")
