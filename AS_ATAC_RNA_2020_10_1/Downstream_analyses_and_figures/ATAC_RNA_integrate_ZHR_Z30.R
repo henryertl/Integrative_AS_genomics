@@ -132,6 +132,8 @@ all_classes_integrated$distance_to_exon1 <- abs(all_classes_integrated[,18] - al
 
 write.table(all_classes_integrated, file = "./AS_ATAC_RNA_2020_10_1/ATAC_RNA_comp/ZHR_Z30_ATAC_RNA_integrated_minimal.txt", row.names = F, quote = F, sep = "\t")
 
+all_classes_integrated <- read.delim("./AS_ATAC_RNA_2020_10_1/ATAC_RNA_comp/ZHR_Z30_ATAC_RNA_integrated_minimal.txt", header = T)
+
 O <- all_classes_integrated %>%
 ggplot(aes(x=P_est.mean, y=P_est.mean_RNA, color=div_category)) +
 geom_point() +
@@ -146,6 +148,68 @@ ylim(-2.5,2.5) +
 xlim(-2.5,2.5) +
 ggtitle("Accessibility vs Expression divergence - integrated categories")
 	ggsave(O, file = "./Figures/Acc_vs_Exp_categories_ZHR_Z30.pdf")
+
+## without guide
+	G <- all_classes_integrated %>%
+	ggplot(aes(x=P_est.mean, y=P_est.mean_RNA, color=div_category)) +
+	geom_point() +
+	theme_main() +
+	scale_color_discrete(guide = F) +
+	xlab("Estimated accessibility divergence") +
+	ylab("Estimated expression divergennce") +
+	ylim(-2.5,2.5) +
+	xlim(-2.5,2.5) +
+	ggtitle("Accessibility vs Expression divergence - integrated categories")
+
+	X <- all_classes_integrated[all_classes_integrated$class == "start",] %>%
+	ggplot(aes(x=P_est.mean, y=P_est.mean_RNA, color=div_category)) +
+	geom_point() +
+	theme_main() +
+	scale_color_discrete(guide = F) +
+	xlab("Estimated accessibility divergence") +
+	ylab("Estimated expression divergennce") +
+	ylim(-2.5,2.5) +
+	xlim(-2.5,2.5) +
+	ggtitle("Accessibility vs Expression divergence - integrated categories")
+
+	Y <- all_classes_integrated[all_classes_integrated$class == "end",] %>%
+	ggplot(aes(x=P_est.mean, y=P_est.mean_RNA, color=div_category)) +
+	geom_point() +
+	theme_main() +
+	scale_color_discrete(guide = F) +
+	xlab("Estimated accessibility divergence") +
+	ylab("Estimated expression divergennce") +
+	ylim(-2.5,2.5) +
+	xlim(-2.5,2.5) +
+	ggtitle("Accessibility vs Expression divergence - integrated categories")
+
+	Z <- all_classes_integrated[all_classes_integrated$class == "inter",] %>%
+	ggplot(aes(x=P_est.mean, y=P_est.mean_RNA, color=div_category)) +
+	geom_point() +
+	theme_main() +
+	scale_color_discrete(guide = F) +
+	xlab("Estimated accessibility divergence") +
+	ylab("Estimated expression divergennce") +
+	ylim(-2.5,2.5) +
+	xlim(-2.5,2.5) +
+	ggtitle("Accessibility vs Expression divergence - integrated categories")
+
+	A <- all_classes_integrated[all_classes_integrated$class == "intra",] %>%
+	ggplot(aes(x=P_est.mean, y=P_est.mean_RNA, color=div_category)) +
+	geom_point() +
+	theme_main() +
+	scale_color_discrete(guide = F) +
+	xlab("Estimated accessibility divergence") +
+	ylab("Estimated expression divergennce") +
+	ylim(-2.5,2.5) +
+	xlim(-2.5,2.5) +
+	ggtitle("Accessibility vs Expression divergence - integrated categories")
+
+	B <- plot_grid(X, Y, Z, A)
+
+
+
+		ggsave(G, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Acc_vs_Exp_categories_ZHR_Z30_noguide.pdf")
 
 # % cis expression by group
 M <- all_classes_integrated[all_classes_integrated$P_qvalue_RNA < 0.05 & all_classes_integrated$class == "start", ,] %>%

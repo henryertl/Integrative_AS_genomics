@@ -33,7 +33,20 @@ facet_wrap(~class_Z30, nrow=2, , labeller = labeller(class_Z30=
       "intra" = "intragenic")
   ))
 
-ggsave(A, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/perc_cis_withinVSbetween.pdf")
+ggsave(A, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/perc_cis_withinVSbetween.pdf", width = 4.5)
+
+C <- Z30_TSIM[(Z30_TSIM$P_qvalue_TSIM < 0.05 | Z30_TSIM$H_qvalue_TSIM < 0.05) & (Z30_TSIM$P_qvalue_Z30 < 0.05 | Z30_TSIM$H_qvalue_Z30 < 0.05),] %>%
+melt(measure.vars = c("perc_cis_Z30", "perc_cis_TSIM")) %>%
+ggplot(aes(x=variable, y=value, fill=variable)) +
+geom_boxplot(notch=TRUE) +
+theme_main() +
+ylab("CA divergence due to cis changes (percent)") +
+xlab("") +
+scale_x_discrete(labels=c("Within\nspecies", "Between\nspecies")) +
+scale_fill_discrete(guide=F)
+
+ggsave(C, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/perc_cis_withinVSbetween_ALL.pdf", width = 3)
+
 
 B <- Z30_TSIM[(Z30_TSIM$P_qvalue_TSIM < 0.05 | Z30_TSIM$H_qvalue_TSIM < 0.05) & (Z30_TSIM$P_qvalue_Z30 < 0.05 | Z30_TSIM$H_qvalue_Z30 < 0.05),] %>%
 melt(id.vars = "class_Z30", measure.vars = c("P_est.mean_Z30", "P_est.mean_TSIM")) %>%
@@ -52,4 +65,17 @@ facet_wrap(~class_Z30, nrow=2, , labeller = labeller(class_Z30=
       "intra" = "intragenic")
   ))
 
-ggsave(B, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Est_CA_divergence_withinVSbetween.pdf")
+ggsave(B, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Est_CA_divergence_withinVSbetween.pdf", width = 4.5)
+
+D <- Z30_TSIM[(Z30_TSIM$P_qvalue_TSIM < 0.05 | Z30_TSIM$H_qvalue_TSIM < 0.05) & (Z30_TSIM$P_qvalue_Z30 < 0.05 | Z30_TSIM$H_qvalue_Z30 < 0.05),] %>%
+melt(measure.vars = c("P_est.mean_Z30", "P_est.mean_TSIM")) %>%
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +
+geom_boxplot(notch=TRUE) +
+ylim(0,1) +
+theme_main() +
+ylab("Estimated CA divergence ") +
+xlab("") +
+scale_x_discrete(labels=c("Within\nspecies", "Between\nspecies")) +
+scale_fill_discrete(guide=F)
+
+ggsave(D, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Est_CA_divergence_withinVSbetween_ALL.pdf", width = 3)
