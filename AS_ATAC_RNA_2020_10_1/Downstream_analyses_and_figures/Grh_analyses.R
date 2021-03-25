@@ -2,12 +2,30 @@
 
 # load libraries
 library(plyr)
+library(dplyr)
 library(ggplot2)
 library(rstatix)
 
 # set wd
 setwd("/Users/wittkopp_member/Code/Integrative_AS_genomics")
 setwd("/Users/henryertl/Documents/Devs/Integrative_AS_genomics")
+
+theme_main <- function() {
+  theme_bw() +
+  theme(
+  #panel.grid.major = element_blank(),
+  #panel.grid.minor = element_blank(),
+  axis.text = element_text(size = 15),
+  axis.title = element_text(size = 15),
+  strip.text = element_text(size = 15),
+  legend.text= element_text(size = 15),
+  legend.title = element_text(size = 10),
+  plot.title = element_text(size = 15, face = "bold")
+
+)
+}
+
+
 
 # STEP 1: FIND OVERLAPPING REGIONS WITH GRH CHIP/MOTIF LOCATIONS
 #### BEDTOOLS command line to prep files #####
@@ -161,7 +179,11 @@ ZHR_Z30_regions_ALL_SNPs_GRh_final$P_est.mean_abs <- abs(ZHR_Z30_regions_ALL_SNP
 
 write.table(ZHR_Z30_regions_ALL_SNPs_GRh_final, file = "./AS_ATAC_RNA_2020_10_1/Grh_data/ZHR_Z30_GRH_SNPs_count_FINALALL.txt", sep = "\t", quote = F, row.names = F)
 
+ZHR_Z30_regions_ALL_SNPs_GRh_final <- read.delim("./AS_ATAC_RNA_2020_10_1/Grh_data/ZHR_Z30_GRH_SNPs_count_FINALALL.txt", header = T)
+
 # STEP 4: ANALYSES
+ZHR_Z30_regions_ALL_SNPs_GRh_final$class <- factor(ZHR_Z30_regions_ALL_SNPs_GRh_final$class,levels = c("start", "end", "inter", "intra"))
+
 ZHR_Z30_regions_ALL_SNPs_GRh_final_grh_overlap <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",]
 ZHR_Z30_regions_ALL_SNPs_GRh_final_sig_sub <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05 | ZHR_Z30_regions_ALL_SNPs_GRh_final$H_qvalue < 0.05,]
 ZHR_Z30_regions_ALL_SNPs_GRh_final_grh_overlap_7_9SNPs <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps > 4 & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps < 12,]
@@ -229,6 +251,18 @@ geom_boxplot(notch=T)
 I <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05 | ZHR_Z30_regions_ALL_SNPs_GRh_final$H_qvalue < 0.05,] %>%
 ggplot(aes(x=grh_motif_bin, y=total_region_snps, fill=grh_motif_bin))+
 geom_boxplot(notch=T)
+
+I <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%
+ggplot(aes(x=class, y=total_region_snps, fill=class))+
+geom_boxplot(notch=TRUE) +
+theme_main() +
+ylab("Number of SNPs in region") +
+xlab("") +
+scale_fill_discrete(guide=FALSE) +
+scale_x_discrete(labels=c("txStart","txEnd", "intergenic", "intragenic")) +
+ylim(0,30)
+ggsave(I, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/ZHR_Z30_Full_results_output_ALL_classes_total_SNPs.pdf")
+
 
 ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_snps_per_grh_motif_norm_by_total_snps <- (ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_snp_count / ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_motif_counts)/ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps
 
