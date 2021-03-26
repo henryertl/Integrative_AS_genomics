@@ -189,7 +189,7 @@ ZHR_Z30_regions_ALL_SNPs_GRh_final_sig_sub <- ZHR_Z30_regions_ALL_SNPs_GRh_final
 ZHR_Z30_regions_ALL_SNPs_GRh_final_grh_overlap_7_9SNPs <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps > 4 & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps < 12,]
 
 # are regions with grh motifs more or less divergent?
-G <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05 | ZHR_Z30_regions_ALL_SNPs_GRh_final$H_qvalue < 0.05,] %>%
+G <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%
 ggplot(aes(x=overlap_grh_motif_binary, y=abs(P_est.mean), fill=overlap_grh_motif_binary))+
 geom_boxplot(notch=T) +
 ylim(0,1)
@@ -241,27 +241,37 @@ ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_motif_bin <- factor(ZHR_Z30_regions_ALL_S
 
 G <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%
 ggplot(aes(x=grh_motif_bin, y=P_est.mean_abs, fill=grh_motif_bin))+
-geom_boxplot(notch=T) +
-ylim(0,2)
-
-H <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05 | ZHR_Z30_regions_ALL_SNPs_GRh_final$H_qvalue < 0.05,] %>%
-ggplot(aes(x=grh_motif_bin, y=perc_cis, fill=grh_motif_bin))+
-geom_boxplot(notch=T)
-
-I <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05 | ZHR_Z30_regions_ALL_SNPs_GRh_final$H_qvalue < 0.05,] %>%
-ggplot(aes(x=grh_motif_bin, y=total_region_snps, fill=grh_motif_bin))+
-geom_boxplot(notch=T)
-
-I <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%
-ggplot(aes(x=class, y=total_region_snps, fill=class))+
 geom_boxplot(notch=TRUE) +
+ylim(0,1) +
 theme_main() +
-ylab("Number of SNPs in region") +
+ylab("Estimted accessibility divergence") +
 xlab("") +
 scale_fill_discrete(guide=FALSE) +
-scale_x_discrete(labels=c("txStart","txEnd", "intergenic", "intragenic")) +
+scale_x_discrete(labels=c("0","1-2", "3-7", ">7"))
+ggsave(G, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Grh_motifs_series_acc_div.pdf")
+
+H <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%
+ggplot(aes(x=grh_motif_bin, y=perc_cis, fill=grh_motif_bin))+
+geom_boxplot(notch=TRUE) +
+theme_main() +
+xlab("") +
+scale_fill_discrete(guide=FALSE) +
+scale_x_discrete(labels=c("0","1-2", "3-7", ">7")) +
+ylab("perc cis")
+ggsave(H, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Grh_motifs_series_perc_cis.pdf")
+
+I <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%
+ggplot(aes(x=grh_motif_bin, y=total_region_snps, fill=grh_motif_bin))+
+geom_boxplot(notch=TRUE) +
+theme_main() +
+xlab("") +
+scale_fill_discrete(guide=FALSE) +
+scale_x_discrete(labels=c("0","1-2", "3-7", ">7")) +
+ylab("Number of SNPs in region") +
 ylim(0,30)
-ggsave(I, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/ZHR_Z30_Full_results_output_ALL_classes_total_SNPs.pdf")
+ggsave(I, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Grh_motifs_series_number_SNPs.pdf")
+
+
 
 
 ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_snps_per_grh_motif_norm_by_total_snps <- (ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_snp_count / ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_motif_counts)/ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps
@@ -286,8 +296,15 @@ pairwise.wilcox.test(ZHR_Z30_regions_ALL_SNPs_GRh_final$perc_cis,ZHR_Z30_regions
 # do variable grh motifs have more divergence than nonvariable?
 B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%
 ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+
-geom_boxplot(notch=T) +
-ylim(0,1)
+geom_boxplot(notch=TRUE) +
+ylim(0,1) +
+theme_main() +
+ylab("Estimted accessibility divergence") +
+xlab("") +
+scale_fill_discrete(guide=FALSE) +
+scale_x_discrete(labels=c("Regions w/o grh\nmotif variation","Regions w. grh\nmotif variation"))
+ggsave(B, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Access_div_by_grh_motifs_variation.pdf")
+
 
 pairwise.wilcox.test(ZHR_Z30_regions_ALL_SNPs_GRh_final_grh_overlap$P_est.mean_abs,ZHR_Z30_regions_ALL_SNPs_GRh_final_grh_overlap$overlap_grh_snp_binary)
 ## yes however this could be due to variable grh motifs being in overall more variable regions - q: 0.018
@@ -295,7 +312,13 @@ pairwise.wilcox.test(ZHR_Z30_regions_ALL_SNPs_GRh_final_grh_overlap$P_est.mean_a
 # are variable grh motifs in overall more variable regions?
 C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%
 ggplot(aes(x=overlap_grh_snp_binary, y=total_region_snps, fill=overlap_grh_snp_binary))+
-geom_boxplot(notch=F)
+geom_boxplot(notch=TRUE) +
+theme_main() +
+ylab("Number of SNPs") +
+xlab("") +
+scale_fill_discrete(guide=FALSE) +
+scale_x_discrete(labels=c("Regions w/o grh\nmotif variation","Regions w/ grh\nmotif variation"))
+ggsave(C, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/total_snps_by_grh_motifs_variation.pdf")
 
 pairwise.wilcox.test(ZHR_Z30_regions_ALL_SNPs_GRh_final_grh_overlap$total_region_snps,ZHR_Z30_regions_ALL_SNPs_GRh_final_grh_overlap$overlap_grh_snp_binary)
 ## yes these regions are just more variable... need to isolate the input from grh variation - q: <2e-16
@@ -308,9 +331,17 @@ ggplot(aes(x=total_region_snps))+
 geom_density()
 ## mean is ~8
 
-E <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%
+E <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps > 7 & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps < 17,] %>%
 ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+
-geom_boxplot(notch=T)
+geom_boxplot(notch=T) +
+ylim(0,1) +
+theme_main() +
+ylab("Estimted accessibility divergence for regions with 8 SNPs") +
+xlab("") +
+scale_fill_discrete(guide=FALSE) +
+scale_x_discrete(labels=c("Regions w/o grh\nmotif variation","Regions w/ grh\nmotif variation")) +
+facet_wrap(~total_region_snps, nrow=3)
+ggsave(E, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Access_div_by_grh_motifs_variation_only8SNPs.pdf")
 pairwise.wilcox.test(ZHR_Z30_regions_ALL_SNPs_GRh_final_grh_overlap$P_est.mean_abs,ZHR_Z30_regions_ALL_SNPs_GRh_final_grh_overlap$overlap_grh_snp_binary)
 
 ## if only subset regions w/ 8 total snps, then there is a slight difference for regions with variable grh motifs

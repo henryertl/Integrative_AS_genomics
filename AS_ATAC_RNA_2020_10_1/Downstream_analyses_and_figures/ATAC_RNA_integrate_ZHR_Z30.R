@@ -132,7 +132,7 @@ all_classes_integrated$distance_to_exon1 <- abs(all_classes_integrated[,18] - al
 
 write.table(all_classes_integrated, file = "./AS_ATAC_RNA_2020_10_1/ATAC_RNA_comp/ZHR_Z30_ATAC_RNA_integrated_minimal.txt", row.names = F, quote = F, sep = "\t")
 
-all_classes_integrated <- read.delim("./AS_ATAC_RNA_2020_10_1/ATAC_RNA_comp/ZHR_Z30_ATAC_RNA_integrated_minimal.txt", header = T)
+all_classes_integrated <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_RNA_comp/ZHR_Z30_ATAC_RNA_integrated_minimal.txt", header = T)
 
 O <- all_classes_integrated %>%
 ggplot(aes(x=P_est.mean, y=P_est.mean_RNA, color=div_category)) +
@@ -147,7 +147,7 @@ ylab("Estimated expression divergennce") +
 ylim(-2.5,2.5) +
 xlim(-2.5,2.5) +
 ggtitle("Accessibility vs Expression divergence - integrated categories")
-	ggsave(O, file = "./Figures/Acc_vs_Exp_categories_ZHR_Z30.pdf")
+	ggsave(O, file = "Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Acc_vs_Exp_categories_ZHR_Z30.pdf")
 
 ## without guide
 	G <- all_classes_integrated %>%
@@ -209,7 +209,7 @@ ggtitle("Accessibility vs Expression divergence - integrated categories")
 
 
 
-		ggsave(G, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Acc_vs_Exp_categories_ZHR_Z30_noguide.pdf")
+		ggsave(G, file = "Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Acc_vs_Exp_categories_ZHR_Z30_noguide.pdf")
 
 # % cis expression by group
 M <- all_classes_integrated[all_classes_integrated$P_qvalue_RNA < 0.05 & all_classes_integrated$class == "start", ,] %>%
@@ -271,7 +271,7 @@ theme(axis.text = element_text(size = 15),
 axis.title = element_text(size = 15),
 plot.title = element_text(size = 12, face = "bold")) +
 ggtitle("Magnitude of expression divergence (only txStart) across integrated categories")
-	ggsave(K, file = "./Figures/Exp_effectsize_txStartONLY_int_categories_ZHR_Z30.pdf")
+	ggsave(K, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Exp_effectsize_txStartONLY_int_categories_ZHR_Z30.pdf")
 
 # effect size accessibility by group
 Y <- all_classes_integrated[all_classes_integrated$P_qvalue < 0.05,] %>%
@@ -320,7 +320,7 @@ theme(axis.text = element_text(size = 13),
 axis.title = element_text(size = 15),
 plot.title = element_text(size = 12, face = "bold")) +
 ggtitle("Kilobases to closest gene (inter- & intragenic) across integrated categories")
-	ggsave(Q, file = "./Figures/Dist_to_closest_gene_int_categories_ZHR_Z30.pdf")
+	ggsave(Q, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Dist_to_closest_gene_int_categories_ZHR_Z30.pdf")
 
 
 class_props <- matrix(ncol = 4, nrow = 5) %>% as.data.frame()
@@ -370,4 +370,4 @@ plot.title = element_text(size = 13, face = "bold"),
 legend.text= element_text(size = 10),
 legend.title = element_text(size = 10)) +
 ggtitle("Relative proportions of integrated category for each class")
-	ggsave(G, file = "./Figures/Prop_div_categories_by_int_categories_ZHR_Z30.pdf")
+	ggsave(G, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Prop_div_categories_by_int_categories_ZHR_Z30.pdf")

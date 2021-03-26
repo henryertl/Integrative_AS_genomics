@@ -1,4 +1,5 @@
 setwd("/Users/henryertl/Documents/Devs")
+setwd("/Users/wittkopp_member/Code")
 
 
 # read in both Full_results_output fiels
@@ -15,6 +16,9 @@ colnames(TSIM)[4] <- "Paste_locus"
 Z30_TSIM <- join_all(list(Z30, TSIM), type = "full", by = "Paste_locus") %>% na.omit() %>% unique()
 
 Z30_TSIM$class_Z30 <- factor(Z30_TSIM$class_Z30,levels = c("start", "end", "inter", "intra"))
+
+write.table(Z30_TSIM, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/ZHR_Z30_TSIM_Full_results_output_ATAC.txt", quote = F, sep = "\t", row.names = F)
+
 
 # plot percent cis for each class within vs between species
 A <- Z30_TSIM[(Z30_TSIM$P_qvalue_TSIM < 0.05 | Z30_TSIM$H_qvalue_TSIM < 0.05) & (Z30_TSIM$P_qvalue_Z30 < 0.05 | Z30_TSIM$H_qvalue_Z30 < 0.05),] %>%

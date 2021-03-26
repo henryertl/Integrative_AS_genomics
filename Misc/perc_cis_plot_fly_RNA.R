@@ -8,6 +8,8 @@ library(tidyverse)
 library(ggpubr)
 library(rstatix)
 
+setwd("/Users/wittkopp_member/Code")
+
 theme_main <- function() {
   theme_bw() +
   theme(
@@ -28,8 +30,8 @@ theme_main <- function() {
 #######################################################################
 
 # Read in Bayes output files
-TSIM <- read.delim("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/RNA_seq/Data_tables/Full_results_output_ZHR_TSIM_RNA_20min.txt", header = T)
-Z30 <- read.delim("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/RNA_seq/Data_tables/Full_results_output_ZHR_Z30_RNA_20min_1000max.txt", header = T)
+TSIM <- read.delim("Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/RNA_seq/Data_tables/Full_results_output_ZHR_TSIM_RNA_20min.txt", header = T)
+Z30 <- read.delim("Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/RNA_seq/Data_tables/Full_results_output_ZHR_Z30_RNA_20min_1000max.txt", header = T)
 
 # Merge from both comparisons
 Full_results_comb <- merge(Z30, TSIM, by = "Paste_locus")
@@ -38,7 +40,9 @@ Full_results_comb <- Full_results_comb %>%
 Full_results_comb <- Full_results_comb[-c(1)]
 Full_results_comb$perc_cis_diff <- log2(Full_results_comb$perc_cis.y/Full_results_comb$perc_cis.x)
 
-write.table(Full_results_comb, file="~/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/RNA_seq/ZHR_Z30_TSIM_Full_results_output.txt", sep = "\t", row.names = F, quote = F)
+write.table(Full_results_comb, file="Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/RNA_seq/ZHR_Z30_TSIM_Full_results_output.txt", sep = "\t", row.names = F, quote = F)
+
+Full_results_comb <- read.delim("/AS_ATAC_RNA_2020_10_1/RNA_seq/ZHR_Z30_TSIM_Full_results_output.txt", header = T)
 
 # Plot % cis across species
 Full_results_comb_div <- Full_results_comb[Full_results_comb$P_qvalue.x < 0.05 | Full_results_comb$H_qvalue.x < 0.05 | Full_results_comb$P_qvalue.y < 0.05 | Full_results_comb$H_qvalue.y < 0.05,]
