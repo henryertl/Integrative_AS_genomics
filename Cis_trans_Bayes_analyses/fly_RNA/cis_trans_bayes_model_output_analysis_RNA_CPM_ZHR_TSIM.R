@@ -26,7 +26,7 @@ theme_main <- function() {
 ####################
 ##Combine datasets##
 ####################
-full_dataset <- read.delim("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/RNA_seq/Data_tables/ZHR_TSIM_genic_counts_CPM_final_dm6_20min.txt", header = T)
+full_dataset <- read.delim("Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/RNA_seq/Data_tables/ZHR_TSIM_genic_counts_CPM_final_dm6_20min.txt", header = T)
 full_dataset$chrom <- "0"
 full_dataset$start <- "0"
 full_dataset$end <- "0"
@@ -41,9 +41,9 @@ Hybrid_data <- full_dataset[, c("Paste_locus", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1
 ####################
 ##Combine datasets##
 ####################
-Parental_results <- read.table("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/RNA_seq/Bayes_outputs/Parental_test_output_ZHR_TSIM_RNA_full_CPM_20.txt", header = T)
-Hybrid_results <- read.table("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/RNA_seq/Bayes_outputs/Hybrid_test_output_ZHR_TSIM_RNA_full_CPM_20.txt", header = T)
-Parental_hybrid_results <- read.table("/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/RNA_seq/Bayes_outputs/Parental_Hybrid_test_output_ZHR_TSIM_RNA_full_CPM_20.txt", header = T)
+Parental_results <- read.table("Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/RNA_seq/Bayes_outputs/Parental_test_output_ZHR_TSIM_RNA_full_CPM_20.txt", header = T)
+Hybrid_results <- read.table("Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/RNA_seq/Bayes_outputs/Hybrid_test_output_ZHR_TSIM_RNA_full_CPM_20.txt", header = T)
+Parental_hybrid_results <- read.table("Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/RNA_seq/Bayes_outputs/Parental_Hybrid_test_output_ZHR_TSIM_RNA_full_CPM_20.txt", header = T)
 
 Full_results_output <- join_all(list(Parental_data, Hybrid_data, Parental_results, Hybrid_results, Parental_hybrid_results), by = 'Paste_locus', type = 'full')
 
@@ -182,7 +182,7 @@ Full_results_output$perc_cis <- (abs(Full_results_output$H_est.mean)/(abs(Full_r
 ##Write out full results to file##
 ##################################head
 
-write.table(Full_results_output, file = "~/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/RNA_seq/Data_tables/Full_results_output_ZHR_TSIM_RNA_20min.txt", sep = "\t", row.names = F, quote = F)
+write.table(Full_results_output, file = "Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/RNA_seq/Data_tables/Full_results_output_ZHR_TSIM_RNA_20min.txt", sep = "\t", row.names = F, quote = F)
 
 ##########################
 ##Generate summary plots##

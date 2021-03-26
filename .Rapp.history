@@ -1,0 +1,545 @@
+A <- ZHR_Z30_GRH_condensed %>%#
+ggplot(aes(x=overlap_binary, y=abs(P_est.mean), fill=overlap_binary)) +#
+geom_boxplot(notch=T)
+A
+A <- ZHR_Z30_GRH_condensed %>%#
+ggplot(aes(x=overlap_binary, y=abs(P_est.mean), fill=overlap_binary)) +#
+geom_boxplot(notch=T) +#
+ylim(0,1)
+A
+A <- ZHR_Z30_GRH_condensed %>%#
+ggplot(aes(x=overlap_binary, y=perc_cis, fill=overlap_binary)) +#
+geom_boxplot(notch=T)
+A
+A <- ZHR_Z30_GRH_condensed[ZHR_Z30_GRH_condensed$class == "inter",] %>%#
+ggplot(aes(x=overlap_binary, y=abs(P_est.mean), fill=overlap_binary)) +#
+geom_boxplot(notch=T) +#
+ylim(0,1)
+A
+A <- ZHR_Z30_GRH_condensed[ZHR_Z30_GRH_condensed$class == "inter" | ZHR_Z30_GRH_condensed$class == "intra",] %>%#
+ggplot(aes(x=overlap_binary, y=abs(P_est.mean), fill=overlap_binary)) +#
+geom_boxplot(notch=T) +#
+ylim(0,1)
+A
+write.table(ZHR_Z30_GRH_condensed_count, file = "/AS_ATAC_RNA_2020_10_1/Grh_data/ZHR_Z30_GRH_condensed_count.txt", header = T, sep = "\t", quote = F, row.names = F)
+write.table(ZHR_Z30_GRH_condensed_count, file = "/AS_ATAC_RNA_2020_10_1/Grh_data/ZHR_Z30_GRH_condensed_count.txt", sep = "\t", quote = F, row.names = F)
+write.table(ZHR_Z30_GRH_condensed_count, file = "./AS_ATAC_RNA_2020_10_1/Grh_data/ZHR_Z30_GRH_condensed_count.txt", sep = "\t", quote = F, row.names = F)
+ZHR_Z30_GRH_condensed_SNPs <- read.delim("./AS_ATAC_RNA_2020_10_1/Grh_data/ZHR_Z30_GRH_condensed_count_SNPintersect.bed", header = F)
+head(ZHR_Z30_GRH_condensed_SNPs)
+colnames(ZHR_Z30_GRH_condensed_SNPs) <- c("chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
+"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
+"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "overlap_binary", "start_SNP","end_SNP","score_SNP","overlap_SNP")
+ZHR_Z30_GRH_condensed_SNPs$overlap_SNP_binary <- "NA"#
+#
+for (i in 1:nrow(ZHR_Z30_GRH_condensed_SNPs)) {#
+#
+if (ZHR_Z30_GRH_condensed_SNPs$overlap_SNP[i] != 0){#
+#
+	ZHR_Z30_GRH_condensed_SNPs$overlap_SNP_binary[i] <- "OVERLAP"#
+#
+} else if (ZHR_Z30_GRH_condensed_SNPs$overlap_SNP[i] == 0){#
+#
+	ZHR_Z30_GRH_condensed_SNPs$overlap_SNP_binary[i] <- "NO_OVERLAP"#
+#
+}#
+}
+nrow(ZHR_Z30_GRH_condensed_SNPs)
+head(ZHR_Z30_GRH_condensed_SNPs)
+ZHR_Z30_GRH_condensed_SNPs <- read.delim("./AS_ATAC_RNA_2020_10_1/Grh_data/ZHR_Z30_GRH_condensed_count_SNPintersect.bed", header = F)
+colnames(ZHR_Z30_GRH_condensed_SNPs) <- c("chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
+"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
+"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "overlap_binary", "chrom_SNP", "start_SNP","end_SNP","score_SNP","overlap_SNP")
+head(ZHR_Z30_GRH_condensed_SNPs)
+head(ZHR_Z30_GRH_condensed_SNPs, n=100)
+colnames(ZHR_Z30_GRH_condensed_SNPs) <- c("chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
+"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
+"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "overlap_binary", "count_motifs", "chrom_SNP", "start_SNP","end_SNP","score_SNP","overlap_SNP")
+head(ZHR_Z30_GRH_condensed_SNPs, n=100)
+head(ZHR_Z30_GRH_condensed_SNPs)
+ZHR_Z30_GRH_SNPs <- read.delim("./AS_ATAC_RNA_2020_10_1/Grh_data/ZHR_Z30_GRH_condensed_count_SNPintersect.bed", header = F)
+colnames(ZHR_Z30_GRH_condensed_SNPs) <- c("chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
+"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
+"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "chrom_grh_snp", "start_grh_snp","end_grh_snp","score_grh_snp","overlap_snp")
+colnames(ZHR_Z30_GRH_SNPs) <- c("chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
+"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
+"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "chrom_grh_snp", "start_grh_snp","end_grh_snp","score_grh_snp","overlap_snp")
+colnames(ZHR_Z30_GRH_SNPs) <- c("chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
+"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
+"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "chrom_grh_snp", "start_grh_snp","end_grh_snp","score_grh_snp","overlap_SNP")
+ZHR_Z30_GRH_SNPs$overlap_SNP_binary <- "NA"#
+#
+for (i in 1:nrow(ZHR_Z30_GRH_SNPs)) {#
+#
+if (ZHR_Z30_GRH_SNPs$overlap_SNP[i] != 0){#
+#
+	ZHR_Z30_GRH_SNPs$overlap_SNP_binary[i] <- "OVERLAP"#
+#
+} else if (ZHR_Z30_GRH_SNPs$overlap_SNP[i] == 0){#
+#
+	ZHR_Z30_GRH_SNPs$overlap_SNP_binary[i] <- "NO_OVERLAP"#
+#
+}#
+}
+ZHR_Z30_GRH_SNPs_condensed <- ZHR_Z30_GRH_SNPs[,-c(ncol(ZHR_Z30_GRH_SNPs)-1, ncol(ZHR_Z30_GRH_SNPs)-2, ncol(ZHR_Z30_GRH_SNPs)-3, ncol(ZHR_Z30_GRH_SNPs)-4, ncol(ZHR_Z30_GRH_SNPs)-5)] #
+#
+ZHR_Z30_GRH_SNPs_condensed_count <- ddply(ZHR_Z30_GRH_SNPs_condensed,.(chrom, start, end, Paste_locus, P1_1, P1_2, P1_3, P2_1, P2_2, P2_3, HYB_1_P1, HYB_2_P1, HYB_3_P1, HYB_1_P2, HYB_2_P2, HYB_3_P2,#
+pos_start, pos_end, P_est.mean, P_p_value,H_est.mean,H_p_value,H_P_est,H_P_p_value,P_qvalue,H_qvalue,P_H_qvalue,Direction_parent,Direction_hybrid,#
+P_H_ratio,Regulatory_class,trans_reg_diff,perc_cis,class,overlap_binary),nrow)
+ZHR_Z30_GRH_SNPs_condensed_count <- ddply(ZHR_Z30_GRH_SNPs_condensed,.(chrom, start, end, Paste_locus, P1_1, P1_2, P1_3, P2_1, P2_2, P2_3, HYB_1_P1, HYB_2_P1, HYB_3_P1, HYB_1_P2, HYB_2_P2, HYB_3_P2,#
+pos_start, pos_end, P_est.mean, P_p_value,H_est.mean,H_p_value,H_P_est,H_P_p_value,P_qvalue,H_qvalue,P_H_qvalue,Direction_parent,Direction_hybrid,#
+P_H_ratio,Regulatory_class,trans_reg_diff,perc_cis,class,overlap_SNP_binary),nrow)
+head(ZHR_Z30_GRH_SNPs_condensed_count)
+colnames(ZHR_Z30_GRH_SNPs_condensed_count[,"V1"]) <- "count"
+colnames(ZHR_Z30_GRH_SNPs_condensed_count)["V1"] <- "count"
+colnames(ZHR_Z30_GRH_SNPs_condensed_count)[nrow(ZHR_Z30_GRH_SNPs_condensed_count)] <- "count"
+colnames(ZHR_Z30_GRH_SNPs_condensed_count)[ncol(ZHR_Z30_GRH_SNPs_condensed_count)] <- "count"
+head(ZHR_Z30_GRH_SNPs_condensed_count)
+head(ZHR_Z30_GRH_condensed_count)
+colnames(ZHR_Z30_GRH_condensed_count)[ncol(ZHR_Z30_GRH_condensed_count)] <- "count"
+ZHR_Z30_GRH_SNPs_condensed_count_mintojoin <- [,c(4,35,36)]
+ZHR_Z30_GRH_SNPs_condensed_count_mintojoin <- ZHR_Z30_GRH_SNPs_condensed_count[,c(4,35,36)]
+head(ZHR_Z30_GRH_SNPs_condensed_count_mintojoin)
+olnames(ZHR_Z30_GRH_SNPs_condensed_count)[ncol(ZHR_Z30_GRH_SNPs_condensed_count)] <- "count_SNP"#
+ZHR_Z30_GRH_SNPs_condensed_count_mintojoin <- ZHR_Z30_GRH_SNPs_condensed_count[,c(4,35,36)]
+colnames(ZHR_Z30_GRH_SNPs_condensed_count)[ncol(ZHR_Z30_GRH_SNPs_condensed_count)] <- "count_SNP"#
+ZHR_Z30_GRH_SNPs_condensed_count_mintojoin <- ZHR_Z30_GRH_SNPs_condensed_count[,c(4,35,36)]
+head(ZHR_Z30_GRH_SNPs_condensed_count_mintojoin)
+ZHR_Z30_GRH_SNPs_final <- join_all(list(ZHR_Z30_GRH_SNPs_condensed_count_mintojoin, ZHR_Z30_GRH_condensed_count), type = "full", by = "Paste_locus")
+head(ZHR_Z30_GRH_SNPs_final)
+nrow(ZHR_Z30_GRH_SNPs_final)
+ZHR_Z30_GRH_SNPs_final$SNPs_motif_norm <- ZHR_Z30_GRH_SNPs_final$count_SNP / ZHR_Z30_GRH_SNPs_final$count
+for (i in 1:nrow(ZHR_Z30_GRH_SNPs_final)) {#
+#
+if (ZHR_Z30_GRH_SNPs$overlap_binary[i] == "NO_OVERLAP"){#
+#
+	ZHR_Z30_GRH_SNPs$count[i] <- 0#
+#
+}#
+}#
+#
+for (i in 1:nrow(ZHR_Z30_GRH_SNPs_final)) {#
+#
+if (overlap_SNP_binary[i] == "NO_OVERLAP"){#
+#
+	ZHR_Z30_GRH_SNPs$count_SNP[i] <- 0#
+#
+}#
+}
+for (i in 1:nrow(ZHR_Z30_GRH_SNPs_final)) {#
+#
+if (ZHR_Z30_GRH_SNPs_final$overlap_binary[i] == "NO_OVERLAP"){#
+#
+	ZHR_Z30_GRH_SNPs_final$count[i] <- 0#
+#
+}#
+}#
+#
+for (i in 1:nrow(ZHR_Z30_GRH_SNPs_final)) {#
+#
+if (ZHR_Z30_GRH_SNPs_final$overlap_SNP_binary[i] == "NO_OVERLAP"){#
+#
+	ZHR_Z30_GRH_SNPs_final$count_SNP[i] <- 0#
+#
+}#
+}
+head(ZHR_Z30_GRH_SNPs_final)
+head(ZHR_Z30_GRH_SNPs_final, n =100)
+for (i in 1:nrow(ZHR_Z30_GRH_SNPs_final)) {#
+#
+if (ZHR_Z30_GRH_SNPs_final$overlap_binary[i] == "NO_OVERLAP"){#
+#
+	ZHR_Z30_GRH_SNPs_final$SNPs_motif_norm[i] <- 0#
+#
+}#
+}#
+#
+for (i in 1:nrow(ZHR_Z30_GRH_SNPs_final)) {#
+#
+if (ZHR_Z30_GRH_SNPs_final$overlap_SNP_binary[i] == "NO_OVERLAP"){#
+#
+	ZHR_Z30_GRH_SNPs_final$SNPs_motif_norm[i] <- 0#
+#
+}#
+}
+head(ZHR_Z30_GRH_SNPs_final, n =100)
+A <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP" %>%#
+ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=T) +#
+ylim(0,1)
+A
+A
+A <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP" %>%#
+ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=T) +#
+ylim(0,1)
+)
+A <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=T) +#
+ylim(0,1)
+A
+A <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP" & ZHR_Z30_GRH_SNPs_final$class == "inter",] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=T) +#
+ylim(0,1)
+A
+A <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=T) +#
+ylim(0,1)
+A
+A <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=perc_cis, fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=T) +#
+ylim(0,1)
+A
+A <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=perc_cis, fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=T)
+A
+A <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=perc_cis, fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=T) +#
+ylim(0,1)
+A
+A <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=perc_cis, fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=T)
+A
+ZHR_Z30_regions_ALL_SNPs <- read.delim("./AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Full_results_output_ZHR_Z30_ATAC_20min_centered1000_classes_SNPs_intersectALL.bed", header = F)
+head(ZHR_Z30_regions_ALL_SNPs)
+colnames(ZHR_Z30_regions_ALL_SNPs) <- c("chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
+"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
+"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "chrom_snp", "start_snp","end_snp","overlap_snp")
+ZHR_Z30_regions_ALL_SNPs$overlap_snp <- NULL
+ZHR_Z30_regions_ALL_SNPs <- read.delim("./AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Full_results_output_ZHR_Z30_ATAC_20min_centered1000_classes_SNPs_intersectALL.bed", header = F)#
+colnames(ZHR_Z30_regions_ALL_SNPs) <- c("chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
+"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
+"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "chrom_snp", "start_snp","end_snp","overlap_snp")#
+#
+ZHR_Z30_regions_ALL_SNPs <- ZHR_Z30_regions_ALL_SNPs[,ZHR_Z30_regions_ALL_SNPs(c(1:ncol(ZHR_Z30_regions_ALL_SNPs - 4)))]
+ZHR_Z30_regions_ALL_SNPs <- ZHR_Z30_regions_ALL_SNPs[,c(1:ncol(ZHR_Z30_regions_ALL_SNPs - 4))]
+ZHR_Z30_regions_ALL_SNPs <- ZHR_Z30_regions_ALL_SNPs[,c(1:ncol(ZHR_Z30_regions_ALL_SNPs) - 4))]
+ZHR_Z30_regions_ALL_SNPs <- ZHR_Z30_regions_ALL_SNPs[,c(1:ncol(ZHR_Z30_regions_ALL_SNPs) - 4)]
+ZHR_Z30_regions_ALL_SNPs <- read.delim("./AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Full_results_output_ZHR_Z30_ATAC_20min_centered1000_classes_SNPs_intersectALL.bed", header = F)#
+colnames(ZHR_Z30_regions_ALL_SNPs) <- c("chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
+"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
+"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "chrom_snp", "start_snp","end_snp","overlap_snp")#
+ZHR_Z30_regions_ALL_SNPs <- ZHR_Z30_regions_ALL_SNPs[,c(1:(ncol(ZHR_Z30_regions_ALL_SNPs) - 4))]
+head(ZHR_Z30_regions_ALL_SNPs)
+ZHR_Z30_regions_ALL_SNPs <- ddply(ZHR_Z30_regions_ALL_SNPs,.(chrom, start, end, Paste_locus, P1_1, P1_2, P1_3, P2_1, P2_2, P2_3, HYB_1_P1, HYB_2_P1, HYB_3_P1, HYB_1_P2, HYB_2_P2, HYB_3_P2,#
+pos_start, pos_end, P_est.mean, P_p_value,H_est.mean,H_p_value,H_P_est,H_P_p_value,P_qvalue,H_qvalue,P_H_qvalue,Direction_parent,Direction_hybrid,#
+P_H_ratio,Regulatory_class,trans_reg_diff,perc_cis,class),nrow)
+nrow(ZHR_Z30_regions_ALL_SNPs)
+ZHR_Z30_regions_ALL_SNPs_final <- ZHR_Z30_regions_ALL_SNPs[,c(4,ncol(ZHR_Z30_regions_ALL_SNPs))]
+colnames(ZHR_Z30_regions_ALL_SNPs_final) <- c("Paste_locus", "num_SNPs_total")
+nrow(ZHR_Z30_regions_ALL_SNPs_final)
+nrow(ZHR_Z30_GRH_SNPs_final)
+ZHR_Z30_regions_ALL_SNPs_GRh_final <- join_all(list(ZHR_Z30_regions_ALL_SNPs_final, ZHR_Z30_GRH_SNPs_final), type = 'full', by = 'Paste_locus') %>% unique() %>% na.omit()
+nrow(ZHR_Z30_regions_ALL_SNPs_GRh_final)
+head(ZHR_Z30_regions_ALL_SNPs_GRh_final)
+B <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=num_SNPS_total, fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=T)
+B
+B <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=num_SNPs_total, fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=T)
+B
+B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=num_SNPs_total, fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=T)
+B
+C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=count_SNP, y=num_SNPs_total)) +#
+geom_point()
+C
+C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=count_SNP, y=SNPs_motif_norm)) +#
+geom_point()
+C
+B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=num_SNPs_total, fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=T)
+B
+ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=num_SNPs_total)) +#
+geom_density()
+B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total > 5 & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total < 15,] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=num_SNPs_total, fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=T)
+B
+C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total > 5 & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total < 15,] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=perc_cis, fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=T)
+C
+C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total > 5 & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total < 15,] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=P_est.mean, fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=T)
+C
+C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total > 5 & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total < 15,] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=T)
+C
+ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=num_SNPs_total, y=abs(P_est.mean))) +#
+geom_point()
+ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=num_SNPs_total, y=perc_cis)) +#
+geom_point()
+D <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=num_SNPs_total, y=perc_cis)) +#
+geom_point()
+D
+P <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>% #
+lm(abs(P_est.mean ~ num_SNPs_total + SNPs_motif_norm))
+lm(abs(ZHR_Z30_regions_ALL_SNPs_GRh_final$P_est.mean) ~ (ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total) + (ZHR_Z30_regions_ALL_SNPs_GRh_final$SNPs_motif_norm)))
+lm(abs(ZHR_Z30_regions_ALL_SNPs_GRh_final$P_est.mean) ~ (ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total) + (ZHR_Z30_regions_ALL_SNPs_GRh_final$SNPs_motif_norm))
+T <- lm(abs(ZHR_Z30_regions_ALL_SNPs_GRh_final$P_est.mean) ~ (ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total) + (ZHR_Z30_regions_ALL_SNPs_GRh_final$SNPs_motif_norm))
+T
+summary(T)
+C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total == 10,] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=T)
+C
+C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total == 10,] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=T)
+C
+C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total == 10,] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=F)
+C
+ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=num_SNPs_total)) +#
+geom_density()
+ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=num_SNPs_total)) +#
+geom_hist()
+ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=num_SNPs_total)) +#
+geom_histogram()
+C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total == 8,] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=F)
+C
+C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total == 8,] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=T)
+C
+nrow(ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total == 8,])
+B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total > 5 & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total < 15,] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=num_SNPs_total, fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=T)
+B
+B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total > 5 & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total < 15,] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=num_SNPs_total, fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=F)
+B
+nrow(ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",])
+nrow(ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$class == "start",]
+)
+nrow(ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$class == "end",])
+nrow(ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$class == "inter",])
+nrow(ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$class == "intra",])
+C <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=class, y=num_SNPS_total, fill=class)) +#
+geom_boxplot(notch=T)
+C
+C <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=class, y=num_SNPs_total, fill=class)) +#
+geom_boxplot(notch=T)
+C
+ZHR_Z30_regions_ALL_SNPs_GRh_final <- join_all(list(ZHR_Z30_regions_ALL_SNPs_final, ZHR_Z30_GRH_SNPs_final), type = 'full', by = 'Paste_locus') %>% unique() %>% na.omit()
+C <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=class, y=num_SNPs_total, fill=class)) +#
+geom_boxplot(notch=T)
+C
+ZHR_Z30_regions_ALL_SNPs_GRh_final <- join_all(list(ZHR_Z30_regions_ALL_SNPs_final, ZHR_Z30_GRH_SNPs_final), type = 'full', by = 'Paste_locus') %>% unique() %>% na.omit() %>% as.data.frame()
+C <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=class, y=num_SNPs_total, fill=class)) +#
+geom_boxplot(notch=T)
+C
+C <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=class, y=num_SNPs_total, fill=class)) +#
+geom_boxplot(notch=F)
+C
+head(ZHR_Z30_regions_ALL_SNPs_GRh_final)
+ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_snps_motif_totalsnp_norm <- ZHR_Z30_regions_ALL_SNPs_GRh_final$SNPs_motif_norm / ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total
+head(ZHR_Z30_regions_ALL_SNPs_GRh_final)
+head(ZHR_Z30_regions_ALL_SNPs_GRh_final, n=100)
+B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=grh_snps_motif_totalsnp_norm, y=abs(P_est.mean), fill=grh_snps_motif_totalsnp_norm)) +#
+geom_boxplot(notch=F)
+B
+B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=grh_snps_motif_total$snp_norm, y=abs(P_est.mean), fill=grh_snps_motif_total$snp_norm)) +#
+geom_boxplot(notch=F) +#
+ylim(0,1)
+B
+B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_SNP_binary, y=grh_snps_motif_totalsnp_norm, fill=ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_SNP_binary)) +#
+geom_boxplot(notch=F) +#
+ylim(0,1)
+B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_SNP_binary, y=grh_snps_motif_totalsnp_norm, fill=ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_SNP_binary)) +#
+geom_boxplot(notch=F)
+B
+B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_SNP_binary, y=grh_snps_motif_totalsnp_norm, fill=overlap_SNP_binary)) +#
+geom_boxplot(notch=F)
+B
+B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=grh_snps_motif_totalsnp_norm)) + #
+geom_density()
+B
+ZHR_Z30_regions_ALL_SNPs_GRh_final
+head(ZHR_Z30_regions_ALL_SNPs_GRh_final)
+colnames(ZHR_Z30_regions_ALL_SNPs_GRh_final) <- c("Paste_locus", "total_region_snps", "overlap_grh_snp_binary", "grh_snp_count", "chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
+"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
+"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "overlap_grh_motif_binary", "grh_motif_counts", "grh_snps_norm_by_motif_count", "grh_snps_norm_by_motif_count_total_SNPs")
+colnames(ZHR_Z30_regions_ALL_SNPs_GRh_final) <- c("Paste_locus", "total_region_snps", "overlap_grh_snp_binary", "grh_snp_count", "chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
+"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
+"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "overlap_grh_motif_binary", "grh_motif_counts", "grh_snps_norm_by_motif_count", "grh_snps_norm_by_motif_count_total_SNPs", "test")
+colnames(ZHR_Z30_regions_ALL_SNPs_GRh_final) <- c("Paste_locus", "total_region_snps", "overlap_grh_snp_binary", "grh_snp_count", "chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
+"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
+"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "overlap_grh_motif_binary", "grh_motif_counts", "grh_snps_norm_by_motif_count")
+head(ZHR_Z30_regions_ALL_SNPs_GRh_final)
+colnames(ZHR_Z30_regions_ALL_SNPs_GRh_final) <- c("Paste_locus", "total_region_snps", "overlap_grh_snp_binary", "grh_snp_count", "chrom", "start", "end", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
+"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
+"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "overlap_grh_motif_binary", "grh_motif_counts", "grh_snps_norm_by_motif_count", "grh_snps_norm_by_motif_count_total_SNPs")
+A <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary, y=abs(P_est.mean), fill=ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary))+#
+geom_boxplot(notch=T)
+A
+A <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary, y=abs(P_est.mean), fill=ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary))+#
+geom_boxplot(notch=F)
+A
+A <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=overlap_binary, y=abs(P_est.mean), fill=overlap_binary))+#
+geom_boxplot(notch=F)
+A
+A <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=overlap_grh_motif_binary, y=abs(P_est.mean), fill=overlap_grh_motif_binary))+#
+geom_boxplot(notch=F)
+A
+A <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=overlap_grh_motif_binary, y=abs(P_est.mean), fill=overlap_grh_motif_binary))+#
+geom_boxplot(notch=F) +#
+ylim(0,1)
+A
+B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=F) +#
+ylim(0,1)
+B
+B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=F)
+B
+B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=F) +#
+ylim(0,1)
+B
+C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=total_region_snps, fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=F)
+C
+D <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_regions_snps == 8,] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=F)
+D
+nrow(ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_regions_snps == 8,])
+nrow(ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",])
+D <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%#
+ggplot(aes(x=total_snp_count)_#
+geom_density()
+D <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%#
+ggplot(aes(x=total_snp_count)+#
+geom_density()
+)
+D <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%#
+ggplot(aes(x=total_snp_count))+#
+geom_density()
+D
+D <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%#
+ggplot(aes(x=total_region_snps))+#
+geom_density()
+D
+E <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps == 8,]) %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=F)
+ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps == 8,])
+E <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps == 8,] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=F)
+E
+E <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps == 8,] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=T)
+E
+E <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps == 8,] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=F)
+E
+F <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps == 8,] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=total_regions_snps, fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=F)
+F
+F <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps == 8,] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=total_region_snps, fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=F)
+F
+F <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps == 8,] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=total_region_snps, fill=overlap_grh_snp_binary))+#
+geom_boxplot()
+F
+F <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps > 6 & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps < 12,] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=F)
+F
+F <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps > 6 & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps < 12,] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
+geom_boxplot()
+F
+F <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps > 6 & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps < 12,] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=perc_cis, fill=overlap_grh_snp_binary))+#
+geom_boxplot()
+F
+G <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=overlap_grh_motif_binary, y=perc_cis, fill=overlap_grh_motif_binary))+#
+geom_boxplot()
+G
+G <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05] %>%#
+ggplot(aes(x=overlap_grh_motif_binary, y=perc_cis, fill=overlap_grh_motif_binary))+#
+geom_boxplot()
+G <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05,] %>%#
+ggplot(aes(x=overlap_grh_motif_binary, y=perc_cis, fill=overlap_grh_motif_binary))+#
+geom_boxplot()
+G
+G <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05 & ZHR_Z30_regions_ALL_SNPs_GRh_final$class == "inter",] %>%#
+ggplot(aes(x=overlap_grh_motif_binary, y=perc_cis, fill=overlap_grh_motif_binary))+#
+geom_boxplot()
+G
+G <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05,] %>%#
+ggplot(aes(x=overlap_grh_motif_binary, y=perc_cis, fill=overlap_grh_motif_binary))+#
+geom_boxplot()
+G
+H <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05,] %>%#
+ggplot(aes(x=overlap_grh_motif_binary, y=abs(P_est.mean), fill=overlap_grh_motif_binary))+#
+geom_boxplot()
+H
+H <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05 & ZHR_Z30_regions_ALL_SNPs_GRh_final$class == "inter",] %>%#
+ggplot(aes(x=overlap_grh_motif_binary, y=abs(P_est.mean), fill=overlap_grh_motif_binary))+#
+geom_boxplot()
+H
+G <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05 & ZHR_Z30_regions_ALL_SNPs_GRh_final$class == "inter",,] %>%#
+ggplot(aes(x=overlap_grh_motif_binary, y=perc_cis, fill=overlap_grh_motif_binary))+#
+geom_boxplot()
+G
+G <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05,] %>%#
+ggplot(aes(x=overlap_grh_motif_binary, y=perc_cis, fill=overlap_grh_motif_binary))+#
+geom_boxplot()
+G
