@@ -1,545 +1,849 @@
-A <- ZHR_Z30_GRH_condensed %>%#
-ggplot(aes(x=overlap_binary, y=abs(P_est.mean), fill=overlap_binary)) +#
-geom_boxplot(notch=T)
-A
-A <- ZHR_Z30_GRH_condensed %>%#
-ggplot(aes(x=overlap_binary, y=abs(P_est.mean), fill=overlap_binary)) +#
-geom_boxplot(notch=T) +#
-ylim(0,1)
-A
-A <- ZHR_Z30_GRH_condensed %>%#
-ggplot(aes(x=overlap_binary, y=perc_cis, fill=overlap_binary)) +#
-geom_boxplot(notch=T)
-A
-A <- ZHR_Z30_GRH_condensed[ZHR_Z30_GRH_condensed$class == "inter",] %>%#
-ggplot(aes(x=overlap_binary, y=abs(P_est.mean), fill=overlap_binary)) +#
-geom_boxplot(notch=T) +#
-ylim(0,1)
-A
-A <- ZHR_Z30_GRH_condensed[ZHR_Z30_GRH_condensed$class == "inter" | ZHR_Z30_GRH_condensed$class == "intra",] %>%#
-ggplot(aes(x=overlap_binary, y=abs(P_est.mean), fill=overlap_binary)) +#
-geom_boxplot(notch=T) +#
-ylim(0,1)
-A
-write.table(ZHR_Z30_GRH_condensed_count, file = "/AS_ATAC_RNA_2020_10_1/Grh_data/ZHR_Z30_GRH_condensed_count.txt", header = T, sep = "\t", quote = F, row.names = F)
-write.table(ZHR_Z30_GRH_condensed_count, file = "/AS_ATAC_RNA_2020_10_1/Grh_data/ZHR_Z30_GRH_condensed_count.txt", sep = "\t", quote = F, row.names = F)
-write.table(ZHR_Z30_GRH_condensed_count, file = "./AS_ATAC_RNA_2020_10_1/Grh_data/ZHR_Z30_GRH_condensed_count.txt", sep = "\t", quote = F, row.names = F)
-ZHR_Z30_GRH_condensed_SNPs <- read.delim("./AS_ATAC_RNA_2020_10_1/Grh_data/ZHR_Z30_GRH_condensed_count_SNPintersect.bed", header = F)
-head(ZHR_Z30_GRH_condensed_SNPs)
-colnames(ZHR_Z30_GRH_condensed_SNPs) <- c("chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
-"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
-"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "overlap_binary", "start_SNP","end_SNP","score_SNP","overlap_SNP")
-ZHR_Z30_GRH_condensed_SNPs$overlap_SNP_binary <- "NA"#
+ZHR_Z30_TSIM_RNA <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/RNA_seq/Data_tables/ZHR_Z30_TSIM_Full_results_output.txt", header = T)
+setwd("/Users/wittkopp_member/Code")
+ZHR_Z30_TSIM_RNA <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/RNA_seq/Data_tables/ZHR_Z30_TSIM_Full_results_output.txt", header = T)#
+ZHR_Z30_TSIM_RNA$data_type <- "RNA"#
+ZHR_Z30_TSIM_ATAC <- read.delim("Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/ZHR_Z30_TSIM_Full_results_output_ATAC.txt", header = T)#
+ZHR_Z30_TSIM_ATAC$data_type <- "ATAC"#
 #
-for (i in 1:nrow(ZHR_Z30_GRH_condensed_SNPs)) {#
+ZHR_Z30_TSIM_RNA_min <- cbind(ZHR_Z30_TSIM_RNA$P_est.mean.x, ZHR_Z30_TSIM_RNA$P_est.mean.y, ZHR_Z30_TSIM_RNA$perc_cis.x, ZHR_Z30_TSIM_RNA$perc_cis.y, ZHR_Z30_TSIM_RNA$data_type) %>% as.data.frame()#
+colnames(ZHR_Z30_TSIM_RNA_min) <- c("Z30_div", "TSIM_div", "Z30_perc_cis", "TSIM_perc_cis", "datatype")#
 #
-if (ZHR_Z30_GRH_condensed_SNPs$overlap_SNP[i] != 0){#
+ZHR_Z30_TSIM_ATAC_min <- cbind(ZHR_Z30_TSIM_ATAC$P_est.mean_Z30, ZHR_Z30_TSIM_ATAC$P_est.mean_TSIM, ZHR_Z30_TSIM_ATAC$perc_cis_Z30, ZHR_Z30_TSIM_ATAC$perc_cis_TSIM, ZHR_Z30_TSIM_ATAC$data_type) %>% as.data.frame()#
+colnames(ZHR_Z30_TSIM_RNA_min) <- c("Z30_div", "TSIM_div", "Z30_perc_cis", "TSIM_perc_cis", "datatype")
+# load libraries and functions#
+library(stringr)#
+library(dplyr)#
+library(plyr)#
+library(ggplot2)#
+library(reshape2)#
+library(tidyverse)#
+library(ggpubr)#
+library(rstatix)
+ZHR_Z30_TSIM_RNA <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/RNA_seq/Data_tables/ZHR_Z30_TSIM_Full_results_output.txt", header = T)#
+ZHR_Z30_TSIM_RNA$data_type <- "RNA"#
+ZHR_Z30_TSIM_ATAC <- read.delim("Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/ZHR_Z30_TSIM_Full_results_output_ATAC.txt", header = T)#
+ZHR_Z30_TSIM_ATAC$data_type <- "ATAC"#
 #
-	ZHR_Z30_GRH_condensed_SNPs$overlap_SNP_binary[i] <- "OVERLAP"#
+ZHR_Z30_TSIM_RNA_min <- cbind(ZHR_Z30_TSIM_RNA$P_est.mean.x, ZHR_Z30_TSIM_RNA$P_est.mean.y, ZHR_Z30_TSIM_RNA$perc_cis.x, ZHR_Z30_TSIM_RNA$perc_cis.y, ZHR_Z30_TSIM_RNA$data_type) %>% as.data.frame()#
+colnames(ZHR_Z30_TSIM_RNA_min) <- c("Z30_div", "TSIM_div", "Z30_perc_cis", "TSIM_perc_cis", "datatype")#
 #
-} else if (ZHR_Z30_GRH_condensed_SNPs$overlap_SNP[i] == 0){#
-#
-	ZHR_Z30_GRH_condensed_SNPs$overlap_SNP_binary[i] <- "NO_OVERLAP"#
-#
-}#
-}
-nrow(ZHR_Z30_GRH_condensed_SNPs)
-head(ZHR_Z30_GRH_condensed_SNPs)
-ZHR_Z30_GRH_condensed_SNPs <- read.delim("./AS_ATAC_RNA_2020_10_1/Grh_data/ZHR_Z30_GRH_condensed_count_SNPintersect.bed", header = F)
-colnames(ZHR_Z30_GRH_condensed_SNPs) <- c("chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
-"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
-"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "overlap_binary", "chrom_SNP", "start_SNP","end_SNP","score_SNP","overlap_SNP")
-head(ZHR_Z30_GRH_condensed_SNPs)
-head(ZHR_Z30_GRH_condensed_SNPs, n=100)
-colnames(ZHR_Z30_GRH_condensed_SNPs) <- c("chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
-"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
-"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "overlap_binary", "count_motifs", "chrom_SNP", "start_SNP","end_SNP","score_SNP","overlap_SNP")
-head(ZHR_Z30_GRH_condensed_SNPs, n=100)
-head(ZHR_Z30_GRH_condensed_SNPs)
-ZHR_Z30_GRH_SNPs <- read.delim("./AS_ATAC_RNA_2020_10_1/Grh_data/ZHR_Z30_GRH_condensed_count_SNPintersect.bed", header = F)
-colnames(ZHR_Z30_GRH_condensed_SNPs) <- c("chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
-"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
-"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "chrom_grh_snp", "start_grh_snp","end_grh_snp","score_grh_snp","overlap_snp")
-colnames(ZHR_Z30_GRH_SNPs) <- c("chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
-"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
-"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "chrom_grh_snp", "start_grh_snp","end_grh_snp","score_grh_snp","overlap_snp")
-colnames(ZHR_Z30_GRH_SNPs) <- c("chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
-"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
-"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "chrom_grh_snp", "start_grh_snp","end_grh_snp","score_grh_snp","overlap_SNP")
-ZHR_Z30_GRH_SNPs$overlap_SNP_binary <- "NA"#
-#
-for (i in 1:nrow(ZHR_Z30_GRH_SNPs)) {#
-#
-if (ZHR_Z30_GRH_SNPs$overlap_SNP[i] != 0){#
-#
-	ZHR_Z30_GRH_SNPs$overlap_SNP_binary[i] <- "OVERLAP"#
-#
-} else if (ZHR_Z30_GRH_SNPs$overlap_SNP[i] == 0){#
-#
-	ZHR_Z30_GRH_SNPs$overlap_SNP_binary[i] <- "NO_OVERLAP"#
-#
-}#
-}
-ZHR_Z30_GRH_SNPs_condensed <- ZHR_Z30_GRH_SNPs[,-c(ncol(ZHR_Z30_GRH_SNPs)-1, ncol(ZHR_Z30_GRH_SNPs)-2, ncol(ZHR_Z30_GRH_SNPs)-3, ncol(ZHR_Z30_GRH_SNPs)-4, ncol(ZHR_Z30_GRH_SNPs)-5)] #
-#
-ZHR_Z30_GRH_SNPs_condensed_count <- ddply(ZHR_Z30_GRH_SNPs_condensed,.(chrom, start, end, Paste_locus, P1_1, P1_2, P1_3, P2_1, P2_2, P2_3, HYB_1_P1, HYB_2_P1, HYB_3_P1, HYB_1_P2, HYB_2_P2, HYB_3_P2,#
-pos_start, pos_end, P_est.mean, P_p_value,H_est.mean,H_p_value,H_P_est,H_P_p_value,P_qvalue,H_qvalue,P_H_qvalue,Direction_parent,Direction_hybrid,#
-P_H_ratio,Regulatory_class,trans_reg_diff,perc_cis,class,overlap_binary),nrow)
-ZHR_Z30_GRH_SNPs_condensed_count <- ddply(ZHR_Z30_GRH_SNPs_condensed,.(chrom, start, end, Paste_locus, P1_1, P1_2, P1_3, P2_1, P2_2, P2_3, HYB_1_P1, HYB_2_P1, HYB_3_P1, HYB_1_P2, HYB_2_P2, HYB_3_P2,#
-pos_start, pos_end, P_est.mean, P_p_value,H_est.mean,H_p_value,H_P_est,H_P_p_value,P_qvalue,H_qvalue,P_H_qvalue,Direction_parent,Direction_hybrid,#
-P_H_ratio,Regulatory_class,trans_reg_diff,perc_cis,class,overlap_SNP_binary),nrow)
-head(ZHR_Z30_GRH_SNPs_condensed_count)
-colnames(ZHR_Z30_GRH_SNPs_condensed_count[,"V1"]) <- "count"
-colnames(ZHR_Z30_GRH_SNPs_condensed_count)["V1"] <- "count"
-colnames(ZHR_Z30_GRH_SNPs_condensed_count)[nrow(ZHR_Z30_GRH_SNPs_condensed_count)] <- "count"
-colnames(ZHR_Z30_GRH_SNPs_condensed_count)[ncol(ZHR_Z30_GRH_SNPs_condensed_count)] <- "count"
-head(ZHR_Z30_GRH_SNPs_condensed_count)
-head(ZHR_Z30_GRH_condensed_count)
-colnames(ZHR_Z30_GRH_condensed_count)[ncol(ZHR_Z30_GRH_condensed_count)] <- "count"
-ZHR_Z30_GRH_SNPs_condensed_count_mintojoin <- [,c(4,35,36)]
-ZHR_Z30_GRH_SNPs_condensed_count_mintojoin <- ZHR_Z30_GRH_SNPs_condensed_count[,c(4,35,36)]
-head(ZHR_Z30_GRH_SNPs_condensed_count_mintojoin)
-olnames(ZHR_Z30_GRH_SNPs_condensed_count)[ncol(ZHR_Z30_GRH_SNPs_condensed_count)] <- "count_SNP"#
-ZHR_Z30_GRH_SNPs_condensed_count_mintojoin <- ZHR_Z30_GRH_SNPs_condensed_count[,c(4,35,36)]
-colnames(ZHR_Z30_GRH_SNPs_condensed_count)[ncol(ZHR_Z30_GRH_SNPs_condensed_count)] <- "count_SNP"#
-ZHR_Z30_GRH_SNPs_condensed_count_mintojoin <- ZHR_Z30_GRH_SNPs_condensed_count[,c(4,35,36)]
-head(ZHR_Z30_GRH_SNPs_condensed_count_mintojoin)
-ZHR_Z30_GRH_SNPs_final <- join_all(list(ZHR_Z30_GRH_SNPs_condensed_count_mintojoin, ZHR_Z30_GRH_condensed_count), type = "full", by = "Paste_locus")
-head(ZHR_Z30_GRH_SNPs_final)
-nrow(ZHR_Z30_GRH_SNPs_final)
-ZHR_Z30_GRH_SNPs_final$SNPs_motif_norm <- ZHR_Z30_GRH_SNPs_final$count_SNP / ZHR_Z30_GRH_SNPs_final$count
-for (i in 1:nrow(ZHR_Z30_GRH_SNPs_final)) {#
-#
-if (ZHR_Z30_GRH_SNPs$overlap_binary[i] == "NO_OVERLAP"){#
-#
-	ZHR_Z30_GRH_SNPs$count[i] <- 0#
-#
-}#
-}#
-#
-for (i in 1:nrow(ZHR_Z30_GRH_SNPs_final)) {#
-#
-if (overlap_SNP_binary[i] == "NO_OVERLAP"){#
-#
-	ZHR_Z30_GRH_SNPs$count_SNP[i] <- 0#
-#
-}#
-}
-for (i in 1:nrow(ZHR_Z30_GRH_SNPs_final)) {#
-#
-if (ZHR_Z30_GRH_SNPs_final$overlap_binary[i] == "NO_OVERLAP"){#
-#
-	ZHR_Z30_GRH_SNPs_final$count[i] <- 0#
-#
-}#
-}#
-#
-for (i in 1:nrow(ZHR_Z30_GRH_SNPs_final)) {#
-#
-if (ZHR_Z30_GRH_SNPs_final$overlap_SNP_binary[i] == "NO_OVERLAP"){#
-#
-	ZHR_Z30_GRH_SNPs_final$count_SNP[i] <- 0#
-#
-}#
-}
-head(ZHR_Z30_GRH_SNPs_final)
-head(ZHR_Z30_GRH_SNPs_final, n =100)
-for (i in 1:nrow(ZHR_Z30_GRH_SNPs_final)) {#
-#
-if (ZHR_Z30_GRH_SNPs_final$overlap_binary[i] == "NO_OVERLAP"){#
-#
-	ZHR_Z30_GRH_SNPs_final$SNPs_motif_norm[i] <- 0#
-#
-}#
-}#
-#
-for (i in 1:nrow(ZHR_Z30_GRH_SNPs_final)) {#
-#
-if (ZHR_Z30_GRH_SNPs_final$overlap_SNP_binary[i] == "NO_OVERLAP"){#
-#
-	ZHR_Z30_GRH_SNPs_final$SNPs_motif_norm[i] <- 0#
-#
-}#
-}
-head(ZHR_Z30_GRH_SNPs_final, n =100)
-A <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP" %>%#
-ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=T) +#
-ylim(0,1)
-A
-A
-A <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP" %>%#
-ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=T) +#
-ylim(0,1)
+ZHR_Z30_TSIM_ATAC_min <- cbind(ZHR_Z30_TSIM_ATAC$P_est.mean_Z30, ZHR_Z30_TSIM_ATAC$P_est.mean_TSIM, ZHR_Z30_TSIM_ATAC$perc_cis_Z30, ZHR_Z30_TSIM_ATAC$perc_cis_TSIM, ZHR_Z30_TSIM_ATAC$data_type) %>% as.data.frame()#
+colnames(ZHR_Z30_TSIM_RNA_min) <- c("Z30_div", "TSIM_div", "Z30_perc_cis", "TSIM_perc_cis", "datatype")
+head(melt(ZHR_Z30_TSIM_RNA_min, id.vars = "Z30_div", "TSIM_div"))
+head(ZHR_Z30_TSIM_RNA_min)
+head(melt(ZHR_Z30_TSIM_RNA_min, measure.vars = "Z30_div", "TSIM_div"))
+head(melt(ZHR_Z30_TSIM_RNA_min, measure.vars = c("Z30_div", "TSIM_div")))
+R  <- melt(ZHR_Z30_TSIM_RNA_min, measure.vars = c("Z30_div", "TSIM_div")) %>%#
+ggplot(aes(x=variable, y=value, fill=variable)) +#
+geom_boxplot(notch=TRUE
 )
-A <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=T) +#
-ylim(0,1)
-A
-A <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP" & ZHR_Z30_GRH_SNPs_final$class == "inter",] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=T) +#
-ylim(0,1)
-A
-A <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=T) +#
-ylim(0,1)
-A
-A <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=perc_cis, fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=T) +#
-ylim(0,1)
-A
-A <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=perc_cis, fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=T)
-A
-A <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=perc_cis, fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=T) +#
-ylim(0,1)
-A
-A <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=perc_cis, fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=T)
-A
-ZHR_Z30_regions_ALL_SNPs <- read.delim("./AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Full_results_output_ZHR_Z30_ATAC_20min_centered1000_classes_SNPs_intersectALL.bed", header = F)
-head(ZHR_Z30_regions_ALL_SNPs)
-colnames(ZHR_Z30_regions_ALL_SNPs) <- c("chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
-"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
-"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "chrom_snp", "start_snp","end_snp","overlap_snp")
-ZHR_Z30_regions_ALL_SNPs$overlap_snp <- NULL
-ZHR_Z30_regions_ALL_SNPs <- read.delim("./AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Full_results_output_ZHR_Z30_ATAC_20min_centered1000_classes_SNPs_intersectALL.bed", header = F)#
-colnames(ZHR_Z30_regions_ALL_SNPs) <- c("chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
-"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
-"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "chrom_snp", "start_snp","end_snp","overlap_snp")#
+R
+droplevels(ZHR_Z30_TSIM_RNA_min)#
+droplevels(ZHR_Z30_TSIM_ATAC_min)
+droplevels(ZHR_Z30_TSIM_RNA_min)
+ZHR_Z30_TSIM_RNA_min <- droplevels(ZHR_Z30_TSIM_RNA_min)#
+ZHR_Z30_TSIM_ATAC_min <- droplevels(ZHR_Z30_TSIM_ATAC_min)
+head(melt(ZHR_Z30_TSIM_RNA_min, measure.vars = c("Z30_div", "TSIM_div")))
+R  <- melt(ZHR_Z30_TSIM_RNA_min, measure.vars = c("Z30_div", "TSIM_div")) %>%#
+ggplot(aes(x=variable, y=value, fill=variable)) +#
+geom_boxplot(notch=TRUE)
+R  <- melt(ZHR_Z30_TSIM_ATAC_min, measure.vars = c("Z30_div", "TSIM_div")) %>%#
+ggplot(aes(x=variable, y=value, fill=variable)) +#
+geom_boxplot(notch=TRUE)
+ZHR_Z30_TSIM_RNA <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/RNA_seq/Data_tables/ZHR_Z30_TSIM_Full_results_output.txt", header = T)#
+ZHR_Z30_TSIM_RNA$data_type <- "RNA"#
+ZHR_Z30_TSIM_ATAC <- read.delim("Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/ZHR_Z30_TSIM_Full_results_output_ATAC.txt", header = T)#
+ZHR_Z30_TSIM_ATAC$data_type <- "ATAC"#
 #
-ZHR_Z30_regions_ALL_SNPs <- ZHR_Z30_regions_ALL_SNPs[,ZHR_Z30_regions_ALL_SNPs(c(1:ncol(ZHR_Z30_regions_ALL_SNPs - 4)))]
-ZHR_Z30_regions_ALL_SNPs <- ZHR_Z30_regions_ALL_SNPs[,c(1:ncol(ZHR_Z30_regions_ALL_SNPs - 4))]
-ZHR_Z30_regions_ALL_SNPs <- ZHR_Z30_regions_ALL_SNPs[,c(1:ncol(ZHR_Z30_regions_ALL_SNPs) - 4))]
-ZHR_Z30_regions_ALL_SNPs <- ZHR_Z30_regions_ALL_SNPs[,c(1:ncol(ZHR_Z30_regions_ALL_SNPs) - 4)]
-ZHR_Z30_regions_ALL_SNPs <- read.delim("./AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Full_results_output_ZHR_Z30_ATAC_20min_centered1000_classes_SNPs_intersectALL.bed", header = F)#
-colnames(ZHR_Z30_regions_ALL_SNPs) <- c("chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
-"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
-"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "chrom_snp", "start_snp","end_snp","overlap_snp")#
-ZHR_Z30_regions_ALL_SNPs <- ZHR_Z30_regions_ALL_SNPs[,c(1:(ncol(ZHR_Z30_regions_ALL_SNPs) - 4))]
-head(ZHR_Z30_regions_ALL_SNPs)
-ZHR_Z30_regions_ALL_SNPs <- ddply(ZHR_Z30_regions_ALL_SNPs,.(chrom, start, end, Paste_locus, P1_1, P1_2, P1_3, P2_1, P2_2, P2_3, HYB_1_P1, HYB_2_P1, HYB_3_P1, HYB_1_P2, HYB_2_P2, HYB_3_P2,#
-pos_start, pos_end, P_est.mean, P_p_value,H_est.mean,H_p_value,H_P_est,H_P_p_value,P_qvalue,H_qvalue,P_H_qvalue,Direction_parent,Direction_hybrid,#
-P_H_ratio,Regulatory_class,trans_reg_diff,perc_cis,class),nrow)
-nrow(ZHR_Z30_regions_ALL_SNPs)
-ZHR_Z30_regions_ALL_SNPs_final <- ZHR_Z30_regions_ALL_SNPs[,c(4,ncol(ZHR_Z30_regions_ALL_SNPs))]
-colnames(ZHR_Z30_regions_ALL_SNPs_final) <- c("Paste_locus", "num_SNPs_total")
-nrow(ZHR_Z30_regions_ALL_SNPs_final)
-nrow(ZHR_Z30_GRH_SNPs_final)
-ZHR_Z30_regions_ALL_SNPs_GRh_final <- join_all(list(ZHR_Z30_regions_ALL_SNPs_final, ZHR_Z30_GRH_SNPs_final), type = 'full', by = 'Paste_locus') %>% unique() %>% na.omit()
-nrow(ZHR_Z30_regions_ALL_SNPs_GRh_final)
-head(ZHR_Z30_regions_ALL_SNPs_GRh_final)
-B <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=num_SNPS_total, fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=T)
-B
-B <- ZHR_Z30_GRH_SNPs_final[ZHR_Z30_GRH_SNPs_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=num_SNPs_total, fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=T)
-B
-B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=num_SNPs_total, fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=T)
-B
-C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=count_SNP, y=num_SNPs_total)) +#
-geom_point()
-C
-C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=count_SNP, y=SNPs_motif_norm)) +#
-geom_point()
-C
-B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=num_SNPs_total, fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=T)
-B
-ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
-ggplot(aes(x=num_SNPs_total)) +#
-geom_density()
-B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total > 5 & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total < 15,] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=num_SNPs_total, fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=T)
-B
-C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total > 5 & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total < 15,] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=perc_cis, fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=T)
-C
-C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total > 5 & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total < 15,] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=P_est.mean, fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=T)
-C
-C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total > 5 & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total < 15,] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=T)
-C
-ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
-ggplot(aes(x=num_SNPs_total, y=abs(P_est.mean))) +#
-geom_point()
-ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
-ggplot(aes(x=num_SNPs_total, y=perc_cis)) +#
-geom_point()
-D <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
-ggplot(aes(x=num_SNPs_total, y=perc_cis)) +#
-geom_point()
-D
-P <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>% #
-lm(abs(P_est.mean ~ num_SNPs_total + SNPs_motif_norm))
-lm(abs(ZHR_Z30_regions_ALL_SNPs_GRh_final$P_est.mean) ~ (ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total) + (ZHR_Z30_regions_ALL_SNPs_GRh_final$SNPs_motif_norm)))
-lm(abs(ZHR_Z30_regions_ALL_SNPs_GRh_final$P_est.mean) ~ (ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total) + (ZHR_Z30_regions_ALL_SNPs_GRh_final$SNPs_motif_norm))
-T <- lm(abs(ZHR_Z30_regions_ALL_SNPs_GRh_final$P_est.mean) ~ (ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total) + (ZHR_Z30_regions_ALL_SNPs_GRh_final$SNPs_motif_norm))
-T
-summary(T)
-C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total == 10,] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=T)
-C
-C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total == 10,] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=T)
-C
-C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total == 10,] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=F)
-C
-ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=num_SNPs_total)) +#
-geom_density()
-ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=num_SNPs_total)) +#
-geom_hist()
-ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=num_SNPs_total)) +#
-geom_histogram()
-C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total == 8,] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=F)
-C
-C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total == 8,] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=abs(P_est.mean), fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=T)
-C
-nrow(ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total == 8,])
-B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total > 5 & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total < 15,] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=num_SNPs_total, fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=T)
-B
-B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total > 5 & ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total < 15,] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=num_SNPs_total, fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=F)
-B
-nrow(ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",])
-nrow(ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$class == "start",]
-)
-nrow(ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$class == "end",])
-nrow(ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$class == "inter",])
-nrow(ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$class == "intra",])
-C <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
-ggplot(aes(x=class, y=num_SNPS_total, fill=class)) +#
-geom_boxplot(notch=T)
-C
-C <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
-ggplot(aes(x=class, y=num_SNPs_total, fill=class)) +#
-geom_boxplot(notch=T)
-C
-ZHR_Z30_regions_ALL_SNPs_GRh_final <- join_all(list(ZHR_Z30_regions_ALL_SNPs_final, ZHR_Z30_GRH_SNPs_final), type = 'full', by = 'Paste_locus') %>% unique() %>% na.omit()
-C <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
-ggplot(aes(x=class, y=num_SNPs_total, fill=class)) +#
-geom_boxplot(notch=T)
-C
-ZHR_Z30_regions_ALL_SNPs_GRh_final <- join_all(list(ZHR_Z30_regions_ALL_SNPs_final, ZHR_Z30_GRH_SNPs_final), type = 'full', by = 'Paste_locus') %>% unique() %>% na.omit() %>% as.data.frame()
-C <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
-ggplot(aes(x=class, y=num_SNPs_total, fill=class)) +#
-geom_boxplot(notch=T)
-C
-C <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
-ggplot(aes(x=class, y=num_SNPs_total, fill=class)) +#
-geom_boxplot(notch=F)
-C
-head(ZHR_Z30_regions_ALL_SNPs_GRh_final)
-ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_snps_motif_totalsnp_norm <- ZHR_Z30_regions_ALL_SNPs_GRh_final$SNPs_motif_norm / ZHR_Z30_regions_ALL_SNPs_GRh_final$num_SNPs_total
-head(ZHR_Z30_regions_ALL_SNPs_GRh_final)
-head(ZHR_Z30_regions_ALL_SNPs_GRh_final, n=100)
-B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=grh_snps_motif_totalsnp_norm, y=abs(P_est.mean), fill=grh_snps_motif_totalsnp_norm)) +#
-geom_boxplot(notch=F)
-B
-B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=grh_snps_motif_total$snp_norm, y=abs(P_est.mean), fill=grh_snps_motif_total$snp_norm)) +#
-geom_boxplot(notch=F) +#
+ZHR_Z30_TSIM_RNA_min <- cbind(ZHR_Z30_TSIM_RNA$P_est.mean.x, ZHR_Z30_TSIM_RNA$P_est.mean.y, ZHR_Z30_TSIM_RNA$perc_cis.x, ZHR_Z30_TSIM_RNA$perc_cis.y, ZHR_Z30_TSIM_RNA$data_type) %>% as.data.frame()#
+colnames(ZHR_Z30_TSIM_RNA_min) <- c("Z30_div", "TSIM_div", "Z30_perc_cis", "TSIM_perc_cis", "datatype")#
+#
+ZHR_Z30_TSIM_ATAC_min <- cbind(ZHR_Z30_TSIM_ATAC$P_est.mean_Z30, ZHR_Z30_TSIM_ATAC$P_est.mean_TSIM, ZHR_Z30_TSIM_ATAC$perc_cis_Z30, ZHR_Z30_TSIM_ATAC$perc_cis_TSIM, ZHR_Z30_TSIM_ATAC$data_type) %>% as.data.frame()#
+colnames(ZHR_Z30_TSIM_RNA_min) <- c("Z30_div", "TSIM_div", "Z30_perc_cis", "TSIM_perc_cis", "datatype")
+R  <- melt(ZHR_Z30_TSIM_ATAC_min, measure.vars = c("Z30_div", "TSIM_div")) %>%#
+ggplot(aes(x=variable, y=value, fill=variable)) +#
+geom_boxplot(notch=TRUE)
+head(ZHR_Z30_TSIM_ATAC_min)
+colnames(ZHR_Z30_TSIM_ATAC_min) <- c("Z30_div", "TSIM_div", "Z30_perc_cis", "TSIM_perc_cis", "datatype")
+R  <- melt(ZHR_Z30_TSIM_ATAC_min, measure.vars = c("Z30_div", "TSIM_div")) %>%#
+ggplot(aes(x=variable, y=value, fill=variable)) +#
+geom_boxplot(notch=TRUE)
+R  <- melt(ZHR_Z30_TSIM_ATAC_min, id.vars = c("Z30_div", "TSIM_div")) %>%#
+ggplot(aes(x=variable, y=value, fill=variable)) +#
+geom_boxplot(notch=TRUE)
+head(melt(ZHR_Z30_TSIM_ATAC_min, id.vars = c("Z30_div", "TSIM_div")))
+R  <- melt(ZHR_Z30_TSIM_ATAC_min, id.vars = c("Z30_div", "TSIM_div")) %>%#
+ggplot(aes(x=variable, y=value, fill=variable)) +#
+geom_boxplot(notch=TRUE)
+head(ZHR_Z30_TSIM_ATAC_min)
+ZHR_Z30_TSIM_ATAC_min, id.vars = c("Z30_div", "TSIM_div"))
+melt(ZHR_Z30_TSIM_ATAC_min, id.vars = c("Z30_div", "TSIM_div"))
+ZHR_Z30_TSIM_RNA_min <- cbind(ZHR_Z30_TSIM_RNA$P_est.mean.x, ZHR_Z30_TSIM_RNA$P_est.mean.y, ZHR_Z30_TSIM_RNA$perc_cis.x, ZHR_Z30_TSIM_RNA$perc_cis.y, ZHR_Z30_TSIM_RNA$data_type) %>% as.data.frame() %>% na.omit()#
+colnames(ZHR_Z30_TSIM_RNA_min) <- c("Z30_div", "TSIM_div", "Z30_perc_cis", "TSIM_perc_cis", "datatype")#
+#
+ZHR_Z30_TSIM_ATAC_min <- cbind(ZHR_Z30_TSIM_ATAC$P_est.mean_Z30, ZHR_Z30_TSIM_ATAC$P_est.mean_TSIM, ZHR_Z30_TSIM_ATAC$perc_cis_Z30, ZHR_Z30_TSIM_ATAC$perc_cis_TSIM, ZHR_Z30_TSIM_ATAC$data_type) %>% as.data.frame() %>% na.omit()#
+colnames(ZHR_Z30_TSIM_ATAC_min) <- c("Z30_div", "TSIM_div", "Z30_perc_cis", "TSIM_perc_cis", "datatype")
+head(melt(ZHR_Z30_TSIM_ATAC_min, id.vars = c("Z30_div", "TSIM_div")))
+R  <- melt(ZHR_Z30_TSIM_ATAC_min, id.vars = c("Z30_div", "TSIM_div")) %>%#
+ggplot(aes(x=variable, y=value, fill=variable)) +#
+geom_boxplot(notch=TRUE)
+R
+R  <- melt(ZHR_Z30_TSIM_ATAC_min, id.vars = c("Z30_perc_cis", "TSIM_perc_cis")) %>%#
+ggplot(aes(x=variable, y=value, fill=variable)) +#
+geom_boxplot(notch=TRUE)
+nrow(melt(ZHR_Z30_TSIM_ATAC_min, id.vars = c("Z30_perc_cis", "TSIM_perc_cis")))
+R  <- melt(ZHR_Z30_TSIM_ATAC_min, id.vars = c("Z30_perc_cis", "TSIM_perc_cis")) %>%#
+ggplot(aes(x=variable, y=value, fill=variable)) +#
+geom_boxplot(notch=TRUE)
+R
+ggsave(R, file = "AS_ATAC_RNA_2020_10_1/RNA_seq/test.pdf", width = 10, height = 15)
+ggsave(R, file = "AS_ATAC_RNA_2020_10_1/RNA_seq/test.pdf", width = 10, height = 15)
+ggsave(R, file = "./AS_ATAC_RNA_2020_10_1/RNA_seq/test.pdf", width = 10, height = 15)
+head(ZHR_Z30_TSIM_ATAC_min)
+ZHR_Z30_TSIM_ATAC_div <- cbind(ZHR_Z30_TSIM_ATAC$P_est.mean_Z30, ZHR_Z30_TSIM_ATAC$P_est.mean_TSIM) %>% as.data.frame() %>% na.omit()#
+colnames(ZHR_Z30_TSIM_ATAC_min) <- c("Z30_div", "TSIM_div")
+head(melt(ZHR_Z30_TSIM_ATAC_min))
+head(melt(ZHR_Z30_TSIM_ATAC_div))
+colnames(ZHR_Z30_TSIM_ATAC_div) <- c("Z30_div", "TSIM_div")
+head(melt(ZHR_Z30_TSIM_ATAC_div))
+R  <- melt(ZHR_Z30_TSIM_ATAC_div) %>%#
+ggplot(aes(x=variable, y=value, fill=variable)) +#
+geom_boxplot(notch=TRUE)
+R
+R  <- melt(ZHR_Z30_TSIM_ATAC_div) %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE)
+R
+R  <- melt(ZHR_Z30_TSIM_ATAC_div) %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE) +#
 ylim(0,1)
-B
-B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_SNP_binary, y=grh_snps_motif_totalsnp_norm, fill=ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_SNP_binary)) +#
-geom_boxplot(notch=F) +#
+R
+R  <- melt(ZHR_Z30_TSIM_RNA_div) %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE)
+ZHR_Z30_TSIM_RNA_div <- cbind(ZHR_Z30_TSIM_RNA$P_est.mean_Z30, ZHR_Z30_TSIM_RNA$P_est.mean_TSIM) %>% as.data.frame() %>% na.omit()#
+colnames(ZHR_Z30_TSIM_RNA_div) <- c("Z30_div", "TSIM_div")
+head(ZHR_Z30_TSIM_RNA_div)
+ZHR_Z30_TSIM_RNA_div <- cbind(ZHR_Z30_TSIM_RNA$P_est.mean_Z30, ZHR_Z30_TSIM_RNA$P_est.mean_TSIM) %>% as.data.frame() %>% na.omit()
+colnames(ZHR_Z30_TSIM_RNA_div) <- c("Z30_div", "TSIM_div")
+ZHR_Z30_TSIM_RNA_min <- cbind(ZHR_Z30_TSIM_RNA$P_est.mean.x, ZHR_Z30_TSIM_RNA$P_est.mean.y, ZHR_Z30_TSIM_RNA$perc_cis.x, ZHR_Z30_TSIM_RNA$perc_cis.y, ZHR_Z30_TSIM_RNA$data_type) %>% as.data.frame() %>% na.omit()#
+colnames(ZHR_Z30_TSIM_RNA_min) <- c("Z30_div", "TSIM_div", "Z30_perc_cis", "TSIM_perc_cis", "datatype")
+ZHR_Z30_TSIM_RNA_div <- cbind(ZHR_Z30_TSIM_RNA$P_est.mean_Z30, ZHR_Z30_TSIM_RNA$P_est.mean_TSIM) %>% as.data.frame() %>% na.omit()#
+colnames(ZHR_Z30_TSIM_RNA_div) <- c("Z30_div", "TSIM_div")
+ZHR_Z30_TSIM_RNA_div <- cbind(ZHR_Z30_TSIM_RNA_min$P_est.mean_Z30, ZHR_Z30_TSIM_RNA_min$P_est.mean_TSIM) %>% as.data.frame() %>% na.omit()#
+colnames(ZHR_Z30_TSIM_RNA_div) <- c("Z30_div", "TSIM_div")
+ZHR_Z30_TSIM_RNA_div <- cbind(ZHR_Z30_TSIM_RNA_min$Z30_div, ZHR_Z30_TSIM_RNA_min$Z30_div) %>% as.data.frame() %>% na.omit()
+R  <- melt(ZHR_Z30_TSIM_RNA_div) %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE)
+R
+head(ZHR_Z30_TSIM_RNA)
+ZHR_Z30_TSIM_RNA_min <- ZHR_Z30_TSIM_RNA[(ZHR_Z30_TSIM_RNA$P_qvalue.y < 0.05 |ZHR_Z30_TSIM_RNA$H_qvalue.y < 0.05) & (ZHR_Z30_TSIM_RNA$P_qvalue.x < 0.05 | ZHR_Z30_TSIM_RNA$H_qvalue.x < 0.05),] %>% cbind(ZHR_Z30_TSIM_RNA$P_est.mean.x, ZHR_Z30_TSIM_RNA$P_est.mean.y, ZHR_Z30_TSIM_RNA$perc_cis.x, ZHR_Z30_TSIM_RNA$perc_cis.y, ZHR_Z30_TSIM_RNA$data_type) %>% as.data.frame() %>% na.omit()
+ZHR_Z30_TSIM_RNA_div <- cbind(ZHR_Z30_TSIM_RNA_min$P_est.mean.x, ZHR_Z30_TSIM_RNA_min$P_est.mean.y) %>% as.data.frame() %>% na.omit()
+head(ZHR_Z30_TSIM_RNA_div)
+ZHR_Z30_TSIM_RNA_min <- ZHR_Z30_TSIM_RNA[(ZHR_Z30_TSIM_RNA$P_qvalue.y < 0.05 |ZHR_Z30_TSIM_RNA$H_qvalue.y < 0.05) & (ZHR_Z30_TSIM_RNA$P_qvalue.x < 0.05 | ZHR_Z30_TSIM_RNA$H_qvalue.x < 0.05),]
+head(ZHR_Z30_TSIM_RNA_min)
+ZHR_Z30_TSIM_RNA_div <- NULL
+ZHR_Z30_TSIM_RNA_div <- cbind(ZHR_Z30_TSIM_RNA_min$P_est.mean.x, ZHR_Z30_TSIM_RNA_min$P_est.mean.y) %>% as.data.frame() %>% na.omit()
+head(ZHR_Z30_TSIM_RNA_div)
+R  <- melt(ZHR_Z30_TSIM_RNA_div) %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE)
+R
+ZHR_Z30_TSIM_RNA_perc_cis <- cbind(ZHR_Z30_TSIM_RNA_min$perc_cis.x, ZHR_Z30_TSIM_RNA_min$perc_cis.y) %>% as.data.frame() %>% na.omit()
+R  <- melt(ZHR_Z30_TSIM_RNA_perc_cis) %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE)
+R
+ZHR_Z30_TSIM_ATAC_min <- ZHR_Z30_TSIM_ATAC[(ZHR_Z30_TSIM_ATAC$P_qvalue.y < 0.05 |ZHR_Z30_TSIM_ATAC$H_qvalue.y < 0.05) & (ZHR_Z30_TSIM_ATAC$P_qvalue.x < 0.05 | ZHR_Z30_TSIM_ATAC$H_qvalue.x < 0.05),] #
+ZHR_Z30_TSIM_ATAC_div <- cbind(ZHR_Z30_TSIM_ATAC_min$P_est.mean.x, ZHR_Z30_TSIM_ATAC_min$P_est.mean.y) %>% as.data.frame() %>% na.omit()#
+ZHR_Z30_TSIM_ATAC_perc_cis <- cbind(ZHR_Z30_TSIM_ATAC_min$perc_cis.x, ZHR_Z30_TSIM_ATAC_min$perc_cis.y) %>% as.data.frame() %>% na.omit()
+R  <- melt(ZHR_Z30_TSIM_ATAC_perc_cis) %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE)
+melt(ZHR_Z30_TSIM_ATAC_perc_cis)
+head(ZHR_Z30_TSIM_ATAC_perc_cis)
+ZHR_Z30_TSIM_ATAC_div <- cbind(ZHR_Z30_TSIM_ATAC_min$P_est.mean.x, ZHR_Z30_TSIM_ATAC_min$P_est.mean.y) %>% as.data.frame() %>% na.omit()
+head(ZHR_Z30_TSIM_ATAC_div)
+ZHR_Z30_TSIM_ATAC_min <- ZHR_Z30_TSIM_ATAC[(ZHR_Z30_TSIM_ATAC$P_qvalue_TSIM < 0.05 |ZHR_Z30_TSIM_ATAC$H_qvalue_TSIM < 0.05) & (ZHR_Z30_TSIM_ATAC$P_qvalue_Z30 < 0.05 | ZHR_Z30_TSIM_ATAC$H_qvalue_Z30 < 0.05),] #
+ZHR_Z30_TSIM_ATAC_div <- cbind(ZHR_Z30_TSIM_ATAC_min$P_est.mean.x, ZHR_Z30_TSIM_ATAC_min$P_est.mean.y) %>% as.data.frame() %>% na.omit()#
+ZHR_Z30_TSIM_ATAC_perc_cis <- cbind(ZHR_Z30_TSIM_ATAC_min$perc_cis.x, ZHR_Z30_TSIM_ATAC_min$perc_cis.y) %>% as.data.frame() %>% na.omit()#
+# Plot % cis across species#
+R  <- melt(ZHR_Z30_TSIM_ATAC_perc_cis) %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE)
+ZHR_Z30_TSIM_ATAC_min <- ZHR_Z30_TSIM_ATAC[(ZHR_Z30_TSIM_ATAC$P_qvalue_TSIM < 0.05 |ZHR_Z30_TSIM_ATAC$H_qvalue_TSIM < 0.05) & (ZHR_Z30_TSIM_ATAC$P_qvalue_Z30 < 0.05 | ZHR_Z30_TSIM_ATAC$H_qvalue_Z30 < 0.05),]
+head(ZHR_Z30_TSIM_ATAC_min)
+ZHR_Z30_TSIM_ATAC_div <- cbind(ZHR_Z30_TSIM_ATAC_min$P_est.mean_Z30, ZHR_Z30_TSIM_ATAC_min$P_est.mean_TSIM) %>% as.data.frame() %>% na.omit()#
+ZHR_Z30_TSIM_ATAC_perc_cis <- cbind(ZHR_Z30_TSIM_ATAC_min$perc_cis_Z30, ZHR_Z30_TSIM_ATAC_min$perc_cis_TSIM) %>% as.data.frame() %>% na.omit()
+R  <- melt(ZHR_Z30_TSIM_ATAC_perc_cis) %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE)
+R
+R  <- melt(ZHR_Z30_TSIM_ATAC_div) %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE)
+R
+R  <- melt(ZHR_Z30_TSIM_ATAC_div) %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE) +#
 ylim(0,1)
-B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_SNP_binary, y=grh_snps_motif_totalsnp_norm, fill=ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_SNP_binary)) +#
-geom_boxplot(notch=F)
-B
-B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=overlap_SNP_binary, y=grh_snps_motif_totalsnp_norm, fill=overlap_SNP_binary)) +#
-geom_boxplot(notch=F)
-B
-B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=grh_snps_motif_totalsnp_norm)) + #
-geom_density()
-B
-ZHR_Z30_regions_ALL_SNPs_GRh_final
-head(ZHR_Z30_regions_ALL_SNPs_GRh_final)
-colnames(ZHR_Z30_regions_ALL_SNPs_GRh_final) <- c("Paste_locus", "total_region_snps", "overlap_grh_snp_binary", "grh_snp_count", "chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
-"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
-"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "overlap_grh_motif_binary", "grh_motif_counts", "grh_snps_norm_by_motif_count", "grh_snps_norm_by_motif_count_total_SNPs")
-colnames(ZHR_Z30_regions_ALL_SNPs_GRh_final) <- c("Paste_locus", "total_region_snps", "overlap_grh_snp_binary", "grh_snp_count", "chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
-"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
-"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "overlap_grh_motif_binary", "grh_motif_counts", "grh_snps_norm_by_motif_count", "grh_snps_norm_by_motif_count_total_SNPs", "test")
-colnames(ZHR_Z30_regions_ALL_SNPs_GRh_final) <- c("Paste_locus", "total_region_snps", "overlap_grh_snp_binary", "grh_snp_count", "chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
-"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
-"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "overlap_grh_motif_binary", "grh_motif_counts", "grh_snps_norm_by_motif_count")
-head(ZHR_Z30_regions_ALL_SNPs_GRh_final)
-colnames(ZHR_Z30_regions_ALL_SNPs_GRh_final) <- c("Paste_locus", "total_region_snps", "overlap_grh_snp_binary", "grh_snp_count", "chrom", "start", "end", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",#
-"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",#
-"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "overlap_grh_motif_binary", "grh_motif_counts", "grh_snps_norm_by_motif_count", "grh_snps_norm_by_motif_count_total_SNPs")
-A <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
-ggplot(aes(x=ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary, y=abs(P_est.mean), fill=ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary))+#
-geom_boxplot(notch=T)
-A
-A <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
-ggplot(aes(x=ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary, y=abs(P_est.mean), fill=ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary))+#
-geom_boxplot(notch=F)
-A
-A <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
-ggplot(aes(x=overlap_binary, y=abs(P_est.mean), fill=overlap_binary))+#
-geom_boxplot(notch=F)
-A
-A <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+R
+R  <- melt(ZHR_Z30_TSIM_ATAC_div) %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("Estimated CA divergence ") +#
+xlab("") +#
+scale_x_discrete(labels=c("Within\nspecies", "Between\nspecies")) +#
+scale_fill_discrete(guide=F)
+theme_main <- function() {#
+  theme_bw() +#
+  theme(#
+  #panel.grid.major = element_blank(),#
+  #panel.grid.minor = element_blank(),#
+  axis.text = element_text(size = 30),#
+  axis.title = element_text(size = 40),#
+  strip.text = element_text(size = 30),#
+  legend.text= element_text(size = 30),#
+  legend.title = element_text(size = 20),#
+  plot.title = element_text(size = 25, face = "bold")#
+#
+)#
+}
+R  <- melt(ZHR_Z30_TSIM_ATAC_div) %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("Estimated CA divergence ") +#
+xlab("") +#
+scale_x_discrete(labels=c("Within\nspecies", "Between\nspecies")) +#
+scale_fill_discrete(guide=F)
+R
+R  <- melt(ZHR_Z30_TSIM_ATAC_div) %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("Estimated CA divergence ") +#
+xlab("") +#
+scale_x_discrete(labels=c("Within\nspecies", "Between\nspecies")) +#
+scale_fill_discrete(guide=F)#
+  ggsave(R, file = "./AS_ATAC_RNA_2020_10_1/Downstream_analysis_and_figures.pdf", width = 5)
+ggsave(R, file = "./AS_ATAC_RNA_2020_10_1/Downstream_analyses_and_figures/ZHR_Z30_TSIM_divergence_ALL.pdf", width = 5)
+theme_main <- function() {#
+  theme_bw() +#
+  theme(#
+  #panel.grid.major = element_blank(),#
+  #panel.grid.minor = element_blank(),#
+  axis.text = element_text(size = 20),#
+  axis.title = element_text(size = 30),#
+  strip.text = element_text(size = 20),#
+  legend.text= element_text(size = 20),#
+  legend.title = element_text(size = 15),#
+  plot.title = element_text(size = 17, face = "bold")#
+#
+)#
+}
+R  <- melt(ZHR_Z30_TSIM_ATAC_div) %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("Estimated CA divergence ") +#
+xlab("") +#
+scale_x_discrete(labels=c("Within\nspecies", "Between\nspecies")) +#
+scale_fill_discrete(guide=F)#
+  ggsave(R, file = "./AS_ATAC_RNA_2020_10_1/Downstream_analyses_and_figures/ZHR_Z30_TSIM_divergence_ALL.pdf", width = 5)
+ggsave(R, file = "./AS_ATAC_RNA_2020_10_1/Downstream_analyses_and_figures/ZHR_Z30_TSIM_divergence_ALL.pdf", width = 15)
+ggsave(R, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Downstream_analyses_and_figures/ZHR_Z30_TSIM_divergence_ALL.pdf", width = 5)
+ggsave(R, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Est_CA_divergence_withinVSbetween_ALL.pdf.pdf", width = 3)
+S <- melt(ZHR_Z30_TSIM_RNA_div) %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("Estimated expression divergence ") +#
+xlab("") +#
+scale_x_discrete(labels=c("Within\nspecies", "Between\nspecies")) +#
+scale_fill_discrete(guide=F)
+colnames(ZHR_Z30_TSIM_RNA_div) <- c("P_est.mean_Z30", "P_est.mean_TSIM")#
+colnames(ZHR_Z30_TSIM_RNA_perc_cis) <- c("perc_cis_Z30", "perc_cis_TSIM")
+colnames(ZHR_Z30_TSIM_ATAC_div) <- c("P_est.mean_Z30", "P_est.mean_TSIM")#
+colnames(ZHR_Z30_TSIM_ATAC_perc_cis) <- c("perc_cis_Z30", "perc_cis_TSIM")
+ZHR_Z30_TSIM_RNA <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/RNA_seq/Data_tables/ZHR_Z30_TSIM_Full_results_output.txt", header = T)#
+ZHR_Z30_TSIM_RNA$data_type <- "RNA"#
+ZHR_Z30_TSIM_ATAC <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/ZHR_Z30_TSIM_Full_results_output_ATAC.txt", header = T)#
+ZHR_Z30_TSIM_ATAC$data_type <- "ATAC"#
+#
+ZHR_Z30_TSIM_RNA_min <- ZHR_Z30_TSIM_RNA[(ZHR_Z30_TSIM_RNA$P_qvalue.y < 0.05 |ZHR_Z30_TSIM_RNA$H_qvalue.y < 0.05) & (ZHR_Z30_TSIM_RNA$P_qvalue.x < 0.05 | ZHR_Z30_TSIM_RNA$H_qvalue.x < 0.05),] #
+ZHR_Z30_TSIM_RNA_div <- cbind(ZHR_Z30_TSIM_RNA_min$P_est.mean.x, ZHR_Z30_TSIM_RNA_min$P_est.mean.y, ZHR_Z30_TSIM_RNA_min$data_type) %>% as.data.frame() %>% na.omit()#
+ZHR_Z30_TSIM_RNA_perc_cis <- cbind(ZHR_Z30_TSIM_RNA_min$perc_cis.x, ZHR_Z30_TSIM_RNA_min$perc_cis.y, ZHR_Z30_TSIM_RNA_min$data_type) %>% as.data.frame() %>% na.omit()#
+colnames(ZHR_Z30_TSIM_RNA_div) <- c("P_est.mean_Z30", "P_est.mean_TSIM")#
+colnames(ZHR_Z30_TSIM_RNA_perc_cis) <- c("perc_cis_Z30", "perc_cis_TSIM")#
+ZHR_Z30_TSIM_ATAC_min <- ZHR_Z30_TSIM_ATAC[(ZHR_Z30_TSIM_ATAC$P_qvalue_TSIM < 0.05 |ZHR_Z30_TSIM_ATAC$H_qvalue_TSIM < 0.05) & (ZHR_Z30_TSIM_ATAC$P_qvalue_Z30 < 0.05 | ZHR_Z30_TSIM_ATAC$H_qvalue_Z30 < 0.05),] #
+ZHR_Z30_TSIM_ATAC_div <- cbind(ZHR_Z30_TSIM_ATAC_min$P_est.mean_Z30, ZHR_Z30_TSIM_ATAC_min$P_est.mean_TSIM, ZHR_Z30_TSIM_ATAC_min$data_type) %>% as.data.frame() %>% na.omit()#
+ZHR_Z30_TSIM_ATAC_perc_cis <- cbind(ZHR_Z30_TSIM_ATAC_min$perc_cis_Z30, ZHR_Z30_TSIM_ATAC_min$perc_cis_TSIM, ZHR_Z30_TSIM_ATAC_min$data_type) %>% as.data.frame() %>% na.omit()#
+colnames(ZHR_Z30_TSIM_ATAC_div) <- c("P_est.mean_Z30", "P_est.mean_TSIM")#
+colnames(ZHR_Z30_TSIM_ATAC_perc_cis) <- c("perc_cis_Z30", "perc_cis_TSIM")
+head(ZHR_Z30_TSIM_ATAC_perc_cis)
+colnames(ZHR_Z30_TSIM_RNA_div) <- c("P_est.mean_Z30", "P_est.mean_TSIM", "datatype")#
+colnames(ZHR_Z30_TSIM_RNA_perc_cis) <- c("perc_cis_Z30", "perc_cis_TSIM", "datatype")
+colnames(ZHR_Z30_TSIM_ATAC_div) <- c("P_est.mean_Z30", "P_est.mean_TSIM", "datatype")#
+colnames(ZHR_Z30_TSIM_ATAC_perc_cis) <- c("perc_cis_Z30", "perc_cis_TSIM", "datatype")
+head(melt(ZHR_Z30_TSIM_ATAC_div))
+head(melt(ZHR_Z30_TSIM_ATAC_div, id.vars = "datatype", measure_vars = c("P_est.mean_Z30", "P_est.mean_TSIM")))
+R  <- melt(ZHR_Z30_TSIM_ATAC_div, id.vars = "datatype", measure_vars = c("P_est.mean_Z30", "P_est.mean_TSIM")) %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE)
+R
+ZHR_Z30_TSIM_ATAC_div_melt <- melt(ZHR_Z30_TSIM_ATAC_div)
+head(ZHR_Z30_TSIM_ATAC_div_melt)
+ZHR_Z30_TSIM_RNA <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/RNA_seq/Data_tables/ZHR_Z30_TSIM_Full_results_output.txt", header = T)#
+ZHR_Z30_TSIM_RNA$data_type <- "RNA"#
+ZHR_Z30_TSIM_ATAC <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/ZHR_Z30_TSIM_Full_results_output_ATAC.txt", header = T)#
+ZHR_Z30_TSIM_ATAC$data_type <- "ATAC"#
+#
+ZHR_Z30_TSIM_RNA_min <- ZHR_Z30_TSIM_RNA[(ZHR_Z30_TSIM_RNA$P_qvalue.y < 0.05 |ZHR_Z30_TSIM_RNA$H_qvalue.y < 0.05) & (ZHR_Z30_TSIM_RNA$P_qvalue.x < 0.05 | ZHR_Z30_TSIM_RNA$H_qvalue.x < 0.05),] #
+ZHR_Z30_TSIM_RNA_div <- cbind(ZHR_Z30_TSIM_RNA_min$P_est.mean.x, ZHR_Z30_TSIM_RNA_min$P_est.mean.y) %>% as.data.frame() %>% na.omit()#
+ZHR_Z30_TSIM_RNA_perc_cis <- cbind(ZHR_Z30_TSIM_RNA_min$perc_cis.x, ZHR_Z30_TSIM_RNA_min$perc_cis.y) %>% as.data.frame() %>% na.omit()#
+colnames(ZHR_Z30_TSIM_RNA_div) <- c("P_est.mean_Z30", "P_est.mean_TSIM")#
+colnames(ZHR_Z30_TSIM_RNA_perc_cis) <- c("perc_cis_Z30", "perc_cis_TSIM")#
+ZHR_Z30_TSIM_ATAC_min <- ZHR_Z30_TSIM_ATAC[(ZHR_Z30_TSIM_ATAC$P_qvalue_TSIM < 0.05 |ZHR_Z30_TSIM_ATAC$H_qvalue_TSIM < 0.05) & (ZHR_Z30_TSIM_ATAC$P_qvalue_Z30 < 0.05 | ZHR_Z30_TSIM_ATAC$H_qvalue_Z30 < 0.05),] #
+ZHR_Z30_TSIM_ATAC_div <- cbind(ZHR_Z30_TSIM_ATAC_min$P_est.mean_Z30, ZHR_Z30_TSIM_ATAC_min$P_est.mean_TSIM) %>% as.data.frame() %>% na.omit()#
+ZHR_Z30_TSIM_ATAC_perc_cis <- cbind(ZHR_Z30_TSIM_ATAC_min$perc_cis_Z30, ZHR_Z30_TSIM_ATAC_min$perc_cis_TSIM) %>% as.data.frame() %>% na.omit()#
+colnames(ZHR_Z30_TSIM_ATAC_div) <- c("P_est.mean_Z30", "P_est.mean_TSIM")#
+colnames(ZHR_Z30_TSIM_ATAC_perc_cis) <- c("perc_cis_Z30", "perc_cis_TSIM")
+ZHR_Z30_TSIM_ATAC_div_melt <- melt(ZHR_Z30_TSIM_ATAC_div)
+head(ZHR_Z30_TSIM_ATAC_div_melt)
+ZHR_Z30_TSIM_ATAC_div_melt$datatype <- "ATAC"
+ZHR_Z30_TSIM_RNA_div_melt <- melt(ZHR_Z30_TSIM_RNA_div)#
+ZHR_Z30_TSIM_RNA_div_melt$datatype <- "RNA"
+ZHR_Z30_TSIM_ATAC_RNA_div <- rbind(ZHR_Z30_TSIM_ATAC_div_melt, ZHR_Z30_TSIM_RNA_div_melt)
+head(ZHR_Z30_TSIM_ATAC_RNA_div)
+R  <- ZHR_Z30_TSIM_ATAC_RNA_div %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("Estimated CA divergence ") +#
+xlab("") +#
+scale_x_discrete(labels=c("Within\nspecies", "Between\nspecies")) +#
+scale_fill_discrete(guide=F) +#
+facet_wrap(~datatype, nrow=1)
+R  <- ZHR_Z30_TSIM_ATAC_RNA_div %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("Estimated CA divergence ") +#
+xlab("") +#
+scale_x_discrete(labels=c("Within\nspecies", "Between\nspecies")) +#
+scale_fill_discrete(guide=F) +#
+facet_wrap(~datatype, nrow=1)
+R
+ZHR_Z30_TSIM_ATAC_perc_cis_melt <- melt(ZHR_Z30_TSIM_ATAC_perc_cis)#
+ZHR_Z30_TSIM_ATAC_perc_cis_melt$datatype <- "ATAC"#
+ZHR_Z30_TSIM_RNA_perc_cis_melt <- melt(ZHR_Z30_TSIM_RNA_perc_cis)#
+ZHR_Z30_TSIM_RNA_perc_cis_melt$datatype <- "RNA"#
+ZHR_Z30_TSIM_ATAC_RNA_perc_cis <- rbind(ZHR_Z30_TSIM_ATAC_perc_cis_melt, ZHR_Z30_TSIM_RNA_perc_cis_melt)
+S <- ZHR_Z30_TSIM_ATAC_RNA_perc_cis %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("perc cis") +#
+xlab("") +#
+scale_x_discrete(labels=c("Within\nspecies", "Between\nspecies")) +#
+scale_fill_discrete(guide=F) +#
+facet_wrap(~datatype, nrow=1)
+S
+ZHR_Z30_TSIM_ATAC_perc_cis_melt <- melt(ZHR_Z30_TSIM_ATAC_perc_cis)
+ZHR_Z30_TSIM_ATAC_perc_cis_melt$datatype <- "ATAC"
+ZHR_Z30_TSIM_RNA_perc_cis_melt <- melt(ZHR_Z30_TSIM_RNA_perc_cis)
+ZHR_Z30_TSIM_ATAC_perc_cis_melt$datatype <- "RNA"
+ZHR_Z30_TSIM_ATAC_RNA_perc_cis <- rbind(ZHR_Z30_TSIM_ATAC_perc_cis_melt, ZHR_Z30_TSIM_RNA_perc_cis_melt)
+ZHR_Z30_TSIM_ATAC_perc_cis_melt <- melt(ZHR_Z30_TSIM_ATAC_perc_cis)#
+ZHR_Z30_TSIM_ATAC_perc_cis_melt$datatype <- "RNA"#
+ZHR_Z30_TSIM_RNA_perc_cis_melt <- melt(ZHR_Z30_TSIM_RNA_perc_cis)#
+ZHR_Z30_TSIM_RNA_perc_cis_melt$datatype <- "RNA"#
+ZHR_Z30_TSIM_ATAC_RNA_perc_cis <- rbind(ZHR_Z30_TSIM_ATAC_perc_cis_melt, ZHR_Z30_TSIM_RNA_perc_cis_melt)
+S <- ZHR_Z30_TSIM_ATAC_RNA_perc_cis %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("perc cis") +#
+xlab("") +#
+scale_x_discrete(labels=c("Within\nspecies", "Between\nspecies")) +#
+scale_fill_discrete(guide=F) +#
+facet_wrap(~datatype, nrow=1)
+S
+ZHR_Z30_TSIM_ATAC_perc_cis_melt <- melt(ZHR_Z30_TSIM_ATAC_perc_cis)#
+ZHR_Z30_TSIM_ATAC_perc_cis_melt$datatype <- "ATAC"#
+ZHR_Z30_TSIM_RNA_perc_cis_melt <- melt(ZHR_Z30_TSIM_RNA_perc_cis)#
+ZHR_Z30_TSIM_RNA_perc_cis_melt$datatype <- "RNA"#
+ZHR_Z30_TSIM_ATAC_RNA_perc_cis <- rbind(ZHR_Z30_TSIM_ATAC_perc_cis_melt, ZHR_Z30_TSIM_RNA_perc_cis_melt)
+S <- ZHR_Z30_TSIM_ATAC_RNA_perc_cis %>%#
+ggplot(aes(x=variable, y=abs(value), fill=variable)) +#
+geom_boxplot(notch=TRUE) +#
+theme_main() +#
+ylab("perc cis") +#
+xlab("") +#
+scale_x_discrete(labels=c("Within\nspecies", "Between\nspecies")) +#
+scale_fill_discrete(guide=F) +#
+facet_wrap(~datatype, nrow=1)
+S
+ggsave(R, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Est_CA_divergence_withinVSbetween_ALL_RNA_ATAC.pdf", width = 3)
+ggsave(S, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/perc_cis_withinVSbetween_ALL_RNA_ATAC.pdf", width = 3)
+ggsave(S, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/perc_cis_withinVSbetween_ALL_RNA_ATAC.pdf", width = 5)
+ggsave(R, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Est_CA_divergence_withinVSbetween_ALL_RNA_ATAC.pdf", width = 5)
+all_classes_integrated <- read.delim("./AS_ATAC_RNA_2020_10_1/ATAC_RNA_comp/ZHR_Z30_ATAC_RNA_integrated_minimal.txt", header = T)
+all_classes_integrated <- read.delim("./Integrated_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_RNA_comp/ZHR_Z30_ATAC_RNA_integrated_minimal.txt", header = T)
+all_classes_integrated <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_RNA_comp/ZHR_Z30_ATAC_RNA_integrated_minimal.txt", header = T)
+O <- all_classes_integrated %>%#
+ggplot(aes(x=P_est.mean, y=P_est.mean_RNA, color=div_category)) +#
+geom_point() +#
+theme_main() +#
+scale_color_discrete(name = "Divergence category",#
+labels = c("Acc cons & Exp cons", "Acc cons & Exp div", "Acc div & Exp cons", "Acc div & Exp div opposite", "Acc div & Exp div same ")) +#
+theme(legend.text= element_text(size = 10),#
+legend.title = element_text(size = 10)) +#
+xlab("Estimated accessibility divergence") +#
+ylab("Estimated expression divergennce") +#
+ylim(-2.5,2.5) +#
+xlim(-2.5,2.5) +#
+ggtitle("Accessibility vs Expression divergence - integrated categories")#
+	ggsave(O, file = "Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Acc_vs_Exp_categories_ZHR_Z30.pdf")
+O <- all_classes_integrated %>%#
+ggplot(aes(x=P_est.mean, y=P_est.mean_RNA, color=div_category)) +#
+geom_point() +#
+theme_main() +#
+scale_color_discrete(name = "Divergence category",#
+labels = c("Acc cons & Exp cons", "Acc cons & Exp div", "Acc div & Exp cons", "Acc div & Exp div opposite", "Acc div & Exp div same ")) +#
+theme(legend.text= element_text(size = 10),#
+legend.title = element_text(size = 10)) +#
+xlab("Estimated accessibility divergence") +#
+ylab("Estimated expression divergennce") +#
+ylim(-2.5,2.5) +#
+xlim(-2.5,2.5) +#
+ggtitle("Accessibility vs Expression divergence - integrated categories")#
+	ggsave(O, file = "Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Acc_vs_Exp_categories_ZHR_Z30.pdf")
+G <- all_classes_integrated %>%#
+	ggplot(aes(x=P_est.mean, y=P_est.mean_RNA, color=div_category)) +#
+	geom_point() +#
+	theme_main() +#
+	scale_color_discrete(guide = F) +#
+	xlab("Estimated accessibility divergence") +#
+	ylab("Estimated expression divergennce") +#
+	ylim(-2.5,2.5) +#
+	xlim(-2.5,2.5) +#
+	ggtitle("Accessibility vs Expression divergence - integrated categories")
+ggsave(G, file = "Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Acc_vs_Exp_categories_ZHR_Z30_noguide.pdf")
+K <- all_classes_integrated[all_classes_integrated$P_qvalue_RNA < 0.05 & all_classes_integrated$class == "start",] %>%#
+ggplot(aes(x=div_category, fill=div_category, y=abs(P_est.mean_RNA))) +#
+geom_boxplot(notch=TRUE) +#
+ylim(0,1.5) +#
+ylab("Magnitude of estimated expression divergence") +#
+xlab("") +#
+scale_x_discrete(labels=c("Acc cons & Exp div","Acc div & Exp div\nopposite", "Acc div & Exp div\nsame")) +#
+scale_fill_discrete(guide=FALSE) +#
+theme_main() +#
+theme(axis.text = element_text(size = 15),#
+axis.title = element_text(size = 15),#
+plot.title = element_text(size = 12, face = "bold")) +#
+ggtitle("Magnitude of expression divergence (only txStart) across integrated categories")#
+	ggsave(K, file = ".Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Exp_effectsize_txStartONLY_int_categories_ZHR_Z30.pdf")
+ggsave(K, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Exp_effectsize_txStartONLY_int_categories_ZHR_Z30.pdf")
+Q <- all_classes_integrated[(all_classes_integrated$class == "inter" | all_classes_integrated$class == "intra") & all_classes_integrated$div_category != "AccC_ExpC" & all_classes_integrated$div_category != "AccC_ExpD",] %>%#
+ggplot(aes(x=div_category, fill=div_category, y=distance_to_exon1/1000)) +#
+geom_boxplot(notch=TRUE) +#
+ylim(0,30) +#
+ylab("Distance to closest expressed gene") +#
+xlab("") +#
+#scale_x_discrete(labels=c("Acc div & Exp cons","Acc div & Exp div\nopposite", "Acc div & Exp div\nsame")) +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("Acc div & Exp cons","Acc div & Exp div\nopposite", "Acc div & Exp div\nsame")) +#
+theme_main() +#
+theme(axis.text = element_text(size = 13),#
+axis.title = element_text(size = 15),#
+plot.title = element_text(size = 12, face = "bold")) +#
+ggtitle("Kilobases to closest gene (inter- & intragenic) across integrated categories")#
+	ggsave(Q, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Dist_to_closest_gene_int_categories_ZHR_Z30.pdf")
+class_props <- matrix(ncol = 4, nrow = 5) %>% as.data.frame()#
+colnames(class_props) <- c("inter", "intra", "start", "end")#
+class_props[1,1] <- nrow(all_classes_integrated[all_classes_integrated$class == "inter" & all_classes_integrated$div_category == "AccC_ExpC",])#
+class_props[2,1] <- nrow(all_classes_integrated[all_classes_integrated$class == "inter" & all_classes_integrated$div_category == "AccC_ExpD",])#
+class_props[3,1] <- nrow(all_classes_integrated[all_classes_integrated$class == "inter" & all_classes_integrated$div_category == "AccD_ExpC",])#
+class_props[4,1] <- nrow(all_classes_integrated[all_classes_integrated$class == "inter" & all_classes_integrated$div_category == "AccD_ExpD_O",])#
+class_props[5,1] <- nrow(all_classes_integrated[all_classes_integrated$class == "inter" & all_classes_integrated$div_category == "AccD_ExpD_S",])#
+#
+class_props[1,2] <- nrow(all_classes_integrated[all_classes_integrated$class == "intra" & all_classes_integrated$div_category == "AccC_ExpC",])#
+class_props[2,2] <- nrow(all_classes_integrated[all_classes_integrated$class == "intra" & all_classes_integrated$div_category == "AccC_ExpD",])#
+class_props[3,2] <- nrow(all_classes_integrated[all_classes_integrated$class == "intra" & all_classes_integrated$div_category == "AccD_ExpC",])#
+class_props[4,2] <- nrow(all_classes_integrated[all_classes_integrated$class == "intra" & all_classes_integrated$div_category == "AccD_ExpD_O",])#
+class_props[5,2] <- nrow(all_classes_integrated[all_classes_integrated$class == "intra" & all_classes_integrated$div_category == "AccD_ExpD_S",])#
+#
+class_props[1,3] <- nrow(all_classes_integrated[all_classes_integrated$class == "start" & all_classes_integrated$div_category == "AccC_ExpC",])#
+class_props[2,3] <- nrow(all_classes_integrated[all_classes_integrated$class == "start" & all_classes_integrated$div_category == "AccC_ExpD",])#
+class_props[3,3] <- nrow(all_classes_integrated[all_classes_integrated$class == "start" & all_classes_integrated$div_category == "AccD_ExpC",])#
+class_props[4,3] <- nrow(all_classes_integrated[all_classes_integrated$class == "start" & all_classes_integrated$div_category == "AccD_ExpD_O",])#
+class_props[5,3] <- nrow(all_classes_integrated[all_classes_integrated$class == "start" & all_classes_integrated$div_category == "AccD_ExpD_S",])#
+#
+class_props[1,4] <- nrow(all_classes_integrated[all_classes_integrated$class == "end" & all_classes_integrated$div_category == "AccC_ExpC",])#
+class_props[2,4] <- nrow(all_classes_integrated[all_classes_integrated$class == "end" & all_classes_integrated$div_category == "AccC_ExpD",])#
+class_props[3,4] <- nrow(all_classes_integrated[all_classes_integrated$class == "end" & all_classes_integrated$div_category == "AccD_ExpC",])#
+class_props[4,4] <- nrow(all_classes_integrated[all_classes_integrated$class == "end" & all_classes_integrated$div_category == "AccD_ExpD_O",])#
+class_props[5,4] <- nrow(all_classes_integrated[all_classes_integrated$class == "end" & all_classes_integrated$div_category == "AccD_ExpD_S",])#
+#
+class_props$inter <- class_props$inter/sum(class_props$inter)#
+class_props$intra <- class_props$intra/sum(class_props$intra)#
+class_props$start <- class_props$start/sum(class_props$start)#
+class_props$end <- class_props$end/sum(class_props$end)#
+class_props$div_category <- c("AccC_ExpC", "AccC_ExpD", "AccD_ExpC", "AccD_ExpD_O", "AccD_ExpD_S")#
+#
+G <- melt(class_props) %>%#
+ggplot(aes(x=variable, y=value, fill=div_category)) +#
+geom_bar(stat="identity", colour="white") +#
+xlab("") +#
+ylab("Proportion") +#
+scale_x_discrete(labels=c("Intergenic","Intragenic", "txStart", "txEnd")) +#
+scale_fill_discrete(name = "Divergence category",#
+labels = c("Acc cons & Exp cons", "Acc cons & Exp div", "Acc div & Exp cons", "Acc div & Exp div opposite", "Acc div & Exp div same ")) +#
+theme_main() +#
+theme(axis.text = element_text(size = 12),#
+axis.title = element_text(size = 15),#
+plot.title = element_text(size = 13, face = "bold"),#
+legend.text= element_text(size = 10),#
+legend.title = element_text(size = 10)) +#
+ggtitle("Relative proportions of integrated category for each class")#
+	ggsave(G, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Prop_div_categories_by_int_categories_ZHR_Z30.pdf")
+setwd("/Users/wittkopp_member/Code/Integrative_AS_genomics")
+ZHR_Z30_regions_ALL_SNPs_GRh_final <- read.delim("./AS_ATAC_RNA_2020_10_1/Grh_data/ZHR_Z30_GRH_SNPs_count_FINALALL.txt", header = T)#
+#
+# STEP 4: ANALYSES#
+ZHR_Z30_regions_ALL_SNPs_GRh_final$class <- factor(ZHR_Z30_regions_ALL_SNPs_GRh_final$class,levels = c("start", "end", "inter", "intra"))
+G <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05 | ZHR_Z30_regions_ALL_SNPs_GRh_final$H_qvalue < 0.05,] %>%#
 ggplot(aes(x=overlap_grh_motif_binary, y=abs(P_est.mean), fill=overlap_grh_motif_binary))+#
-geom_boxplot(notch=F)
-A
-A <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+geom_boxplot(notch=T) +#
+ylim(0,1)
+G
+G <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05 | ZHR_Z30_regions_ALL_SNPs_GRh_final$H_qvalue < 0.05,] %>%#
 ggplot(aes(x=overlap_grh_motif_binary, y=abs(P_est.mean), fill=overlap_grh_motif_binary))+#
-geom_boxplot(notch=F) +#
+geom_boxplot(notch=T)
+G
+G <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05 | ZHR_Z30_regions_ALL_SNPs_GRh_final$H_qvalue < 0.05,] %>%#
+ggplot(aes(x=overlap_grh_motif_binary, y=abs(P_est.mean), fill=overlap_grh_motif_binary))+#
+geom_boxplot(notch=T) +#
 ylim(0,1)
-A
-B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
-geom_boxplot(notch=F) +#
+G
+G <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=overlap_grh_motif_binary, y=abs(P_est.mean), fill=overlap_grh_motif_binary))+#
+geom_boxplot(notch=T) +#
 ylim(0,1)
-B
-B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_binary == "OVERLAP",] %>%#
-ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
-geom_boxplot(notch=F)
-B
+G
+H <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05 | ZHR_Z30_regions_ALL_SNPs_GRh_final$H_qvalue < 0.05,] %>%#
+ggplot(aes(x=overlap_grh_motif_binary, y=perc_cis, fill=overlap_grh_motif_binary))+#
+geom_boxplot(notch = T)
+H
+ZHR_Z30_regions_ALL_SNPs_GRh_final <- as.data.frame(ZHR_Z30_regions_ALL_SNPs_GRh_final)#
+#
+ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_motif_bin <- "NA"#
+#
+for (i in 1:nrow(ZHR_Z30_regions_ALL_SNPs_GRh_final)) {#
+#
+if (ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_motif_counts[i] < 1){#
+#
+	ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_motif_bin[i] <- "0"#
+#
+} else if (ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_motif_counts[i] > 0 & ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_motif_counts[i] < 3){#
+#
+	ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_motif_bin[i] <- "1-2"#
+#
+} else if (ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_motif_counts[i] > 2 & ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_motif_counts[i] < 8){#
+#
+	ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_motif_bin[i] <- "3-7"#
+#
+} else if (ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_motif_counts[i] > 7){#
+#
+	ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_motif_bin[i] <- ">7"#
+#
+}#
+}
+ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_motif_bin <- factor(ZHR_Z30_regions_ALL_SNPs_GRh_final$grh_motif_bin,levels = c("0", "1-2", "3-7", ">7"))
+G <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=grh_motif_bin, y=P_est.mean_abs, fill=grh_motif_bin))+#
+geom_boxplot(notch=T) +#
+ylim(0,2)
+G
+G <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=grh_motif_bin, y=P_est.mean_abs, fill=grh_motif_bin))+#
+geom_boxplot(notch=T)
+G
+G <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=grh_motif_bin, y=P_est.mean_abs, fill=grh_motif_bin))+#
+geom_boxplot(notch=T) +#
+ylim(0,1)
+G
+G <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=grh_motif_bin, y=P_est.mean_abs, fill=grh_motif_bin))+#
+geom_boxplot(notch=TRUE) +#
+theme_main() +#
+ylab("Estimted accessibility divergence") +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("0","1-2", "3-7", ">7"))
+G
+G <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=grh_motif_bin, y=P_est.mean_abs, fill=grh_motif_bin))+#
+geom_boxplot(notch=TRUE) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("Estimted accessibility divergence") +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("0","1-2", "3-7", ">7"))
+G
+ggsave(G, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Grh_motifs_series_acc_div.pdf")
+ggsave(G, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Grh_motifs_series_acc_div.pdf")
+I <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=class, y=total_region_snps, fill=class))+#
+geom_boxplot(notch=TRUE) +#
+theme_main() +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("0","1-2", "3-7", ">7")) +#
+ylab("Number of SNPs in region") +#
+ylim(0,30)
+I
+I <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=class, y=total_region_snps, fill=class))+#
+geom_boxplot(notch=TRUE) +#
+theme_main() +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("0","1-2", "3-7", ">7")) +#
+ylab("Number of SNPs in region")
+I
+I <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=grh_motif_bin, y=total_region_snps, fill=grh_motif_bin))+#
+geom_boxplot(notch=TRUE) +#
+theme_main() +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("0","1-2", "3-7", ">7")) +#
+ylab("Number of SNPs in region") +#
+ylim(0,30)
+I
+ggsave(I, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Grh_motifs_series_number_SNPs.pdf")
+H <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=grh_motif_bin, y=perc_cis, fill=grh_motif_bin))+#
+geom_boxplot(notch=TRUE) +#
+theme_main() +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("0","1-2", "3-7", ">7")) +#
+ylab("perc cis") #
+ggsave(H, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Grh_motifs_series_perc_cis.pdf")
+H
+G <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=overlap_grh_motif_binary, y=abs(P_est.mean), fill=overlap_grh_motif_binary))+#
+geom_boxplot(notch=T)
+G
+G <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
+ggplot(aes(x=overlap_grh_motif_binary, y=abs(P_est.mean), fill=overlap_grh_motif_binary))+#
+geom_boxplot(notch=T) +#
+ylim(0,1)
+G
 B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%#
 ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
-geom_boxplot(notch=F) +#
+geom_boxplot(notch=T) +#
 ylim(0,1)
 B
 C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%#
 ggplot(aes(x=overlap_grh_snp_binary, y=total_region_snps, fill=overlap_grh_snp_binary))+#
 geom_boxplot(notch=F)
 C
-D <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_regions_snps == 8,] %>%#
-ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
-geom_boxplot(notch=F)
-D
-nrow(ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_regions_snps == 8,])
-nrow(ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",])
-D <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%#
-ggplot(aes(x=total_snp_count)_#
-geom_density()
-D <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%#
-ggplot(aes(x=total_snp_count)+#
-geom_density()
-)
-D <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%#
-ggplot(aes(x=total_snp_count))+#
-geom_density()
-D
-D <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%#
-ggplot(aes(x=total_region_snps))+#
-geom_density()
-D
-E <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps == 8,]) %>%#
-ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
-geom_boxplot(notch=F)
-ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps == 8,])
-E <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps == 8,] %>%#
-ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
-geom_boxplot(notch=F)
-E
+C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=total_region_snps, fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=T)
+C
 E <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps == 8,] %>%#
 ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
 geom_boxplot(notch=T)
 E
+G <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps == 8,] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=perc_cis, fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=T)
+G
+B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=TRUE) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("Estimted accessibility divergence") +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("Regions w/ grh motif variation","Regions w/o grh motif variation"))
+B
+B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=TRUE) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("Estimted accessibility divergence") +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("Regions w/ grh\nmotif variation","Regions w/o grh\nmotif variation"))
+B
+C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=total_region_snps, fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=TRUE) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("Number of SNPs") +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("Regions w/ grh\nmotif variation","Regions w/o grh\nmotif variation"))
+C
+C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=total_region_snps, fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=TRUE) +#
+theme_main() +#
+ylab("Number of SNPs") +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("Regions w/ grh\nmotif variation","Regions w/o grh\nmotif variation"))
+C
+ggsave(B, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Access_div_by_grh_motifs_variation.pdf")
+C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=total_region_snps, fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=TRUE) +#
+theme_main() +#
+ylab("Number of SNPs") +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("Regions w/ grh\nmotif variation","Regions w/o grh\nmotif variation"))#
+ggsave(C, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/total_snps_by_grh_motifs_variation.pdf")
 E <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps == 8,] %>%#
 ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
-geom_boxplot(notch=F)
+geom_boxplot(notch=TRUE) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("Estimted accessibility divergence for regions with 8 SNPs") +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("Regions w/ grh\nmotif variation","Regions w/o grh\nmotif variation"))#
+ggsave(E, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Access_div_by_grh_motifs_variation_only8SNPs.pdf")
+E <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps == 15,] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=TRUE) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("Estimted accessibility divergence for regions with 8 SNPs") +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("Regions w/ grh\nmotif variation","Regions w/o grh\nmotif variation"))
 E
-F <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps == 8,] %>%#
-ggplot(aes(x=overlap_grh_snp_binary, y=total_regions_snps, fill=overlap_grh_snp_binary))+#
-geom_boxplot(notch=F)
-F
-F <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps == 8,] %>%#
-ggplot(aes(x=overlap_grh_snp_binary, y=total_region_snps, fill=overlap_grh_snp_binary))+#
-geom_boxplot(notch=F)
-F
-F <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps == 8,] %>%#
-ggplot(aes(x=overlap_grh_snp_binary, y=total_region_snps, fill=overlap_grh_snp_binary))+#
-geom_boxplot()
-F
-F <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps > 6 & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps < 12,] %>%#
+E <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps == 13,] %>%#
 ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
-geom_boxplot(notch=F)
-F
-F <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps > 6 & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps < 12,] %>%#
+geom_boxplot(notch=TRUE) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("Estimted accessibility divergence for regions with 8 SNPs") +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("Regions w/ grh\nmotif variation","Regions w/o grh\nmotif variation"))
+E
+E <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps == 14,] %>%#
 ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
-geom_boxplot()
-F
-F <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps > 6 & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps < 12,] %>%#
-ggplot(aes(x=overlap_grh_snp_binary, y=perc_cis, fill=overlap_grh_snp_binary))+#
-geom_boxplot()
-F
-G <- ZHR_Z30_regions_ALL_SNPs_GRh_final %>%#
-ggplot(aes(x=overlap_grh_motif_binary, y=perc_cis, fill=overlap_grh_motif_binary))+#
-geom_boxplot()
-G
-G <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05] %>%#
-ggplot(aes(x=overlap_grh_motif_binary, y=perc_cis, fill=overlap_grh_motif_binary))+#
-geom_boxplot()
-G <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05,] %>%#
-ggplot(aes(x=overlap_grh_motif_binary, y=perc_cis, fill=overlap_grh_motif_binary))+#
-geom_boxplot()
-G
-G <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05 & ZHR_Z30_regions_ALL_SNPs_GRh_final$class == "inter",] %>%#
-ggplot(aes(x=overlap_grh_motif_binary, y=perc_cis, fill=overlap_grh_motif_binary))+#
-geom_boxplot()
-G
-G <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05,] %>%#
-ggplot(aes(x=overlap_grh_motif_binary, y=perc_cis, fill=overlap_grh_motif_binary))+#
-geom_boxplot()
-G
-H <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05,] %>%#
-ggplot(aes(x=overlap_grh_motif_binary, y=abs(P_est.mean), fill=overlap_grh_motif_binary))+#
-geom_boxplot()
-H
-H <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05 & ZHR_Z30_regions_ALL_SNPs_GRh_final$class == "inter",] %>%#
-ggplot(aes(x=overlap_grh_motif_binary, y=abs(P_est.mean), fill=overlap_grh_motif_binary))+#
-geom_boxplot()
-H
-G <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05 & ZHR_Z30_regions_ALL_SNPs_GRh_final$class == "inter",,] %>%#
-ggplot(aes(x=overlap_grh_motif_binary, y=perc_cis, fill=overlap_grh_motif_binary))+#
-geom_boxplot()
-G
-G <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$P_qvalue < 0.05,] %>%#
-ggplot(aes(x=overlap_grh_motif_binary, y=perc_cis, fill=overlap_grh_motif_binary))+#
-geom_boxplot()
-G
+geom_boxplot(notch=TRUE) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("Estimted accessibility divergence for regions with 8 SNPs") +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("Regions w/ grh\nmotif variation","Regions w/o grh\nmotif variation"))
+E
+E <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps > 7 & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps < 15,] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=TRUE) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("Estimted accessibility divergence for regions with 8 SNPs") +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("Regions w/ grh\nmotif variation","Regions w/o grh\nmotif variation")) +#
+facet_wrap(~total_region_snps, nrow=3)
+E
+E <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps > 7 & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps < 17,] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=F) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("Estimted accessibility divergence for regions with 8 SNPs") +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("Regions w/ grh\nmotif variation","Regions w/o grh\nmotif variation")) +#
+facet_wrap(~total_region_snps, nrow=3)
+E
+E <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps > 7 & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps < 17,] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=T) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("Estimted accessibility divergence for regions with 8 SNPs") +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("Regions w/ grh\nmotif variation","Regions w/o grh\nmotif variation")) +#
+facet_wrap(~total_region_snps, nrow=3)
+E
+B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=TRUE) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("Estimted accessibility divergence") +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE)
+B
+E <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP" & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps > 7 & ZHR_Z30_regions_ALL_SNPs_GRh_final$total_region_snps < 17,] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=T) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("Estimted accessibility divergence for regions with 8 SNPs") +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("Regions w/o grh\nmotif variation","Regions w/ grh\nmotif variation")) +#
+facet_wrap(~total_region_snps, nrow=3)#
+ggsave(E, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Access_div_by_grh_motifs_variation_only8SNPs.pdf")
+C <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=total_region_snps, fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=TRUE) +#
+theme_main() +#
+ylab("Number of SNPs") +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("Regions w/o grh\nmotif variation","Regions w/ grh\nmotif variation"))#
+ggsave(C, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/total_snps_by_grh_motifs_variation.pdf")
+B <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overlap_grh_motif_binary == "OVERLAP",] %>%#
+ggplot(aes(x=overlap_grh_snp_binary, y=abs(P_est.mean), fill=overlap_grh_snp_binary))+#
+geom_boxplot(notch=TRUE) +#
+ylim(0,1) +#
+theme_main() +#
+ylab("Estimted accessibility divergence") +#
+xlab("") +#
+scale_fill_discrete(guide=FALSE) +#
+scale_x_discrete(labels=c("Regions w/o grh\nmotif variation","Regions w. grh\nmotif variation"))#
+ggsave(B, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Access_div_by_grh_motifs_variation.pdf")
+if (!requireNamespace("BiocManager", quietly = TRUE))#
+    install.packages("BiocManager")#
+#
+BiocManager::install("DiffBind")
+library("DiffBind")
+library(DiffBind)
+BiocManager::install("DiffBind")
