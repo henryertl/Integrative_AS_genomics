@@ -73,7 +73,7 @@ geom_boxplot(notch=T) +
 theme_main() +
 ylab("# of nucleotide variants in region") +
 xlab("") +
-scale_fill_discrete(guide=FALSE) +
+scale_fill_discrete(guide=FALSE)
 
 
 ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$chrom != "chr4",] %>%
@@ -85,7 +85,7 @@ scale_fill_discrete(guide=FALSE)
 
 # is chr2L more seq divergent overall (outside of CA regions?)
 
-snps <- read.delim("/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/zhr_z30_SNPs_dm6_genome.bed", header = T)
+snps <- read.delim("./AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/zhr_z30_SNPs_dm6_genome.bed", header = T)
 colnames(snps) <- c("chrom", "start", "end")
 snps_chrom <- snps$chrom %>% as.data.frame()
 colnames(snps_chrom) <- "chrom"
@@ -164,7 +164,8 @@ geom_boxplot(notch=T) +
 theme_main() +
 ylab("Estimated expression divergence") +
 xlab("") +
-scale_fill_discrete(guide=FALSE)
+scale_fill_discrete(guide=FALSE) +
+ylim(0,1)
 
 N <- all_classes_integrated %>%
 

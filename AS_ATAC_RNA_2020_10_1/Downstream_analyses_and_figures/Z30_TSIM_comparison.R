@@ -1,4 +1,4 @@
-setwd("/Users/henryertl/Documents/Devs")
+setwd("/Users/henryertl/Documents/Devs/Integrative_AS_genomics")
 setwd("/Users/wittkopp_member/Code")
 
 
@@ -52,7 +52,7 @@ scale_fill_discrete(guide=F)
 ggsave(C, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/perc_cis_withinVSbetween_ALL.pdf", width = 3)
 
 
-B <- Z30_TSIM[(Z30_TSIM$P_qvalue_TSIM < 0.05 | Z30_TSIM$H_qvalue_TSIM < 0.05) & (Z30_TSIM$P_qvalue_Z30 < 0.05 | Z30_TSIM$H_qvalue_Z30 < 0.05),] %>%
+B <- Z30_TSIM %>%
 melt(id.vars = "class_Z30", measure.vars = c("P_est.mean_Z30", "P_est.mean_TSIM")) %>%
 ggplot(aes(x=variable, y=abs(value), fill=variable)) +
 geom_boxplot(notch=TRUE) +
@@ -71,8 +71,8 @@ facet_wrap(~class_Z30, nrow=2, , labeller = labeller(class_Z30=
 
 ggsave(B, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Est_CA_divergence_withinVSbetween.pdf", width = 4.5)
 
-D <- Z30_TSIM[(Z30_TSIM$P_qvalue_TSIM < 0.05 | Z30_TSIM$H_qvalue_TSIM < 0.05) & (Z30_TSIM$P_qvalue_Z30 < 0.05 | Z30_TSIM$H_qvalue_Z30 < 0.05),] %>%
-melt(measure.vars = c("P_est.mean_Z30", "P_est.mean_TSIM")) %>%
+D <- Z30_TSIM %>%
+melt(measure.vars = c("H_est.mean_Z30", "H_est.mean_TSIM")) %>%
 ggplot(aes(x=variable, y=abs(value), fill=variable)) +
 geom_boxplot(notch=TRUE) +
 ylim(0,1) +
