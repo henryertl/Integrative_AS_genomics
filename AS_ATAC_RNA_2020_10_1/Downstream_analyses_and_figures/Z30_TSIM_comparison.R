@@ -19,6 +19,7 @@ Z30_TSIM$class_Z30 <- factor(Z30_TSIM$class_Z30,levels = c("start", "end", "inte
 
 write.table(Z30_TSIM, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/ZHR_Z30_TSIM_Full_results_output_ATAC.txt", quote = F, sep = "\t", row.names = F)
 
+Z30_TSIM <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/ZHR_Z30_TSIM_Full_results_output_ATAC.txt", header = TRUE)
 
 # plot percent cis for each class within vs between species
 A <- Z30_TSIM[(Z30_TSIM$P_qvalue_TSIM < 0.05 | Z30_TSIM$H_qvalue_TSIM < 0.05) & (Z30_TSIM$P_qvalue_Z30 < 0.05 | Z30_TSIM$H_qvalue_Z30 < 0.05),] %>%
@@ -39,7 +40,7 @@ facet_wrap(~class_Z30, nrow=2, , labeller = labeller(class_Z30=
 
 ggsave(A, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/perc_cis_withinVSbetween.pdf", width = 4.5)
 
-C <- Z30_TSIM[(Z30_TSIM$P_qvalue_TSIM < 0.05 | Z30_TSIM$H_qvalue_TSIM < 0.05) & (Z30_TSIM$P_qvalue_Z30 < 0.05 | Z30_TSIM$H_qvalue_Z30 < 0.05),] %>%
+C <- Z30_TSIM[(Z30_TSIM$chrom_Z30 != "chr2L") & (Z30_TSIM$P_qvalue_TSIM < 0.05 | Z30_TSIM$H_qvalue_TSIM < 0.05) & (Z30_TSIM$P_qvalue_Z30 < 0.05 | Z30_TSIM$H_qvalue_Z30 < 0.05),] %>%
 melt(measure.vars = c("perc_cis_Z30", "perc_cis_TSIM")) %>%
 ggplot(aes(x=variable, y=value, fill=variable)) +
 geom_boxplot(notch=TRUE) +
@@ -52,7 +53,7 @@ scale_fill_discrete(guide=F)
 ggsave(C, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/perc_cis_withinVSbetween_ALL.pdf", width = 3)
 
 
-B <- Z30_TSIM[(Z30_TSIM$P_qvalue_TSIM < 0.05 | Z30_TSIM$H_qvalue_TSIM < 0.05) & (Z30_TSIM$P_qvalue_Z30 < 0.05 | Z30_TSIM$H_qvalue_Z30 < 0.05),] %>%
+B <- Z30_TSIM[Z30_TSIM$chrom_Z30 != "chr2L",] %>%
 melt(id.vars = "class_Z30", measure.vars = c("P_est.mean_Z30", "P_est.mean_TSIM")) %>%
 ggplot(aes(x=variable, y=abs(value), fill=variable)) +
 geom_boxplot(notch=TRUE) +

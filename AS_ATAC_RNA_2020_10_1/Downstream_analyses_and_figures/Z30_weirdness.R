@@ -19,7 +19,7 @@ theme_main <- function() {
 
 
 # read in file
-ZHR_Z30_regions_ALL_SNPs_GRh_final <- read.delim("./AS_ATAC_RNA_2020_10_1/Grh_data/ZHR_Z30_GRH_SNPs_count_FINALALL.txt", header = T)
+ZHR_Z30_regions_ALL_SNPs_GRh_final <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Grh_data/ZHR_Z30_GRH_SNPs_count_FINALALL.txt", header = T)
 
 # plot cis-trans to set boundaries
 cis_trans_ATAC_CPM <- ZHR_Z30_regions_ALL_SNPs_GRh_final  %>%
@@ -89,6 +89,14 @@ snps <- read.delim("/Users/wittkopp_member/Code/Integrative_AS_genomics/AS_ATAC_
 colnames(snps) <- c("chrom", "start", "end")
 snps_chrom <- snps$chrom %>% as.data.frame()
 colnames(snps_chrom) <- "chrom"
+
+# location of snps
+snps[snps$chrom != "chr4",] %>%
+ggplot(aes(x=end, fill = chrom)) +
+geom_density() +
+facet_wrap(~chrom) +
+scale_fill_discrete(guide=FALSE)
+
 
 snps_chrom_count <- ddply(snps_chrom,.(chrom),nrow)
 snps_chrom_count$chrom_size <- c(23513712, 25286936, 28110227, 32079331, 1348131, 23542271)
