@@ -17,9 +17,13 @@ theme_main <- function() {
 )
 }
 
+setwd("/Users/henryertl/Documents/Devs")
+setwd("/Users/wittkopp_member/Code")
+
+
 
 # read in file
-ZHR_Z30_regions_ALL_SNPs_GRh_final <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Grh_data/ZHR_Z30_GRH_SNPs_count_FINALALL.txt", header = T)
+ZHR_Z30_regions_ALL_SNPs_GRh_final <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Grh_data/ZHR_Z30_GRH_SNPs_count_FINALALL.txt", header = TRUE)
 
 # plot cis-trans to set boundaries
 cis_trans_ATAC_CPM <- ZHR_Z30_regions_ALL_SNPs_GRh_final  %>%
@@ -85,7 +89,7 @@ scale_fill_discrete(guide=FALSE)
 
 # is chr2L more seq divergent overall (outside of CA regions?)
 
-snps <- read.delim("./AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/zhr_z30_SNPs_dm6_genome.bed", header = T)
+snps <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/zhr_z30_SNPs_dm6_genome.bed", header = TRUE)
 colnames(snps) <- c("chrom", "start", "end")
 snps_chrom <- snps$chrom %>% as.data.frame()
 colnames(snps_chrom) <- "chrom"

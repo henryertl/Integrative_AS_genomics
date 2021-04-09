@@ -53,12 +53,9 @@ scale_fill_discrete(guide=F)
 ggsave(C, file = "./AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/perc_cis_withinVSbetween_ALL.pdf", width = 3)
 
 
-<<<<<<< HEAD
-B <- Z30_TSIM[Z30_TSIM$chrom_Z30 != "chr2L",] %>%
-=======
+
 B <- Z30_TSIM %>%
->>>>>>> 1ff2ecc5b834fc1fcb775b90f355358076a87ab8
-melt(id.vars = "class_Z30", measure.vars = c("P_est.mean_Z30", "P_est.mean_TSIM")) %>%
+melt(id.vars = "class_Z30", measure.vars = c("H_est.mean_Z30", "H_est.mean_TSIM")) %>%
 ggplot(aes(x=variable, y=abs(value), fill=variable)) +
 geom_boxplot(notch=TRUE) +
 ylim(0,1) +
