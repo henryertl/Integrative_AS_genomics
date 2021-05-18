@@ -350,3 +350,66 @@ G <- ZHR_Z30_regions_ALL_SNPs_GRh_final[ZHR_Z30_regions_ALL_SNPs_GRh_final$overl
 ggplot(aes(x=overlap_grh_snp_binary, y=perc_cis, fill=overlap_grh_snp_binary))+
 geom_boxplot(notch=T)
 ## pattern above is exxgerated if extend range of permitted total snp counts
+
+
+
+
+##
+
+# load diffbind
+library(DiffBind)
+
+setwd("/Users/henryertl/Documents/Devs/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles")
+df <- read.csv("./Grh_KO_cntrl_diffbind.csv", header = TRUE)
+df_dbind <- dba(sampleSheet = df)
+df_dbind <- dba.count(df_dbind)
+df_dbind <- dba.analyze(df_dbind)
+df_dbind.DB <- dba.report(df_dbind)
+
+write.table(df_dbind.DB, file = "./grh_KO_cntrl_diffbind.txt", quote = F, row.names = F, sep = "\t")
+
+bedtools intersect -wao -a /Users/henryertl/Documents/Devs/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Full_results_output_ZHR_Z30_ATAC_20min_centered1000_classes.bed -b /Users/henryertl/Documents/Devs/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/grh_KO_cntrl_diffbind.bed | uniq > /Users/henryertl/Documents/Devs/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Full_results_output_ZHR_Z30_ATAC_20min_centered1000_classes_Grh_intersectALL_diffbind.bed
+
+ZHR_Z30_GRH_diffbind <- read.delim("/Users/henryertl/Documents/Devs/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Full_results_output_ZHR_Z30_ATAC_20min_centered1000_classes_Grh_intersectALL_diffbind.bed", header = F) %>% as.data.frame()
+colnames(ZHR_Z30_GRH_diffbind) <- c("chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2",
+"pos_start", "pos_end", "P_est.mean", "P_p_value","H_est.mean","H_p_value","H_P_est","H_P_p_value","P_qvalue","H_qvalue","P_H_qvalue","Direction_parent","Direction_hybrid",
+"P_H_ratio","Regulatory_class","trans_reg_diff","perc_cis","class", "chrom_grh", "start_grh","end_grh","overlap")
+
+# loop to reassign overlap as YES or NO
+ZHR_Z30_GRH_diffbind$overlap_binary <- "NA"
+
+for (i in 1:nrow(ZHR_Z30_GRH_diffbind)) {
+
+if (ZHR_Z30_GRH_diffbind$overlap[i] != 0){
+
+	ZHR_Z30_GRH_diffbind$overlap_binary[i] <- "OVERLAP"
+
+} else if (ZHR_Z30_GRH_diffbind$overlap[i] == 0){
+
+	ZHR_Z30_GRH_diffbind$overlap_binary[i] <- "NO_OVERLAP"
+
+}
+}
+
+ZHR_Z30_GRH_diffbind %>%
+ggplot(aes(x=overlap_binary, y=abs(P_est.mean))) +
+geom_boxplot(notch=TRUE)
+
+ZHR_Z30_GRH_diffbind[ZHR_Z30_GRH_diffbind$P_qvalue < 0.05 |  ZHR_Z30_GRH_diffbind$H_qvalue < 0.05,] %>%
+ggplot(aes(x=overlap_binary, y=perc_cis, fill=overlap_binary)) +
+geom_boxplot(notch=TRUE) +
+xlab("") +
+ylab("Percent accessibility divergence due to cis changes") +
+scale_x_discrete(labels=c("non-Grh pioneered", "Grh pioneered")) +
+theme_main() +
+scale_fill_discrete(guide=FALSE)
+
+ZHR_Z30_GRH_diffbind[ZHR_Z30_GRH_diffbind$P_qvalue < 0.05 |  ZHR_Z30_GRH_diffbind$H_qvalue < 0.05,] %>%
+ggplot(aes(x=perc_cis, fill=overlap_binary)) +
+geom_density()
+geom_boxplot(notch=TRUE) +
+xlab("") +
+ylab("Percent accessibility divergence due to cis changes") +
+scale_x_discrete(labels=c("non-Grh pioneered", "Grh pioneered")) +
+theme_main() +
+scale_fill_discrete(guide=FALSE)
