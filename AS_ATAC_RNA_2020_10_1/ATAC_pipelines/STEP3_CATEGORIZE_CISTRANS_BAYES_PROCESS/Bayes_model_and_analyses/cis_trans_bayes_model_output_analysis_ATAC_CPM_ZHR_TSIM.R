@@ -3,7 +3,8 @@
 #############
 library(plyr)
 library(cowplot)
-library(magrittr)
+library(magrittr
+library(ggplot2)
 
 #########################
 ##Set master plot theme##
@@ -30,8 +31,11 @@ setwd("/Users/henryertl/Documents/Devs")
 #####################
 ##Read primary data##
 #####################
-full_dataset <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/CPM_transformed_datatables/ZHR_TSIM_ATAC_counts_downsamp_nondownsamp_comb_ALLclasses_20min_CPM_centered1000_onlyZ30overlap.txt", header = T)
-full_dataset$class <- NULL
+full_dataset <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/CPM_transformed_datatables/ZHR_TSIM_ATAC_counts_ALLclasses_20min_CPM_centered1000.txt", header = T)
+temp <- full_dataset[,c(4:(ncol(full_dataset)-1))]
+temp <- ceiling(temp)
+full_dataset <- cbind((full_dataset[,c(1:3)]), temp)
+colnames(full_dataset) <- c("chrom", "start", "end", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3", "HYB_1_P1", "HYB_2_P1", "HYB_3_P1", "HYB_1_P2", "HYB_2_P2", "HYB_3_P2")
 full_dataset$Paste_locus <- paste(full_dataset$chrom, full_dataset$start, full_dataset$end, sep = "_")
 
 Parental_data <- full_dataset[, c("chrom", "start", "end", "Paste_locus", "P1_1", "P1_2", "P1_3", "P2_1", "P2_2", "P2_3")]
@@ -42,9 +46,9 @@ Hybrid_data <- full_dataset[, c("chrom", "start", "end", "Paste_locus", "HYB_1_P
 ####################
 ##Combine datasets##
 ####################
-Parental_results <- read.table("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Parental_test_output_ZHR_TSIM_ATAC_CPM_macs2_20min_centered1000_downsamp_overlap.txt", header = T) %>% unique()
-Hybrid_results <- read.table("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Hybrid_test_output_ZHR_TSIM_ATAC_CPM_macs2_20min_centered1000_downsamp_overlap.txt", header = T) %>% unique()
-Parental_hybrid_results <- read.table("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Parent_Hybrid_test_output_ZHR_TSIM_ATAC_CPM_macs2_20min_centered1000_downsamp_overlap.txt", header = T) %>% unique()
+Parental_results <- read.table("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Parental_test_output_ZHR_TSIM_ATAC_CPM_macs2_20min_centered1000.txt", header = T) %>% unique()
+Hybrid_results <- read.table("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Hybrid_test_output_ZHR_TSIM_ATAC_CPM_macs2_20min_centered1000.txt", header = T) %>% unique()
+Parental_hybrid_results <- read.table("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Parent_Hybrid_test_output_ZHR_TSIM_ATAC_CPM_macs2_20min_centered1000.txt", header = T) %>% unique()
 
 Full_results_output <- join_all(list(Parental_data, Hybrid_data, Parental_results, Hybrid_results, Parental_hybrid_results), by = 'Paste_locus', type = 'full')
 
@@ -57,7 +61,7 @@ Hybrid_P_plot <- ggplot(Full_results_output, aes(x = H_p_value)) + geom_histogra
 Parent_hybrid_P_plot <- ggplot(Full_results_output, aes(x = H_P_p_value)) + geom_histogram(bins = 100) + ggtitle("Hybrid-Parents")
 
 p_vals <- plot_grid(Parent_P_plot, Hybrid_P_plot, Parent_hybrid_P_plot, nrow = 3)
-ggsave(p_vals, file = "/Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/Figures/p_vals_ZHR_TSIM_sub_ATAC_20min.pdf", width = 15, height = 15)
+ggsave(p_vals, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/ZHR_TSIM_figs/p_vals_ZHR_TSIM_ATAC_20min1000max.pdf", width = 15, height = 15)
 
 
 ##If all is well, run FDR correction
@@ -178,6 +182,9 @@ nrow(subset(Full_results_output, Full_results_output$Direction == "Reinforcing")
 Full_results_output$trans_reg_diff <- Full_results_output$P_est.mean - Full_results_output$H_est.mean
 Full_results_output$perc_cis <- (abs(Full_results_output$H_est.mean)/(abs(Full_results_output$H_est.mean) + abs(Full_results_output$trans_reg_diff))) * 100
 
+write.table(Full_results_output, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Full_results_output_ZHR_TSIM_ATAC_20min1000max_no_classes.txt", sep = "\t", row.names = F, quote = F)
+
+
 ## Reassign groups
 Full_results_output$Direction <- NULL
 classes_key <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/class_pastelocus.txt", header = T)
@@ -195,7 +202,7 @@ write.table(Full_results_output, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2
 ##########################
 
 perc_cis <- ggplot(Full_results_output, aes(perc_cis)) +
-geom_density(color="darkblue", fill="lightblue") +
+geom_density(color="darkblue", fill="lightblue", adjust = 2) +
 theme_main() +
 xlab("Percent Cis") +
 ggtitle("D.mel,ZHR - D.sim Chromatin accessiblity divergence")
