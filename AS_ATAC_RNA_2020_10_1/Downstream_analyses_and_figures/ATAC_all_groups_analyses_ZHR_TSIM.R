@@ -31,14 +31,14 @@ setwd("/Users/henryertl/Documents/Devs")
 #######################################################################
 
 # Read in Bayes output file
-ALL <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Full_results_output_ZHR_TSIM_ATAC_20min_downsamp_overlap.txt", header = T) %>% na.omit() %>% unique()
+ALL <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Full_results_output_ZHR_TSIM_ATAC_20min1000max_ALL_classes.txt", header = T) %>% na.omit() %>% unique()
 
 ## factor sort to have classes in same order in every plot
 ALL$class <- factor(ALL$class,levels = c("start", "end", "inter", "intra"))
 
 # Plot % cis across species
 ### perc cis ####
-R <- ALL[ALL$P_qvalue < 0.05 | ALL$H_qvalue < 0.05,] %>%
+R <- ALL %>%
 ggplot(aes(x=class, y=perc_cis, fill=class)) +
 geom_boxplot(notch=TRUE) +
 theme_main() +
@@ -46,7 +46,7 @@ ylab("Percent cis") +
 xlab("") +
 scale_fill_discrete(guide=FALSE) +
 scale_x_discrete(labels=c("txStart","txEnd", "intergenic", "intragenic"))
-ggsave(R, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/ZHR_TSIM_Full_results_output_ALL_classes_perc_cis.pdf")
+ggsave(R, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/ZHR_TSIM_figs/ZHR_TSIM_Full_results_output_ALL_classes_perc_cis.pdf")
 
 pairwise.wilcox.test(ALL$perc_cis,ALL$class)
 
@@ -59,7 +59,7 @@ ylab("Estimated accessibility divergence") +
 xlab("") +
 scale_fill_discrete(guide=FALSE) +
 scale_x_discrete(labels=c("txStart","txEnd", "intergenic", "intragenic"))
-ggsave(S, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/ZHR_TSIM_Full_results_output_ALL_classes_accessibility_divergence.pdf")
+ggsave(S, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/ZHR_TSIM_figs/ZHR_TSIM_Full_results_output_ALL_classes_accessibility_divergence.pdf")
 
 
 pairwise.wilcox.test(abs(ALL$P_est.mean),ALL$class)

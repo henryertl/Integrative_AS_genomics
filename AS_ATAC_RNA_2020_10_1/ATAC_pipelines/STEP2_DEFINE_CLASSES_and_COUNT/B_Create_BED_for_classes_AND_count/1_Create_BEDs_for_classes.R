@@ -43,30 +43,30 @@ write.table(df, "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_a
 ####  BEDTOOLS INTERSECT COMMANDS #####
 ## Intergenic -- non-overlap with -500 txStart and +500 txEnd
 bedtools intersect -v -wa \
--a /Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/Data_tables/Analysis_regions_files/ZHR_Z30_TSIM_analysis_regions.bed \
--b /Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_txStart_End.bed \
+-a ZHR_TSIM_ATAC_20min1000max.bed \
+-b /Users/henryertl/Documents/Devs/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_txStart_End.bed \
 | uniq \
-> /Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_Z30_TSIM_analysis_regions_intergenic_NO_TxStart_End.bed
+> /Users/henryertl/Documents/Devs/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_TSIM_ATAC_20min1000max_intergenic_NO_TxStart_End.bed
 
 ## Intragenic -- overlap with -500 txStart and +500 txEnd
 bedtools intersect -wa \
--a /Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/ATAC_seq/Data_tables/Analysis_regions_files/ZHR_Z30_TSIM_analysis_regions.bed \
--b /Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_txStart_End.bed \
+-a ZHR_TSIM_ATAC_20min1000max.bed \
+-b /Users/henryertl/Documents/Devs/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_txStart_End.bed \
 | uniq \
-> /Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/temp.bed
+> /Users/henryertl/Documents/Devs/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/temp.bed
 
 ## BUT non-overlap with +/- 500 txStart nor +/- 500 txEnd
 bedtools intersect -v -wa \
--a /Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/temp.bed \
--b /Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_txStart.bed \
+-a /Users/henryertl/Documents/Devs/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/temp.bed \
+-b /Users/henryertl/Documents/Devs/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_txStart.bed \
 | uniq \
-> /Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/temp2.bed
+> /Users/henryertl/Documents/Devs/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/temp2.bed
 
 bedtools intersect -v -wa \
--a /Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/temp2.bed \
--b /Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_txEnd.bed \
+-a /Users/henryertl/Documents/Devs/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/temp2.bed \
+-b /Users/henryertl/Documents/Devs/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_txEnd.bed \
 | uniq \
-> /Users/henryertl/Documents/Wittkopp_lab/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_Z30_TSIM_analysis_regions_intragenic_NO_TxStart_End.bed
+> /Users/henryertl/Documents/Devs/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/ZHR_TSIM_ATAC_20min1000max_intragenic_NO_TxStart_End.bed
 
 
 #### Make centered tables from intra- and inter-genic files

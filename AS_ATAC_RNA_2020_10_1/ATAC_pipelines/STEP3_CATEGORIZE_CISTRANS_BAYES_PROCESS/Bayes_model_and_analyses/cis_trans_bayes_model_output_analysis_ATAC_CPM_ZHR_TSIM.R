@@ -3,7 +3,7 @@
 #############
 library(plyr)
 library(cowplot)
-library(magrittr
+library(magrittr)
 library(ggplot2)
 
 #########################
@@ -116,7 +116,7 @@ Full_results_output$P_H_ratio <- abs(Full_results_output$P_est.mean / Full_resul
 critical_value <- 0.05
 
 ##Run classifier
-Full_results_output$Regulatory_class <- "Conserved/Ambiguous"
+Full_results_output$Regulatory_class <- "NA"
 
 for (i in 1:nrow(Full_results_output)) {
 
@@ -182,20 +182,13 @@ nrow(subset(Full_results_output, Full_results_output$Direction == "Reinforcing")
 Full_results_output$trans_reg_diff <- Full_results_output$P_est.mean - Full_results_output$H_est.mean
 Full_results_output$perc_cis <- (abs(Full_results_output$H_est.mean)/(abs(Full_results_output$H_est.mean) + abs(Full_results_output$trans_reg_diff))) * 100
 
-write.table(Full_results_output, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Full_results_output_ZHR_TSIM_ATAC_20min1000max_no_classes.txt", sep = "\t", row.names = F, quote = F)
-
-
-## Reassign groups
-Full_results_output$Direction <- NULL
-classes_key <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/class_pastelocus.txt", header = T)
-Full_results_output <- left_join(Full_results_output, classes_key, by = "Paste_locus")
 
 
 ##################################
 ##Write out full results to file##
 ##################################head
+write.table(Full_results_output, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Full_results_output_ZHR_TSIM_ATAC_20min1000max_no_classes.txt", sep = "\t", row.names = F, quote = F)
 
-write.table(Full_results_output, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/Bayes_test_outputs/Full_results_output_ZHR_TSIM_ATAC_20min_downsamp_overlap.txt", sep = "\t", row.names = F, quote = F)
 
 ##########################
 ##Generate summary plots##
@@ -206,16 +199,18 @@ geom_density(color="darkblue", fill="lightblue", adjust = 2) +
 theme_main() +
 xlab("Percent Cis") +
 ggtitle("D.mel,ZHR - D.sim Chromatin accessiblity divergence")
-ggsave(perc_cis, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/perc_cis_ZHR_TSIM_sub_ATAC_CPM_20min.pdf", width = 15, height = 15)
+ggsave(perc_cis, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/ZHR_TSIM_figs/perc_cis_ZHR_TSIM_ATAC_CPM_20min1000max.pdf", width = 15, height = 15)
 
+Full_results_output$density <- NA
+Full_results_output$density <- get_density(Full_results_output$H_est.mean, Full_results_output$P_est.mean, n = 500)
 
 cis_trans_ATAC_CPM <- Full_results_output %>%
 
 ggplot(aes(x = P_est.mean, y = H_est.mean)) +
-geom_point(alpha = 0.3) +
+geom_point(aes(P_est.mean, H_est.mean, col = density)) +
 geom_hline(yintercept = 0, linetype = "dashed") +
 geom_abline(intercept = 0, slope = 1, linetype = "dashed") + theme_main() + geom_vline(xintercept = 0, linetype = "dashed") + xlim(-2, 2) + ylim(-2, 2)
-ggsave(cis_trans_ATAC_CPM, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/cis_trans_ZHR_TSIM_sub_ATAC_CPM_20min_ALL.pdf", width = 15, height = 15)
+ggsave(cis_trans_ATAC_CPM, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/ZHR_TSIM_figs/cis_trans_ZHR_TSIM_ATAC_CPM_20min1000max_ALL.pdf", width = 15, height = 15)
 
 
 ############ DENSITY PLOTS  ######
