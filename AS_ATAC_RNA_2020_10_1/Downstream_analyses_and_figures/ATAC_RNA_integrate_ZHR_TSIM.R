@@ -124,23 +124,23 @@ all_classes_integrated$div_category <- "NA"
 
 for (i in 1:nrow(all_classes_integrated)) {
 
-if (all_classes_integrated$P_qvalue_RNA[i] < 0.05 && all_classes_integrated$P_qvalue[i] < 0.05 && sign(all_classes_integrated$P_est.mean_RNA[i]) == sign(all_classes_integrated$P_est.mean[i])){
+if (all_classes_integrated$P_qvalue_RNA[i] < 0.05 && all_classes_integrated$P_qvalue_ATAC[i] < 0.05 && sign(all_classes_integrated$P_est.mean_RNA[i]) == sign(all_classes_integrated$P_est.mean_ATAC[i])){
 
 	all_classes_integrated$div_category[i] <- "AccD_ExpD_S"
 
-} else if (all_classes_integrated$P_qvalue_RNA[i] < 0.05 && all_classes_integrated$P_qvalue[i] < 0.05 && sign(all_classes_integrated$P_est.mean_RNA[i]) != sign(all_classes_integrated$P_est.mean[i])){
+} else if (all_classes_integrated$P_qvalue_RNA[i] < 0.05 && all_classes_integrated$P_qvalue_ATAC[i] < 0.05 && sign(all_classes_integrated$P_est.mean_RNA[i]) != sign(all_classes_integrated$P_est.mean_ATAC[i])){
 
 	all_classes_integrated$div_category[i] <- "AccD_ExpD_O"
 
-} else if (all_classes_integrated$P_qvalue_RNA[i] > 0.05 && all_classes_integrated$P_qvalue[i] < 0.05){
+} else if (all_classes_integrated$P_qvalue_RNA[i] > 0.05 && all_classes_integrated$P_qvalue_ATAC[i] < 0.05){
 
 	all_classes_integrated$div_category[i] <- "AccD_ExpC"
 
-} else if (all_classes_integrated$P_qvalue_RNA[i] < 0.05 && all_classes_integrated$P_qvalue[i] > 0.05){
+} else if (all_classes_integrated$P_qvalue_RNA[i] < 0.05 && all_classes_integrated$P_qvalue_ATAC[i] > 0.05){
 
 	all_classes_integrated$div_category[i] <- "AccC_ExpD"
 
-} else if (all_classes_integrated$P_qvalue_RNA[i] > 0.05 && all_classes_integrated$P_qvalue[i] > 0.05){
+} else if (all_classes_integrated$P_qvalue_RNA[i] > 0.05 && all_classes_integrated$P_qvalue_ATAC[i] > 0.05){
 
   all_classes_integrated$div_category[i] <- "AccC_ExpC"
 
@@ -154,7 +154,7 @@ write.table(all_classes_integrated, file = "./AS_ATAC_RNA_2020_10_1/ATAC_RNA_com
 all_classes_integrated <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_RNA_comp/ZHR_Z30_ATAC_RNA_integrated_minimal.txt", header = T)
 
 O <- all_classes_integrated %>%
-ggplot(aes(x=P_est.mean, y=P_est.mean_RNA, color=div_category)) +
+ggplot(aes(x=abs(P_est.mean_ATAC), y=abs(P_est.mean_RNA))) +
 geom_point() +
 theme_main() +
 scale_color_discrete(name = "Divergence category",
@@ -165,8 +165,15 @@ xlab("Estimated accessibility divergence") +
 ylab("Estimated expression divergennce") +
 ylim(-2.5,2.5) +
 xlim(-2.5,2.5) +
-ggtitle("Accessibility vs Expression divergence - integrated categories")
+ggtitle("Accessibility vs Expression divergence - integrated categories") +
+facet_wrap(~class_ATAC)
 	ggsave(O, file = "Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Acc_vs_Exp_categories_ZHR_Z30.pdf")
+
+# volcano plot
+test <- all_classes_integrated %>%
+ggplot(aes(x=P_est.mean_ATAC, y=(P_qvalue_ATAC), color = P_qvalue_ATAC > 0.05)) +
+geom_point()
+
 
 ## without guide
 	G <- all_classes_integrated %>%
@@ -246,8 +253,8 @@ plot.title = element_text(size = 13, face = "bold"))
 	ggsave(M, file = "./Figures/Exp_percCis_int_categories_ZHR_Z30.pdf")
 
 # % cis accessibility by group
-N <- all_classes_integrated[all_classes_integrated$P_qvalue < 0.05,] %>%
-ggplot(aes(x=div_category, fill=div_category, y=perc_cis)) +
+N <- all_classes_integrated %>%
+ggplot(aes(x=div_category, fill=div_category, y=perc_cis_RNA)) +
 geom_boxplot(notch=TRUE) +
 theme_main() +
 ylab("Accessibility - percent cis") +
