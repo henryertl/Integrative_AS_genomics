@@ -1,5 +1,0 @@
-SampleID,Tissue,Replicate,bamReads,Peaks,PeakCaller
-Grh_control,Grh_control,1,grh_mut_cont_1.bam,merged_grh_KO_cntrl_sorted_peaks.narrowPeak,bed
-Grh_control,Grh_control,2,grh_mut_cont_2.bam,merged_grh_KO_cntrl_sorted_peaks.narrowPeak,bed
-Grh_KO,Grh_KO,1,grh_mut_1.bam,merged_grh_KO_cntrl_sorted_peaks.narrowPeak,bed
-Grh_KO,Grh_KO,2,grh_mut_2.bam,merged_grh_KO_cntrl_sorted_peaks.narrowPeak,bed
