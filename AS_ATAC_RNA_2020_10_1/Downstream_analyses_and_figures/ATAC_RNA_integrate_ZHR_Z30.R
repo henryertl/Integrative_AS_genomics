@@ -55,7 +55,6 @@ RNA_minimal_closest_locus <- join_all(list(RNA_minimal, ATAC_minimal_intra_inter
 ## OUTPUT 4410 regions with closest gene info
 
 
-
 # Set 2: integrate start and end data with corresponding gene and expression info
 # prepare txSTart and End files - basically just re-writing the locus key
 start_end <- read.delim("./AS_ATAC_RNA_2020_10_1/BED_files_for_analyses/dm6_all_uniq", header = T)
@@ -92,61 +91,124 @@ ATAC_minimal_start_end_gene_RNA_int <- join_all(list(RNA_minimal, ATAC_minimal_s
 ATAC_minimal_start_end_gene_RNA_int$Name <- NULL
 ATAC_minimal_start_end_gene_RNA_int$beg_first_exon <- 0
 
-## OUTPUT: 3768 txStart/End regions
 
 ### join 2 classes ###
 all_classes_integrated <- rbind(ATAC_minimal_start_end_gene_RNA_int, RNA_minimal_closest_locus)
 
-### ANALYSES ###
-
-# Categorize
-
-all_classes_integrated$div_category <- "NA"
-
-for (i in 1:nrow(all_classes_integrated)) {
-
-if (all_classes_integrated$P_qvalue_RNA[i] < 0.05 && all_classes_integrated$P_qvalue[i] < 0.05 && sign(all_classes_integrated$P_est.mean_RNA[i]) == sign(all_classes_integrated$P_est.mean[i])){
-
-	all_classes_integrated$div_category[i] <- "AccD_ExpD_S"
-
-} else if (all_classes_integrated$P_qvalue_RNA[i] < 0.05 && all_classes_integrated$P_qvalue[i] < 0.05 && sign(all_classes_integrated$P_est.mean_RNA[i]) != sign(all_classes_integrated$P_est.mean[i])){
-
-	all_classes_integrated$div_category[i] <- "AccD_ExpD_O"
-
-} else if (all_classes_integrated$P_qvalue_RNA[i] > 0.05 && all_classes_integrated$P_qvalue[i] < 0.05){
-
-	all_classes_integrated$div_category[i] <- "AccD_ExpC"
-
-} else if (all_classes_integrated$P_qvalue_RNA[i] < 0.05 && all_classes_integrated$P_qvalue[i] > 0.05){
-
-	all_classes_integrated$div_category[i] <- "AccC_ExpD"
-
-} else if (all_classes_integrated$P_qvalue_RNA[i] > 0.05 && all_classes_integrated$P_qvalue[i] > 0.05){
-
-  all_classes_integrated$div_category[i] <- "AccC_ExpC"
-
-}
-}
-
+# add distance from gene
 all_classes_integrated$distance_to_exon1 <- abs(all_classes_integrated[,18] - all_classes_integrated[,35])
+
+### WRITE FINAL FILE ###
 
 write.table(all_classes_integrated, file = "./AS_ATAC_RNA_2020_10_1/ATAC_RNA_comp/ZHR_Z30_ATAC_RNA_integrated_minimal.txt", row.names = F, quote = F, sep = "\t")
 
-all_classes_integrated <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_RNA_comp/ZHR_Z30_ATAC_RNA_integrated_minimal.txt", header = T)
+#### ANALYSES ####
+all_classes_integrated <- read.delim("./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_RNA_comp/ZHR_Z30_ATAC_RNA_integrated_minimal.txt", header = T) %>% unique() %>% as.data.frame()
+# add on grh and promoter annotations
+annots <- read.delim("/Users/henryertl/Documents/Devs/Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/ATAC_seq_datafiles/ZHR_Z30_ATAC_Full_results_all_annotations.txt", header = T)
+annots <- annots[,c(4,ncol(annots), (ncol(annots)-1))]
+colnames(annots)[3] <- "Remod_mech"
+
+dfa <- all_classes_integrated[,c(2,4,19,20,22,32,33,34,37)]
+
+df_int <- join_all(list(dfa, annots), by = "Paste_locus") %>% as.data.frame()
+
+df_int$Promoter_type[is.na(df_int$Promoter_type)] <- "Not_promoter"
+
+df_int$Remod_mech[is.na(df_int$Remod_mech)] <- "NO_OVERLAP"
+
+
+ggplot(df_int,aes(x=P_est.mean,y=P_est.mean_RNA)) +
+geom_point(size=0.5)+
+geom_smooth(method="lm")+
+facet_wrap(~class)
+
+ggplot(df_int,aes(x=P_est.mean,y=P_est.mean_RNA)) +
+geom_point(size=0.5)+
+geom_smooth(method="lm")+
+facet_wrap(~Promoter_type)
+
+
+a <- glm(P_est.mean_RNA ~ class*P_est.mean + overlap_binary*P_est.mean + Promoter_type*P_est.mean + overlap_binary*class*P_est.mean + Promoter_type*class*P_est.mean, data = df4)
+a <- glm(P_est.mean_RNA ~ Promoter_type*P_est.mean, data = df4)
+
+
+a <- glm(P_est.mean_RNA ~ class*P_est.mean + overlap_binary*P_est.mean + Promoter_type*P_est.mean + overlap_binary*class*P_est.mean + Promoter_type*class*P_est.mean, data = df4)
+
+a2 <- update(a,~.-overlap_binary:class:P_est.mean)
+anova(a,a2, test="F")
+a3 <- update(a2,~.-Promoter_type:class:P_est.mean)
+anova(a2,a3, test="F")
+a4 <- update(a3,~.-Promoter_type:P_est.mean)
+anova(a3,a4, test="F")
+a5 <- update(a3,~.-overlap_binary:P_est.mean)
+anova(a3,a5, test="F")
+a6 <- update(a5,~.-class:P_est.mean)
+anova(a5,a6, test="F")
+a7 <- update(a6,~.-class:Promoter_type)
+anova(a6,a7, test="F")
+a8 <- update(a7,~.-class:overlap_binary)
+anova(a7,a8, test="F")
+a9 <- update(a8,~.-class)
+anova(a8,a9, test="F")
+a10 <- update(a9,~.-overlap_binary)
+anova(a9,a10, test="F")
+plot(a10)
+
+F(2,849) = 3.8083, p = 0.02257
+
+b<- glm(P_est.mean_RNA ~ class*P_est.mean*overlap_binary*Promoter_type, data = df4)
+
+par(mfrow=c(2,2))
+plot(a10)
+
+df_n %>%
+ggplot(aes(x=P_est.mean,y=P_est.mean_RNA)) +
+geom_point(size=0.5) +
+geom_smooth(method="lm")+
+facet_wrap(~class) +
+xlim(-3,3)+
+ylim(-3,3)
+
+df_n <- df4 %>% na.omit()
+nrow(df_n[df_n$Promoter_type == "P",])
+
+
+all_classes_integrated %>%
+ggplot(aes(x=P_est.mean, y=P_est.mean_RNA)) +
+geom_point() +
+geom_smooth(method="lm") +
+facet_wrap(~class) +
+xlim(-2,2) +
+ylim(-2,2)
+
+
+
+get_density <- function(x, y, ...) {
+  dens <- MASS::kde2d(x, y, ...)
+  ix <- findInterval(x, dens$x)
+  iy <- findInterval(y, dens$y)
+  ii <- cbind(ix, iy)
+  return(dens$z[ii])
+}
+
+all_classes_integrated$density <- NA
+
+all_classes_integrated$density <- get_density(all_classes_integrated$P_est.mean_RNA, all_classes_integrated$P_est.mean, n = 100)
+
+
 
 O <- all_classes_integrated %>%
-ggplot(aes(x=P_est.mean, y=P_est.mean_RNA, color=div_category)) +
-geom_point() +
+ggplot(aes(x=P_est.mean, y=P_est.mean_RNA, col=density)) +
+geom_point(size = 1) +
 theme_main() +
-scale_color_discrete(name = "Divergence category",
-labels = c("Acc cons & Exp cons", "Acc cons & Exp div", "Acc div & Exp cons", "Acc div & Exp div opposite", "Acc div & Exp div same ")) +
-theme(legend.text= element_text(size = 10),
+theme(legend.text= element_text(size = 5),
 legend.title = element_text(size = 10)) +
 xlab("Estimated accessibility divergence") +
 ylab("Estimated expression divergennce") +
 ylim(-2.5,2.5) +
 xlim(-2.5,2.5) +
-ggtitle("Accessibility vs Expression divergence - integrated categories")
+ggtitle("Accessibility vs Expression divergence")
 	ggsave(O, file = "Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Acc_vs_Exp_categories_ZHR_Z30.pdf")
 
 ## without guide
@@ -159,7 +221,8 @@ ggtitle("Accessibility vs Expression divergence - integrated categories")
 	ylab("Estimated expression divergennce") +
 	ylim(-2.5,2.5) +
 	xlim(-2.5,2.5) +
-	ggtitle("Accessibility vs Expression divergence - integrated categories")
+	ggtitle("Accessibility vs Expression divergence - integrated categories") +
+	facet_wrap(~overlap_binary)
 
 	X <- all_classes_integrated[all_classes_integrated$class == "start",] %>%
 	ggplot(aes(x=P_est.mean, y=P_est.mean_RNA, color=div_category)) +
@@ -254,7 +317,8 @@ theme_main() +
 theme(axis.text = element_text(size = 15),
 axis.title = element_text(size = 15),
 plot.title = element_text(size = 13, face = "bold")) +
-ggtitle("Magnitude of expression divergence across integrated categories")
+ggtitle("Magnitude of expression divergence across integrated categories")+
+facet_wrap(~overlap_binary)
 	ggsave(L, file = "./Figures/Exp_effectsize_int_categories_ZHR_Z30.pdf")
 
 # same as above but with JUST txStart to demonstrate that this isn't just due to incorrect pairing
@@ -321,53 +385,3 @@ axis.title = element_text(size = 15),
 plot.title = element_text(size = 12, face = "bold")) +
 ggtitle("Kilobases to closest gene (inter- & intragenic) across integrated categories")
 	ggsave(Q, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Dist_to_closest_gene_int_categories_ZHR_Z30.pdf")
-
-
-class_props <- matrix(ncol = 4, nrow = 5) %>% as.data.frame()
-colnames(class_props) <- c("inter", "intra", "start", "end")
-class_props[1,1] <- nrow(all_classes_integrated[all_classes_integrated$class == "inter" & all_classes_integrated$div_category == "AccC_ExpC",])
-class_props[2,1] <- nrow(all_classes_integrated[all_classes_integrated$class == "inter" & all_classes_integrated$div_category == "AccC_ExpD",])
-class_props[3,1] <- nrow(all_classes_integrated[all_classes_integrated$class == "inter" & all_classes_integrated$div_category == "AccD_ExpC",])
-class_props[4,1] <- nrow(all_classes_integrated[all_classes_integrated$class == "inter" & all_classes_integrated$div_category == "AccD_ExpD_O",])
-class_props[5,1] <- nrow(all_classes_integrated[all_classes_integrated$class == "inter" & all_classes_integrated$div_category == "AccD_ExpD_S",])
-
-class_props[1,2] <- nrow(all_classes_integrated[all_classes_integrated$class == "intra" & all_classes_integrated$div_category == "AccC_ExpC",])
-class_props[2,2] <- nrow(all_classes_integrated[all_classes_integrated$class == "intra" & all_classes_integrated$div_category == "AccC_ExpD",])
-class_props[3,2] <- nrow(all_classes_integrated[all_classes_integrated$class == "intra" & all_classes_integrated$div_category == "AccD_ExpC",])
-class_props[4,2] <- nrow(all_classes_integrated[all_classes_integrated$class == "intra" & all_classes_integrated$div_category == "AccD_ExpD_O",])
-class_props[5,2] <- nrow(all_classes_integrated[all_classes_integrated$class == "intra" & all_classes_integrated$div_category == "AccD_ExpD_S",])
-
-class_props[1,3] <- nrow(all_classes_integrated[all_classes_integrated$class == "start" & all_classes_integrated$div_category == "AccC_ExpC",])
-class_props[2,3] <- nrow(all_classes_integrated[all_classes_integrated$class == "start" & all_classes_integrated$div_category == "AccC_ExpD",])
-class_props[3,3] <- nrow(all_classes_integrated[all_classes_integrated$class == "start" & all_classes_integrated$div_category == "AccD_ExpC",])
-class_props[4,3] <- nrow(all_classes_integrated[all_classes_integrated$class == "start" & all_classes_integrated$div_category == "AccD_ExpD_O",])
-class_props[5,3] <- nrow(all_classes_integrated[all_classes_integrated$class == "start" & all_classes_integrated$div_category == "AccD_ExpD_S",])
-
-class_props[1,4] <- nrow(all_classes_integrated[all_classes_integrated$class == "end" & all_classes_integrated$div_category == "AccC_ExpC",])
-class_props[2,4] <- nrow(all_classes_integrated[all_classes_integrated$class == "end" & all_classes_integrated$div_category == "AccC_ExpD",])
-class_props[3,4] <- nrow(all_classes_integrated[all_classes_integrated$class == "end" & all_classes_integrated$div_category == "AccD_ExpC",])
-class_props[4,4] <- nrow(all_classes_integrated[all_classes_integrated$class == "end" & all_classes_integrated$div_category == "AccD_ExpD_O",])
-class_props[5,4] <- nrow(all_classes_integrated[all_classes_integrated$class == "end" & all_classes_integrated$div_category == "AccD_ExpD_S",])
-
-class_props$inter <- class_props$inter/sum(class_props$inter)
-class_props$intra <- class_props$intra/sum(class_props$intra)
-class_props$start <- class_props$start/sum(class_props$start)
-class_props$end <- class_props$end/sum(class_props$end)
-class_props$div_category <- c("AccC_ExpC", "AccC_ExpD", "AccD_ExpC", "AccD_ExpD_O", "AccD_ExpD_S")
-
-G <- melt(class_props) %>%
-ggplot(aes(x=variable, y=value, fill=div_category)) +
-geom_bar(stat="identity", colour="white") +
-xlab("") +
-ylab("Proportion") +
-scale_x_discrete(labels=c("Intergenic","Intragenic", "txStart", "txEnd")) +
-scale_fill_discrete(name = "Divergence category",
-labels = c("Acc cons & Exp cons", "Acc cons & Exp div", "Acc div & Exp cons", "Acc div & Exp div opposite", "Acc div & Exp div same ")) +
-theme_main() +
-theme(axis.text = element_text(size = 12),
-axis.title = element_text(size = 15),
-plot.title = element_text(size = 13, face = "bold"),
-legend.text= element_text(size = 10),
-legend.title = element_text(size = 10)) +
-ggtitle("Relative proportions of integrated category for each class")
-	ggsave(G, file = "./Integrative_AS_genomics/AS_ATAC_RNA_2020_10_1/Figures_centered1000_runs/Prop_div_categories_by_int_categories_ZHR_Z30.pdf")
